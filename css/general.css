@@ -1,0 +1,63 @@
+
+#member-details .panel_toolbox>li>a{
+	color:#069;
+	padding:8px;
+	font-weight:bold;
+}
+#member-details .panel_toolbox>li :hover{
+	color: #ABCB05;
+    background-color: #fff;
+    border-color: #ABCB05;
+	font-weight:bold;
+
+}
+.panel_toolbox>li>a{
+	color:#fff !important;
+}
+
+.panel_toolbox>li>a:hover{
+    padding: 5px;
+    color: #ABCA04 !important;
+    font-size: 14px;
+	
+}
+.nav_menu {
+    float: left;
+    background: #EDEDED;
+    border-bottom: 1px solid #D9DEE4;
+    margin-bottom: 10px;
+    width: 100%;
+    position: relative;
+	
+}
+.form_wizard .stepContainer{
+	height:auto !important;
+}
+.loginbtn {
+    background: #ABC905 !important;
+    color: #fff;
+    height: 38px;
+}
+#member-details .btn-default {
+    color: #333;
+    background-color: #E2E2E2;
+    border-color: #ccc;
+}
+#member-details .x_content{
+ color: #069;
+}
+#member-details  .details{
+	  border-bottom:1px dotted #DFE3FC;
+  }
+#member-details .lead{
+  color:#000;
+  padding-bottom:1px;
+  margin-bottom:3px;
+  font-size:14px;
+}
+#member-details .p{
+	margin: 0 0 0px;
+  }
+ .x_title h2{
+	 color:#abcb05;
+ }
