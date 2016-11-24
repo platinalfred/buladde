@@ -408,6 +408,17 @@ class Db{
 		}
 		return false;
 	}
+	function addMultiple($table, $fields, $values){
+		$fi = implode(",", $fields);
+		
+		$ins = "INSERT INTO ".$table. " (".$fi.") VALUES ".implode(',', $values);
+		//echo $ins;
+		$inse = $this->conn->query($ins);
+		if($inse){
+			return true;
+		}
+		return false;
+	}
 	function numberFormat($no){  
 		$format_number = number_format($no, 2, '.', ',');
 		return $format_number;

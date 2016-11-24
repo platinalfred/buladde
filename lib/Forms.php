@@ -89,6 +89,7 @@ Class Forms{
          $loan_number =  $initials."-".$date; 
 		?>
 		
+		<form class="form-horizontal form-label-left" novalidate>
 		<div class="row">
 		  <div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="x_panel">
@@ -100,7 +101,6 @@ Class Forms{
 				<div class="clearfix"></div>
 			  </div>
 			  <div class="x_content">
-				<form class="form-horizontal form-label-left" novalidate>
 				 <div class="item form-group">
 					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="loan_number">Loan Number <span class="required">*</span>
 					</label>
@@ -109,35 +109,41 @@ Class Forms{
 					</div>
 				  </div>
 				  <div class="item form-group">
-					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="loan_type">Loan Type <span class="required">*</span>
+					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Loan Type <span class="required">*</span>
 					</label>
 					<div class="col-md-6 col-sm-6 col-xs-12">
 						<?php
 						$db->loadList("Select * from loan_type", "loan_type", "id","name","loan_type");
 						?>
-					 
 					</div>
 				  </div>					
 				  <div class="item form-group">
 					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="branch_id">Awarding Branch<span class="required">*</span>
 					</label>
 					<div class="col-md-6 col-sm-6 col-xs-12">
-					  <input type="text" id="branch_id" name="branch_id"  readonly = "readonly"  value="<?php echo $_SESSION['branch_number']; ?>" class="form-control col-md-7 col-xs-12">
+					  <input type="text" id="branch_number" name="branch_number"  readonly = "readonly"  value="<?php echo $_SESSION['branch_number']; ?>" class="form-control col-md-7 col-xs-12">
+					</div>
+				  </div>					
+				  <div class="item form-group">
+					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="branch_id">Guarantors<span class="required">*</span>
+					</label>
+					<div class="col-md-6 col-sm-6 col-xs-12">
+					<span class="btn btn-primary" data-toggle="modal" data-target=".guarantors-modal">Guarantors <i class="fa fa-plus"></i></span>
 					</div>
 				  </div>
 				  <div class="item form-group">
-					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="loan_amout">Loan Amount <span class="required">*</span>
+					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="loan_amount">Loan Amount <span class="required">*</span>
 					</label>
 					<div class="col-md-6 col-sm-6 col-xs-12">
-					  <input type="number" id="loan_amout" name="loan_amout"  maxlength="128" required="required" class="form-control col-md-7 col-xs-12">
+					  <input type="number" id="loan_amount" name="loan_amount"  maxlength="128" required="required" class="form-control col-md-7 col-xs-12">
 					</div>
 				  </div>
 				  <div class="item form-group" >
-					<label class="control-label col-md-3 col-sm-3 col-xs-12"  for="loan_amout">Amount In Words</label>
+					<label class="control-label col-md-3 col-sm-3 col-xs-12"  for="loan_amount_word">Amount In Words</label>
 					<div class="col-md-6 col-sm-6 col-xs-12" id="number_words">
 					  
 					</div>
-					<input type="hidden" id="loan_amout" type="hidden" name="loan_amount_word"  class="form-control col-md-7 col-xs-12">
+					<input type="hidden" id="loan_amount_word" type="hidden" name="loan_amount_word"  class="form-control col-md-7 col-xs-12">
 				  </div>
 				  <div class="item form-group">
 					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="interest_rate">Loan Interest Rate(%) <span class="required">*</span>
@@ -147,14 +153,15 @@ Class Forms{
 					</div>
 				  </div>
 				  <div class="item form-group" >
-					<label class="control-label col-md-3 col-sm-3 col-xs-12"  for="loan_amout">Expected Payback Amount</label>
+					<label class="control-label col-md-3 col-sm-3 col-xs-12"  for="expected_payback">Expected Payback Amount</label>
 					<div class="col-md-6 col-sm-6 col-xs-12" id="expected_payback">
 					  
 					</div>
-					<input  type="hidden" id="interest_rate"  name="expected_payback" required="required" class="form-control col-md-7 col-xs-12">
+					<input  type="hidden" id="expected_payback2"  name="expected_payback" required="required">
+					<input  type="hidden" id="add_loan"  name="add_loan" value="">
 				  </div>
 				  <div class="item form-group">
-					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="telephone">Repayment Duration <span class="required">*</span>
+					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="repayment_duration">Repayment Duration <span class="required">*</span>
 					</label>
 					<div class="col-md-6 col-sm-6 col-xs-12">
 					  <?php
@@ -165,7 +172,7 @@ Class Forms{
 				  <div class="item form-group">
 					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="daily_default">Daily Charge Upon Default 	</label>
 					<div class="col-md-6 col-sm-6 col-xs-12">
-					  <input id="daily_default" type="number" name="daily_default"  class="optional form-control col-md-7 col-xs-12">
+					  <input id="daily_default_amount" type="number" name="daily_default_amount"  class="optional form-control col-md-7 col-xs-12">
 					</div>
 				  </div>				  
 				  <div class="item form-group">
@@ -187,17 +194,86 @@ Class Forms{
 				  <div class="ln_solid"></div>
 				  <div class="form-group">
 					<div class="col-md-6 col-md-offset-3">
-					  <button type="submit" class="btn btn-primary">Cancel</button>
-					  <button id="send" type="submit" class="btn btn-success loginbtn">Submit</button>
+					  <button type="button" class="btn btn-primary cancel">Cancel</button>
+					  <button type="button" class="btn btn-success loginbtn save_data">Submit</button>
 					</div>
 				  </div>
-				</form>
 			  </div>
 			</div>
 		  </div>
 		</div>
-			
-		 <div class="clearfix"></div>
+		
+		<div class="clearfix"></div>
+		 <div class="modal fade guarantors-modal" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+			  <div class="modal-content">
+
+				<div class="modal-header">
+				  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+				  </button>
+				  <h4 class="modal-title" id="myModalLabel">Guarantors</h4>
+				</div>
+				<div class="modal-body">
+							<script>
+							<?php $member = new Member(); $member_details = $member->findById($_GET['member_id']);?>
+								var memberList = <?php $members = $member->findGuarantors($member_details['person_number']); echo json_encode($members);?>;
+								function get_total_members(){
+									var max_size = 5;
+									if(memberList.length < max_size) { max_size = memberList.length; }
+									return max_size;
+								}
+							</script>
+							<input  type="hidden"  name="person_number" value="<?php echo $member_details['person_number'];?>" required="required">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<table  class="table table-striped table-condensed table-hover">
+									<thead>
+										<tr>
+											<th>Member</th>
+											<th class='contact'>Phone</th>
+											<th>Shares</th>
+											<th>Savings</th>
+											<th>&nbsp;</th>
+										</tr>
+									</thead>
+									<tbody data-bind='foreach: selectedGuarantors'>
+										<tr>
+											<td>
+												<select data-bind='options: memberList, optionsText: "member_names", optionsCaption: "Select guarantor...", value: guarantor' class="form-control"> </select>
+											</td>
+											<td class='phone' data-bind='with: guarantor'>
+												<span data-bind='text: phone' > </span>
+											</td>
+											<td class='shares' data-bind='with: guarantor'>
+												<span data-bind='text: shares'> </span>
+											</td>
+											<td class='savings' data-bind='with: guarantor'>
+												<span data-bind='text: savings'> </span>
+												<input name = "guarantor[]" data-bind='value: person_number' type="hidden" required="required"/>
+											</td>
+											<td>
+												<a href='#' data-bind='click: $parent.removeGuarantor' title="Remove"><span class="fa fa-times danger"></span></a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<div class="col-md-3 col-sm-3 col-xs-12"><button data-bind='click: addGuarantor, enable: selectedGuarantors().length < get_total_members()' class="btn btn-info btn-sm"><i class="fa fa-plus"></i>Add Guarantor</button></div>
+								<div class="col-md-2 col-sm-2 col-xs-12"></div>
+								<div class="col-md-3 col-sm-3 col-xs-12">Total shares: <span data-bind='text: totalShares()'> </span></div>
+								<div class="col-md-3 col-sm-3 col-xs-12">Total savings: <span data-bind='text: totalSavings()'> </span></div>
+								<!--div class="col-md-1 col-sm-1 col-xs-12"><button data-bind='click: save, enable: selectedGuarantors().length>0' class="btn btn-info btn-sm"><i class="fa fa-check"></i>Submit</button></div-->
+							</div>
+						  </div>  
+						  <div class="ln_solid"></div>
+						<div class="clearfix"></div>
+						
+					</div>
+					
+				</div>
+			</div>
+		
+		</div>
+		</form>	
+		<div class="clearfix"></div>
 		<?php
 	}
 	function addSecurity(){

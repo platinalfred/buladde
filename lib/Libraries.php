@@ -17,6 +17,10 @@ require_once("WithDraws.php");
 require_once("Locations.php");
 require_once("Branch.php");
 require_once("Loans.php");
+<<<<<<< HEAD
 require_once("Subscription.php");
 require_once("Income.php");
+=======
+require_once("Guarantor.php");
+>>>>>>> 808c33360ffb8ac997afabcea13260683ef55892
 ?>

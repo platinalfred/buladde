@@ -41,17 +41,27 @@ class Loans extends Db {
 		}
 	}
 	
-
 	public function addLoan($data){
-		
-		if($this->add(self::$table_name, array("title", "bike_hire", "hire_amount", "photo","organizer", "organizer_email", "website" ,"location", "event_date", "end_date", "description","terms_and_conditions","cat_id"), array("title"=>$data['title'], "organizer"=>$data['organizer'], "organizer_email"=>$data['organizer_email'], "website"=>$data['website'],"sport_type"=>$data['sport_type'],"event_map"=>$data['event_map'], "photo"=>$data['photo'], "location"=>$data['location'],"description"=>$data['content'],"terms_and_conditions"=>$data['terms_and_conditions'], "event_date"=>$event_date, "end_date"=>$end_date, "bike_hire"=>$data['bike_hire'], "hire_amount"=>$data['hire_amount'],"cat_id"=>$data['cat_id']))){
-			return true;
+		$loan_date = $this->formatDate($data['loan_date']);
+		$result = $this->add(self::$table_name, array("person_number", "loan_number", "branch_number","loan_type", "loan_date", "loan_amount","loan_amount_word", "interest_rate", "expected_payback", "daily_default_amount", "approved_by", "repayment_duration", "comments"), array("person_number"=>$data['person_number'], "loan_number"=>$data['loan_number'], "branch_number"=>$data['branch_number'], "loan_type"=>$data['loan_type'],"loan_date"=>$data['loan_date'],"loan_amount"=>$data['loan_amount'], "loan_amount_word"=>$data['loan_amount_word'], "interest_rate"=>$data['interest_rate'],"expected_payback"=>$data['expected_payback'],"daily_default_amount"=>$data['daily_default_amount'], "loan_date"=>$loan_date, "approved_by"=>$data['approved_by'], "repayment_duration"=>$data['repayment_duration'], "comments"=>$data['comments']));
+		if($result){
+			return $result;
 		}else{
 			return false;
 		}
 	}
+	public function deleteLoan($id){
+		$this->delete(self::$table_name, "id=".$id);
+	}
+	public function updateLoan($data){
+		$loan_date = $this->formatDate($data['loan_date']);
 	
-	
-	
+		if($this->update(self::$table_name,array("person_number", "loan_number", "branch_number","loan_type", "loan_date", "loan_amount","loan_amount_word", "interest_rate", "expected_payback", "daily_default_amount", "approved_by", "repayment_duration", "comments"), array("person_number"=>$data['person_number'], "loan_number"=>$data['loan_number'], "branch_number"=>$data['branch_number'], "loan_type"=>$data['loan_type'],"loan_date"=>$data['loan_date'],"loan_amount"=>$data['loan_amount'], "loan_amount_word"=>$data['loan_amount_word'], "interest_rate"=>$data['interest_rate'],"expected_payback"=>$data['expected_payback'],"daily_default_amount"=>$data['daily_default_amount'], "loan_date"=>$loan_date, "approved_by"=>$data['approved_by'], "repayment_duration"=>$data['repayment_duration'], "comments"=>$data['comments']), "id=".$data['id'])){
+			return true;
+		}else{
+			echo "Failed to update";
+			return false;
+		}
+	}
 }
 ?>
