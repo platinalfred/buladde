@@ -69,6 +69,32 @@ if(isset($_POST['add_deposit'])){
 		}
 	}
 	return; 
+}elseif(isset($_POST['add_loan'])){
+	$data = $_POST;
+	$loan = new Loans();
+	$guarantor = new Guarantor();
+	$data['loan_date'] = date("Y-m-d");
+	if(isset($data['guarantor'])){
+		$loan_id = $loan->addLoan($data);
+		if($loan_id){
+			$result = false;
+			$guarantor_data = array();
+			foreach($data['guarantor'] as $person_number){
+				$guarantor_data[] = '("'.mysql_real_escape_string($person_number).'", '.$loan_id.')';
+			}
+			$result = $guarantor->addGuarantors($guarantor_data);
+			if($result){
+				echo "success";
+			}
+		}
+		else
+			echo "Failed adding loan";
+		return;
+	}
+	else{
+		echo "Please fill in all fields including guarantors";
+		return;
+	}
 }elseif(isset($_POST['add_security_type'])){
 	$security_type = new SecurityType();
 	if($security_type->addSecurityType($_POST)){

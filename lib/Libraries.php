@@ -17,4 +17,5 @@ require_once("WithDraws.php");
 require_once("Locations.php");
 require_once("Branch.php");
 require_once("Loans.php");
+require_once("Guarantor.php");
 ?>

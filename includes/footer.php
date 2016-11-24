@@ -72,6 +72,8 @@
 	
     <!-- Custom Theme Scripts -->
     <script src="build/js/custom.min.js"></script>
+    <!-- Knockout js -->
+    <script src="js/knockout/knockout-min.js"></script>
 	<?php 
 	include("js/custom_js.php");
 	?>

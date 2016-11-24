@@ -15,16 +15,24 @@
 		return false;
 	}
 	function findExpectedPayBackAmount(){
-		var loan_amout = $("#loan_amout").val();
-		var interest_rate = $("#interest_rate").val();
+		var loan_amount = parseInt($("#loan_amount").val());
+		var interest_rate = parseFloat($("#interest_rate").val());
 		var total  = 0 ;
 		var interest = 0;
-		if(loan_amout.trim() != " "){
+		if(loan_amount.trim() != ""){
 			if(interest_rate.trim() != ""){
-				interest  = ((parseInt(interest_rate)/100)* parseInt(loan_amout));
-				total = parseInt(interest) + parseInt(loan_amout);
-				var display_text = "Your interest is "+interest+"/= "+getWords(interest)+" Uganda Shillings Only and your total payback is "+total+"/= "+getWords(total)+"Uganda Shillings Only";
-				$("#expected_payback").html(display_text);
+				interest  = ((parseInt(interest_rate)/100)* parseInt(loan_amount));
+				total = parseInt(interest) + parseInt(loan_amount);
+				if(!isNaN(total)){
+					var display_text = "Your interest is "+interest+"/= "+getWords(interest)+" Uganda Shillings Only and your total payback is "+total+"/= "+getWords(total)+"Uganda Shillings Only";
+					$("#expected_payback").html(display_text);
+					$("#expected_payback2").val(total);
+				}
+				else{
+					$("#expected_payback").html("");
+					$("#expected_payback2").val("");
+				}
+				
 			}else{
 				alert("Please enter loan interest rate.");
 			}
@@ -33,9 +41,10 @@
 		}
 		
 	}
+
 //Value max validator
 	$('#interest_rate').keyup(function(){
-	  if (parseInt($(this).val()) > 100){
+	  if (parseFloat($(this).val()) > 100){
 		 alert("Interest rate has to be less than 100");
 		$(this).val('100');
 	  }else{
@@ -97,19 +106,33 @@
 		}
 		return str.replace(/\s+/g, ' ');
 	}
-	$("#loan_amout").keyup(function(){
-		var currentInput  = $(this).val();
-		var words  = getWords(currentInput);
-		$("#number_words").html( words +" Ugandan Shillings Only");
+	$("#loan_amount").keyup(function(){
+		var currentInput  = parseInt($(this).val());
+		if(!isNaN(currentInput)){
+			var words  = getWords(currentInput);
+			$("#number_words").html( words +" Ugandan Shillings Only");
+			$("#loan_amount_word").val( words);
+		}
+		else
+		{
+			$("#number_words").html("");
+			$("#loan_amount_word").val("");
+		}
+		
 	})
 	$("#deposit_amount, #withdraw_amount").keyup(function(){
-		var currentInput  = $(this).val();
+		var currentInput  = parseInt($(this).val());
 		var words  = getWords(currentInput);
-		if(words != "not a number"){
-			words = words +" Ugandan Shillings Only"
+		if(!isNaN(currentInput)){
+			words = words +" Ugandan Shillings Only";
+			$("#amount_description").html(words);
+			$(".amount_description").val(words);
 		}
-		$("#amount_description").html(words);
-		$(".amount_description").val(words);
+		else
+		{
+			$("#amount_description").html("");
+			$(".amount_description").val("");
+		}
 	})
 	$("#add_staff").smartWizard({
 		transitionEffect:'fade',
@@ -138,7 +161,7 @@
 				var form  = $(this).closest("form");
 				var formData = form.serializeArray();
 				$.ajax({
-					type: "Post",
+					type: "post",
 					url: "add_data.php",
 					data: formData,
 					cache: false,
@@ -147,11 +170,11 @@
 							showStatusMessage("<strong>Successful!</strong> Your data was successfully added!", "success");
 							setTimeout(function(){
 								form[0].reset();
+								$("#number_words, #expected_payback").html( "");
 							}, 88000);
 						}else{
 							showStatusMessage("Could not add data,please try again. If the problem persisits contact the technical team for assistance!", "error");
 							setTimeout(function(){
-								form[0].reset();
 							}, 98000);
 						}
 					}
@@ -396,6 +419,49 @@
 	$('.buttonPrevious').addClass('btn btn-primary');
 	$('.buttonFinish').addClass('btn btn-default loginbtn');
 
+	//list the guarantors
+var GuarantorSelection = function() {
+    var self = this;
+    self.guarantor = ko.observable();
+};
+ 
+var Guarantor = function() {
+    var self = this;
+    // Stores an array of selectedGuarantors
+    self.selectedGuarantors = ko.observableArray([new GuarantorSelection()]); // Put one guarantor in by default
+    self.totalSavings = ko.pureComputed(function() {
+        var total = 0;
+		$.map(self.selectedGuarantors(), function(selectedGuarantor) {
+			if(selectedGuarantor.guarantor()) {
+                total += parseInt("0" + selectedGuarantor.guarantor().savings);
+            };
+        });
+        //$.each(self.selectedGuarantors(), function() { total += parseInt(this.guarantor.shares) })
+        return total;
+    });
+    self.totalShares = ko.pureComputed(function() {
+		var sum = 0;
+        $.map(self.selectedGuarantors(), function(selectedGuarantor) {
+			if(selectedGuarantor.guarantor()) {
+                sum += parseInt("0" + selectedGuarantor.guarantor().shares);
+            };
+        });
+        return sum;
+    });
+	
+    /* self.dataToSave = $.map(self.selectedGuarantors(), function(selectedGuarantor) {
+			var data = selectedGuarantor.guarantor() ? {
+                person_number: selectedGuarantor.guarantor().person_number
+            } : undefined;
+            return data;
+    }); */
+ 
+    // Operations
+    self.addGuarantor = function() { self.selectedGuarantors.push(new GuarantorSelection()) };
+    self.removeGuarantor = function(selectedGuarantor) { self.selectedGuarantors.remove(selectedGuarantor) };
+};
+var guarantor = new Guarantor();
+ko.applyBindings(guarantor);
 
 //Date range picker
 	var cb = function(start, end, label) {

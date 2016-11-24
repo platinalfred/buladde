@@ -18,6 +18,10 @@ class Member extends Db {
 		$result_array = $this->getarray(self::$table_name, "","id DESC", "");
 		return !empty($result_array) ? $result_array : false;
 	}
+	public function findGuarantors($person_no){
+		$result_array = $this->queryData("SELECT `member`.`person_number`, `phone`, `shares`, `savings`, CONCAT(`firstname`, ' ', `lastname`, ' ', `othername`) `member_names` FROM `member` JOIN `person` ON `member`.`person_number` = `person`.`id` JOIN (SELECT SUM(`amount`) savings, `person_number` FROM `transaction` WHERE `transaction_type`=1 GROUP BY `person_number`) `client_savings` ON `member`.`person_number` = `client_savings`.`person_number` JOIN (SELECT SUM(`amount`) `shares`, `person_number` FROM `shares` GROUP BY `person_number`) `client_shares` ON `member`.`person_number` = `client_shares`.`person_number` WHERE `member`.`id` <> {$_GET['member_id']}");
+		return !empty($result_array) ? $result_array : false;
+	}
 	public function findNamesByPersonNumber($pno){
 		$result = $this->getrec(self::$table_name." st, person p", "p.first_name, p.last_name, p.other_names", "st.person_number='$pno' AND p.person_number = st.person_number", "", "");
 		return !empty($result) ? $result['first_name']." ".$result['other_names']." ".$result['last_name'] : false;
