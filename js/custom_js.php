@@ -143,13 +143,14 @@
 					data: formData,
 					cache: false,
 					success: function(response){
+						
 						if(response.trim() == "success"){
 							showStatusMessage("<strong>Successful!</strong> Your data was successfully added!", "success");
 							setTimeout(function(){
 								form[0].reset();
 							}, 88000);
 						}else{
-							showStatusMessage("Could not add data,please try again. If the problem persisits contact the technical team for assistance!", "error");
+							showStatusMessage(response  + "Could not add data,please try again. If the problem persisits contact the technical team for assistance!", "error");
 							setTimeout(function(){
 								form[0].reset();
 							}, 98000);
@@ -221,11 +222,13 @@
 				data: $('.form-horizontal').serialize(),
 				cache: false,
 				success: function(response){
-					if(response.trim() == "success"){
+					if($.isNumeric(response)){
 						showStatusMessage('A member has been successfully added!', "success");
 						setTimeout(function(){
 							$('.form-horizontal')[0].reset();
+							window.location="member-details.php?member_id="+response;
 						}, 4000);
+						
 					}else{
 						showStatusMessage('Failed to a member, please try again. If the problem persisits contact the technical team for assistance!', "error");
 						setTimeout(function(){
@@ -453,8 +456,12 @@
 		console.log("hide event fired");
 		});
 		$('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-			findReportRange(picker.startDate.format('MMMM D, YYYY'), picker.endDate.format('MMMM D, YYYY'));
-			console.log("apply event fired, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
+			<?php 
+			if(isset($_GET['member_id'])){ ?>
+				findReportRange(<?php echo $_GET['member_id']; ?>, picker.startDate.format('MMMM D, YYYY'), picker.endDate.format('MMMM D, YYYY'));
+			<?php
+			}
+			?>
 		});
 		$('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
 			console.log("cancel event fired");
@@ -475,14 +482,15 @@
 			var initial_range = $("#reportrange span").html().split("-");
 			var start_date = initial_range[0];
 			var end_date = initial_range[1];
-			findReportRange(start_date, end_date);
+			var member = <?php echo $_GET['member_id']; ?>;
+			findReportRange(member, start_date, end_date);
 		<?php 
 		}
 		?>
-		function findReportRange(start_date, end_date){
+		function findReportRange(member, start_date, end_date){
 			$.ajax({
 				type: "get",
-				url: "client_transactions.php?member_id=<?php echo $_GET['member_id']; ?>&start_date="+start_date+"&end_date="+end_date,
+				url: "client_transactions.php?member_id="+member+"&start_date="+start_date+"&end_date="+end_date,
 				success: function(response){
 					$("#report_data").html(response);
 				}

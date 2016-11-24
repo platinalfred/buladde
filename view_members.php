@@ -47,20 +47,7 @@ if(isset($_POST['person_number']) && $_POST['person_number'] != ""){
 		  <div class="x_title">
 			<h2>Members <small></small></h2>
 			<ul class="nav navbar-right panel_toolbox">
-			  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-			  </li>
-			  <li class="dropdown">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-				<ul class="dropdown-menu" role="menu">
-				  <!--<li><a href="#">Settings 1</a>
-				  </li>
-				  <li><a href="#">Settings 2</a>
-				  </li>-->
-				</ul>
-			  </li>
-			  <!--<li><a class="close-link"><i class="fa fa-close"></i></a>-->
-			  </li>
-			</ul>
+			  <li><a class="btn btn-primary" data-toggle="modal" data-target=".member_modal"> <i class="fa fa-plus"></i> Add New Member</a></li></ul>
 			<div class="clearfix"></div>
 		  </div>
 		  <div class="x_content">
@@ -84,7 +71,7 @@ if(isset($_POST['person_number']) && $_POST['person_number'] != ""){
 							?>
 							<tr>
 							  <td><a href="member-details.php?member_id=<?php echo $single['id']; ?>"><?php echo $person_data['person_number']; ?></A></td>
-							  <td><?php echo $person->Username($person_data['firstname'], $person_data['lastname'], $person_data['othername']); ?></td>
+							  <td><?php echo $person_data['firstname']." ".$person_data['othername']." ".$person_data['lastname']; ?></td>
 							  <td><?php echo $person_data['phone'] ?></td>
 							  <td><?php echo date("j F, Y", strtotime($person_data['dateofbirth'])); ?></td>
 							  <td><?php   ?></td>
@@ -131,6 +118,24 @@ if(isset($_POST['person_number']) && $_POST['person_number'] != ""){
 	</div>
   </div>
 </div>
+<div class="clearfix"></div>
+	 <div class="modal fade member_modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+		  <div class="modal-content">
+
+			<div class="modal-header">
+			  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+			  </button>
+			  <h4 class="modal-title" id="myModalLabel">Add  New Member</h4>
+			</div>
+			<div class="modal-body">
+				<?php 
+				include("add_member.php");
+				?>
+			</div>
+		</div>
+	  </div>      
+	</div>
 <!-- /page content -->
 <?php 
 include("includes/footer.php"); 

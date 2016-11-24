@@ -28,10 +28,12 @@ $locations = new Locations();
 				  <li><a href="?task=member_type.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Member Type</a> </li>
 				  <li><a href="?task=branch.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Branch</a></li>
 				  <li><a href="?task=access_level.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Access Level</a></li>
+				  <li><a href="?task=income_types.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Income Type</a></li>
 				  <li><a href="?task=loan_type.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Loan Type</a></li>
-				  <li><a href="?view=loantypes" class="btn btn-success"><i class="fa fa-folder-open-o"></i> View Loan Types</a></li>
-				  <li><a href="?view=securitytypes" class="btn btn-success"><i class="fa fa-folder-open-o"></i> View Security Types </a></li>
-				  <li><a href="?view=accesslevels" class="btn btn-success"><i class="fa fa-folder-open-o"></i> View Access Levels</a></li>
+				  <li><a href="?view=loantypes" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Loan Types</a></li>
+				  <li><a href="?view=securitytypes" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Security Types </a></li>
+				  <li><a href="?view=accesslevels" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Access Levels</a></li>
+				  <li><a href="?view=accesslevels" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Income Types</a></li>
 				</ul>
 				
 			</div>

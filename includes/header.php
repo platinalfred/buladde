@@ -3,6 +3,7 @@ session_start();
 require_once("lib/Libraries.php");
 $staff = new Staff();
 $logged_in_user = $staff->findNamesById($_SESSION['id']);
+print_r($logged_in_user);
 $logged = $_SESSION["Logged"];
 
 if(!$logged){
@@ -55,7 +56,7 @@ if(!$logged){
   <body class="nav-md">
     <div class="container body">
       <div class="main_container">
-        <div class="col-md-3 left_col">
+        <div class="col-md-3 left_col menu_fixed">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
 				<img src="img/logo.png" style="width:70%;margin-top:10px;margin-left: 6%;"/>
@@ -84,19 +85,9 @@ if(!$logged){
                       <li><a href="#">Loans</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-users"></i> Members <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="view_members.php">View Members</a></li>
-                      <li><a href="add_member.php">Add New Member</a></li>
-                    </ul>
-                  </li>
+                  <li><a href="view_members.php"><i class="fa fa-users"></i> Members <span class="fa fa-chevron-right"></span></a> </li>
                   <li><a href="staff.php"><i class="fa fa-users"></i>Staff<span class="fa fa-chevron-right"></span></a></li>
-                  <li><a href="expenses.php"><i class="fa fa-table"></i>Expenses <span class="fa fa-chevron-right"></span></a>
-                   <!-- <ul class="nav child_menu">
-                      <li><a href="#">View Expenses</a></li>
-                      <li><a href="">Add Expense</a></li>
-                    </ul>-->
-                  </li>
+                  <li><a href="expenses.php"><i class="fa fa-table"></i>Expenses <span class="fa fa-chevron-right"></span></a></li>
                   <li><a href="manage_accounts.php"><i class="fa fa-money"></i>Manage Accounts <span class="fa fa-chevron-right"></span></a> </li>
                 </ul>
               </div>

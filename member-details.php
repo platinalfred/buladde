@@ -98,15 +98,22 @@ if($_GET['member_id']){
 			<div class="col-md-12 col-sm-12 col-xs-12 form-group" style="border-top:1px solid #09A; padding-top:10px;">
 				<ul class="nav navbar-left panel_toolbox">
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=loan.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Loan</a> </li>
-				<!--
-				  <li><a href="?member_id=<?php //echo  $_GET['member_id']; ?>&task=repayment.add" class="btn btn-primary"><i class="fa fa-plus"></i> Loan Re-Payment</a></li> -->
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=subscription.add" class="btn btn-primary"><i class="fa fa-plus"></i>Subscribe</a></li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=shares.add" class="btn btn-primary"><i class="fa fa-plus"></i>Add Shares</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=nok.add" class="btn btn-primary"><i class="fa fa-plus"></i></i> Add Next of Kin</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=deposit.add" class="btn btn-primary"><i class="fa fa-plus"></i> Deposit Saving</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=withdraw.add" class="btn btn-primary"><i class="fa fa-plus"></i> Withdraw</a></li>
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=client_trasaction_history" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Transaction History</a></li>
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=client_loans" class="btn btn-success"><i class="fa fa-folder-open-o"></i> View Loans</a></li>
+				 
+				 
 				</ul>
-				
+				<ul class="nav navbar-right panel_toolbox">
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=client_loans" class="btn btn-success"><i class="fa fa-folder-open-o"></i> View Loans</a></li>
+				   <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=subscritions" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Subscriptions</a></li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=myshares" class="btn btn-success"><i class="fa fa-folder-open-o"></i>My Shares</a></li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=nok" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Next of kin details</a></li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=savings" class="btn btn-success"><i class="fa fa-folder-open-o"></i>My savings</a></li>
+				   <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=client_trasaction_history" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Transaction History</a></li>
+				</ul>
 			</div>
 		  </div>
 	  </div>

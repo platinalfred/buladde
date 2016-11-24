@@ -13,14 +13,21 @@ class Member extends Db {
 		$result = $this->getrec(self::$table_name, "person_number=".$pno, "", "");
 		return !empty($result) ? $result:false;
 	}
-	
+	public function findMemberNames($pno){
+		$result = $this->getfrec("person", "firstname, lastname, othername", "id=".$pno, "", "");
+		return !empty($result) ? $result['firstname']." ".$result['othername']." ".$result['lastname'] : false;
+	}
+	public function findMemberPersonNumber($id){
+		$result = $this->getfrec(self::$table_name, "person_number", "id=".$id, "", "");
+		return !empty($result) ? $result['person_number'] : false;
+	}
 	public function findAll(){
 		$result_array = $this->getarray(self::$table_name, "","id DESC", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findNamesByPersonNumber($pno){
-		$result = $this->getrec(self::$table_name." st, person p", "p.first_name, p.last_name, p.other_names", "st.person_number='$pno' AND p.person_number = st.person_number", "", "");
-		return !empty($result) ? $result['first_name']." ".$result['other_names']." ".$result['last_name'] : false;
+		$result = $this->getrec(self::$table_name." st, person p", "p.firstname, p.lastname, p.othername", "p.person_number=".$pno." AND p.id = st.person_number", "", "");
+		return !empty($result) ? $result['firstname']." ".$result['othername']." ".$result['lastname'] : false;
 	}
 	public function findNamesById($id){
 		$result = $this->getrec(self::$table_name." st, person p", "p.first_name, p.last_name, p.other_names", "st.id='$id' AND p.person_number = st.person_number", "", "");
@@ -29,8 +36,9 @@ class Member extends Db {
 	
 	public function addMember($data){
 		$fields = array("person_number","branch_number","member_type","comment", "added_by","date_added");
-		if($this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data))){
-			return true;
+		$ins_id = $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
+		if($ins_id){
+			return $ins_id;
 		}
 		return false;
 	}

@@ -14,6 +14,13 @@ Class Forms{
 			case 'loan.add';
 				$this->addLoan();
 			break;
+			case 'subscription.add';
+				$this->addSubscription();
+			break;
+			case 'shares.add';
+				$this->addShares();
+			break;
+			
 			case 'security.add';
 				$this->addSecurity();
 			break;
@@ -54,35 +61,22 @@ Class Forms{
 	function defaultDisplay(){
 		?>
 		<div class="row">
-			<form style="margin-left:150px; text-align: center; width:200px;" id="check_out_form" name="purchase" action="http://web-tier-elb-826037097.us-west-2.elb.amazonaws.com/wa/purchase-receipt" method="post">
-				<input type="hidden" name="x_fp_sequence" value="179">
-				<input type="hidden" name="x_fp_timestamp" value="1479374359">
-				<input type="hidden" name="x_fp_hash" value="cdd1868cdef4f2f71f7b86056b0d9e42">
-				<input class="products_total_price" type="hidden" name="x_amount" value="119.00">
-				<input class="products_total_price" type="hidden" name="price" value="119.00">
-				<input type="hidden" name="code" value="">
-				<input class="products_total_price" type="hidden" name="total" value="119.00">
-				<input type="hidden" name="x_state" value="wa">
-				<input type="hidden" name="current_state" value="wa">
-				<input type="hidden" name="x_first_name" value="Test1">
-				<input type="hidden" name="x_last_name" value="Tester">
-				<input type="hidden" name="x_phone" value="342-293-2989">
-				<input type="hidden" name="x_cust_id" value="az_tester">
-				<input type="hidden" name="x_email" value="dongorman@gmail.com">
-				<input type="hidden" name="x_description" value="Real Estate Education">
-				<input type="hidden" name="x_login" value="274H6eQmb">
-				<input type="hidden" name="x_show_form" value="PAYMENT_FORM">
-				<input type="hidden" name="x_relay_response" value="True">
-				<input type="hidden" name="x_fp_timestamp" value="1479374359">
-				<input type="hidden" name="x_logo_url" value="https://secure.authorize.net/mgraphics/logo_1448809_3.jpg">
-				<input type="hidden" name="user_id" value="13181">
-				<input type="hidden" name="x_fp_sequence" value="179">
-				<input type="hidden" name="x_fp_timestamp" value="1479374359">
-				<input type="hidden" name="x_fp_hash" value="62753ec1068fd0ce054b193cfa411ec3">
-				<button id="send" type="submit" class="btn btn-success ">Submit</button>
-			</form>
-			 
+		  <div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="x_panel">
+					<div class="x_title">
+						<h2>Default content<small>choose another action or please seek assistance</small></h2>
+						<ul class="nav navbar-right panel_toolbox">
+						  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+						</ul>
+						<div class="clearfix"></div>
+					  </div>
+					<div class="x_content">
+						<h2>The contents your looking for can not be found</h2>
+					</div>
+				</div>
+			</div>
 		</div>
+	
 		<?php
 	}	
 	function addLoan(){
@@ -285,7 +279,155 @@ Class Forms{
 		 <div class="clearfix"></div>
 		<?php
 	}
-	
+	function addSubscription(){
+		$member = new Member();
+		$subscription = new Subscription();
+		$pno = $member->findMemberPersonNumber($_GET['member_id']);
+		?>
+		<div class="row">
+		  <div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="x_panel">
+			  <div class="x_title">
+				<h2>Add Subscription <small></small></h2>
+				<ul class="nav navbar-right panel_toolbox">
+				  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+				</ul>
+				<div class="clearfix"></div>
+			  </div>
+			  <div class="x_content">
+				<form class="form-horizontal form-label-left" novalidate>
+					<input type="hidden" name="add_subscription" value="add_subscription">
+					<input type="hidden" name="person_number" value="<?php echo $pno; ?>">
+					  <div class="item form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Subscription Amount<span class="required">*</span>
+						</label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+							<input type="number"  name="amount"  required="required" class="form-control col-md-7 col-xs-12">
+						  </div>
+					  </div>
+					  <div class="item form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">Subscription Year <span class="required">*</span>
+						</label>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<select class="form-control" name="subscription_year">
+								<?php 
+								for($i = 0; $i < 5; $i++){ 
+									$year = date('Y', strtotime('+'.$i.' year'));
+									if(!$subscription->isSubscribedForYear($pno, $year)){
+										?>
+										<option value="<?php echo $year; ?>" ><?php echo $year; ?> </option>
+										<?php
+									}
+								}
+								?>
+							  </select>
+						</div>
+					  </div>
+					  
+					  <div class="item form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">Paid By <span class="required">*</span>
+						</label>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<input type="text"  name="paid_by"  class="form-control col-md-7 col-xs-12">
+						</div>
+					  </div>
+					  <div class="item form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="telephone">Approved By
+						</label>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+						  <input type="text" disabled="disabled" name="received_by"  value="<?php echo $member->findMemberNames($_SESSION['person_number']); ?>" class="form-control col-md-7 col-xs-12">
+						  <input type="hidden" name="received_by"  value="<?php echo $_SESSION['person_number'] ; ?>" class="form-control col-md-7 col-xs-12">
+						</div>
+					  </div>
+					  <div class="ln_solid"></div>
+					  <div class="form-group">
+						<div class="col-md-6 col-md-offset-3">
+						  <button id="send" type="button" class="btn btn-success loginbtn save_data">Add Subscription</button>
+						</div>
+					  </div>
+				</form>
+			  </div>
+			</div>
+		  </div>
+		</div>
+			
+		 <div class="clearfix"></div>
+		<?php
+	}
+	function addShares(){
+		$member = new Member();
+		$shares = new Shares();
+		
+		?>
+		<div class="row">
+		  <div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="x_panel">
+			  <div class="x_title">
+				<h2>Add Subscription <small></small></h2>
+				<ul class="nav navbar-right panel_toolbox">
+				  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+				</ul>
+				<div class="clearfix"></div>
+			  </div>
+			  <div class="x_content">
+				<form class="form-horizontal form-label-left" novalidate>
+					<input type="hidden" name="add_subscription" value="add_subscription">
+					  <div class="item form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Subscription Amount<span class="required">*</span>
+						</label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+							<input type="number"  name="amount"  required="required" class="form-control col-md-7 col-xs-12">
+						  </div>
+					  </div>
+					  <div class="item form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">Subscription Year <span class="required">*</span>
+						</label>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<select class="form-control" name="subscription_year">
+								<?php 
+								for($i = 0; $i < 5; $i++){ 
+									$year = date('Y', strtotime('+'.$i.' year'));
+									if(!$subscription->isSubscribedForYear($_GET['member_id'], $year)){
+										?>
+										<option value="<?php echo $year; ?>" ><?php echo $year; ?> </option>
+										<?php
+									}
+								}
+								?>
+							  </select>
+						</div>
+					  </div>
+					  
+					  <div class="item form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">Paid By <span class="required">*</span>
+						</label>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<input type="text"  name="paid_by"  class="form-control col-md-7 col-xs-12">
+						</div>
+					  </div>
+					  <div class="item form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="telephone">Approved By
+						</label>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+						  <input type="text" disabled="disabled" name="received_by"  value="<?php echo $member->findMemberNames($_SESSION['person_number']); ?>" class="form-control col-md-7 col-xs-12">
+						  <input type="hidden" name="received_by"  value="<?php $_SESSION['person_number'] ; ?>" class="form-control col-md-7 col-xs-12">
+						</div>
+					  </div>
+					  <div class="ln_solid"></div>
+					  <div class="form-group">
+						<div class="col-md-6 col-md-offset-3">
+						  <button id="send" type="button" class="btn btn-success loginbtn">Add Subscription</button>
+						</div>
+					  </div>
+				</form>
+			  </div>
+			</div>
+		  </div>
+		</div>
+			
+		 <div class="clearfix"></div>
+		<?php
+	}
 	function LoanRepayment(){
 		?>
 		<div class="row">
@@ -369,7 +511,8 @@ Class Forms{
 					  <input id="name" class="form-control col-md-7 col-xs-12" data-validate-length-range="6" data-validate-words="2" name="name" placeholder="both name(s) e.g Jon Doe" required="required" type="text">
 					</div>
 				  </div>
-				  <div class="item form-group">
+					</div>
+					  em form-group">
 					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="gender">Gender<span class="required">*</span>
 					</label>
 					<div class="col-md-6 col-sm-6 col-xs-12">
@@ -871,6 +1014,7 @@ Class Forms{
 		</div>
 			
 		 <div class="clearfix"></div>
-		<?php
+	<?php 
 	}
 }
+	?>

@@ -1,6 +1,23 @@
 <?php 
 require_once("lib/Libraries.php");
-if(isset($_POST['add_deposit'])){
+if(isset($_POST['add_subscription'])){
+	$data = $_POST;
+	$member = new Member();
+	$subscription = new Subscription();
+	$income = new Income();
+	$data['date_paid'] = date("Y-m-d");
+	 if($subscription->addSubscription($data)){
+		$data['income_type'] = 1;
+		$data['date_added'] = date("Y-m-d");
+		$data['added_by'] = $data['received_by'];
+		$data['description'] = "Annual subscription paid by ".$member->findMemberNames($data['person_number'])." for year ".$data['subscription_year'];
+		if($income->addIncome($data)){
+			echo "success";
+			return;
+		}
+	}  
+	return false;
+}if(isset($_POST['add_deposit'])){
 	$data = $_POST;
 	$accounts = new Accounts();
 	if($accounts->addDeposit($data)){
@@ -29,19 +46,20 @@ if(isset($_POST['add_deposit'])){
 	$person_id = $person->addPerson($data);
 	if($person_id){
 		$data['person_number'] = $person_id;
-		if($member->addMember($data)){
+		$member_id = $member->addMember($data);
+		if($member_id){
 			$data['account_number'] = substr(number_format(time() * rand(),0,'',''),0,10);
 			$data['balance'] = 0.00;
 			$data['status'] = 1;
 			$data['date_created'] = date("Y-m-d");
-			$data['created_added'] = $data['added_by']; 
+			$data['created_by'] = $data['added_by']; 
 			if($accounts->addAccount($data)){
-				echo "success";
+				echo $member_id;
 				return;
 			}
 			
 		}
-	}
+	} 
 	return "failed"; 
 }elseif(isset($_POST['add_staff'])){
 	$data = $_POST;

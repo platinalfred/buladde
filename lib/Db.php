@@ -401,6 +401,7 @@ class Db{
 			if ($i < (count($fields) - 1)) $va = $va.",";
 		}
 		$ins = "INSERT INTO ".$table. " (".$fi.") VALUES (".$va.")";
+		//echo $ins;
 		$inse = $this->conn->query($ins);
 		if($inse){
 			return mysqli_insert_id($this->conn);
