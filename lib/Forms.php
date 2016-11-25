@@ -113,7 +113,7 @@ Class Forms{
 					</label>
 					<div class="col-md-6 col-sm-6 col-xs-12">
 						<?php
-						$db->loadList("Select * from loan_type", "loan_type", "id","name","loan_type");
+						$db->loadList("SELECT * FROM loan_type", "loan_type", "id","name","loan_type");
 						?>
 					</div>
 				  </div>					
@@ -127,8 +127,13 @@ Class Forms{
 				  <div class="item form-group">
 					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="branch_id">Guarantors<span class="required">*</span>
 					</label>
-					<div class="col-md-6 col-sm-6 col-xs-12">
-					<span class="btn btn-primary" data-toggle="modal" data-target=".guarantors-modal">Guarantors <i class="fa fa-plus"></i></span>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+					<span class="btn btn-primary" data-toggle="modal" data-target=".guarantors-modal"><i class="fa fa-plus"></i>/<i class="fa fa-minus"></i> Guarantors</span>
+					</div>
+					<div class="col-md-4 col-sm-4 col-xs-12" data-bind="foreach: selectedGuarantors">
+											<span class='btn' data-bind='with: guarantor'>
+												<i data-bind='text: member_names' > </i>
+											</span>
 					</div>
 				  </div>
 				  <div class="item form-group">
@@ -260,7 +265,7 @@ Class Forms{
 								<div class="col-md-2 col-sm-2 col-xs-12"></div>
 								<div class="col-md-3 col-sm-3 col-xs-12">Total shares: <span data-bind='text: totalShares()'> </span></div>
 								<div class="col-md-3 col-sm-3 col-xs-12">Total savings: <span data-bind='text: totalSavings()'> </span></div>
-								<!--div class="col-md-1 col-sm-1 col-xs-12"><button data-bind='click: save, enable: selectedGuarantors().length>0' class="btn btn-info btn-sm"><i class="fa fa-check"></i>Submit</button></div-->
+								<div class="col-md-1 col-sm-1 col-xs-12"><button data-dismiss="modal" data-bind='enable: totalSavings()>0' class="btn btn-info btn-sm"><i class="fa fa-check"></i>Submit</button></div>
 							</div>
 						  </div>  
 						  <div class="ln_solid"></div>
