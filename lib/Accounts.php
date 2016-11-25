@@ -78,6 +78,10 @@ class Accounts extends Db {
 		$result_array = $this->getarray(self::$table_name, "","id DESC", "");
 		return !empty($result_array) ? $result_array : false;
 	}
+	public function findMemberDeposits($pno){
+		$result_array = $this->getarray("transaction", "person_number=".$pno." AND transaction_type=1","id DESC", "");
+		return !empty($result_array) ? $result_array : false;
+	}
 	public function findAccountCredit($accno){
 		$result = $this->getfrec(self::$table_name, "credit", "account_number='$accno'", "");
 		return !empty($result) ? $result['credit']:false;

@@ -24,18 +24,23 @@ $locations = new Locations();
 		<div class="row" >
 		  <div class="col-md-12 col-sm-12 col-xs-12 form-group" style=" padding-top:10px;">
 				<ul class="nav navbar-left panel_toolbox">
-				  <li><a href="?task=security_type.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Security Type</a> </li>
-				  <li><a href="?task=member_type.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Member Type</a> </li>
-				  <li><a href="?task=branch.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Branch</a></li>
-				  <li><a href="?task=access_level.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Access Level</a></li>
-				  <li><a href="?task=income_types.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Income Type</a></li>
-				  <li><a href="?task=loan_type.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Loan Type</a></li>
-				  <li><a href="?view=loantypes" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Loan Types</a></li>
-				  <li><a href="?view=securitytypes" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Security Types </a></li>
-				  <li><a href="?view=accesslevels" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Access Levels</a></li>
-				  <li><a href="?view=accesslevels" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Income Types</a></li>
+					<li><a href="?task=expensetype.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Expense Type</a> </li>
+					<li><a href="?task=security_type.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Security Type</a> </li>
+					<li><a href="?task=member_type.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Member Type</a> </li>
+					<li><a href="?task=branch.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Branch</a></li>
+					<li><a href="?task=access_level.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Access Level</a></li>
+					<li><a href="?task=income_types.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Income Type</a></li>
+					<li><a href="?task=loan_type.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Loan Type</a></li>
+					<li><a href="?task=loan_repayment_durarion.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Loan Repayment Duration</a></li>
 				</ul>
-				
+				<ul class="nav navbar-right panel_toolbox">
+					<li><a href="?view=expensetypes" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Expense Types </a></li>
+					<li><a href="?view=securitytypes" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Security Types </a></li>
+					<li><a href="?view=accesslevels" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Access Levels</a></li>
+					<li><a href="?view=accesslevels" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Income Types</a></li>
+					<li><a href="?view=loantypes" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Loan Types</a></li>
+					<li><a href="?view=securitytypes" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Repayment Durations</a></li>
+				</ul>
 			</div>
 		  </div>
 	  </div>

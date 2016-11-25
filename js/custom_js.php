@@ -6,6 +6,28 @@
 	removeRedBorderOnRequiredField();
 	cancelFormFields();
 /* ADD MEMBER JS */
+	$(".photo_upload").click(function(){
+		var formData = new FormData($("form#photograph")[0]);
+		$.ajax({
+			url: "photo_upload.php",
+			type: 'POST',
+			data: formData,
+			async: false,
+			success: function (response) {
+				alert(response);
+				if(response.trim() == "success"){
+					window.location.reload(true);
+				}else{
+					showStatusMessage(response, "error");
+				}
+			},
+			cache: false,
+			contentType: false,
+			processData: false
+		});
+
+		return false;
+	});
 	function doPasswordsMatch(){
 		var pass = $("#password").val();
 		var pass2 = $("#password2").val();
@@ -172,11 +194,12 @@
 							setTimeout(function(){
 								form[0].reset();
 								$("#number_words, #expected_payback").html( "");
-							}, 88000);
+							}, 4000);
 						}else{
 							showStatusMessage(response  + "Could not add data,please try again. If the problem persisits contact the technical team for assistance!", "error");
 							setTimeout(function(){
-							}, 98000);
+								
+							}, 4000);
 						}
 					}
 				});

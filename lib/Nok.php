@@ -1,9 +1,9 @@
 <?php
 $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
-class Shares extends Db {
-	protected static $table_name  = "shares";
-	protected static $db_fields = array("id", "amount", "person_number",  "paid_by", "received_by", "date_paid");
+class Nok extends Db {
+	protected static $table_name  = "nextofkin";
+	protected static $db_fields = array("id", "name","person_number",  "relationship",  "gender", "marital_status", "phone", "physical_address", "postal_address", "added_by", "date_added");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
@@ -14,7 +14,7 @@ class Shares extends Db {
 		$result_array = $this->getarray(self::$table_name, "", "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
-	public function findMemberShares($pno){
+	public function findMemberNextOfKin($pno){
 		$result_array = $this->getarray(self::$table_name, "person_number=".$pno, "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
@@ -33,7 +33,7 @@ class Shares extends Db {
 		}
 		return false;
 	}
-	public function addShares($data){
+	public function addNok($data){
 		$fields = array_slice(self::$db_fields, 1);
 		if($this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data))){
 			return true;

@@ -13,6 +13,10 @@ class Staff extends Db {
 		$result = $this->getfrec(self::$table_name, "person_number='$pno'", "");
 		return !empty($result) ? $result:false;
 	}
+	public function findPersonsPhoto($pno){
+		$result = $this->getfrec("person", "photograph", "id=".$pno, "", "");
+		return !empty($result) ? $result['photograph']:false;
+	}
 	public function findAll(){
 		$result_array = $this->getarray(self::$table_name, "","id DESC", "");
 		return !empty($result_array) ? $result_array : false;

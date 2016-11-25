@@ -3,12 +3,12 @@ session_start();
 require_once("lib/Libraries.php");
 $staff = new Staff();
 $logged_in_user = $staff->findNamesById($_SESSION['id']);
-print_r($logged_in_user);
 $logged = $_SESSION["Logged"];
 
 if(!$logged){
 	header("Location:index.php");
 } 
+$foto = $staff->findPersonsPhoto($_SESSION['person_number']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,8 +62,17 @@ if(!$logged){
 				<img src="img/logo.png" style="width:70%;margin-top:10px;margin-left: 6%;"/>
             </div>
             <div class="clearfix"></div>
-           
-
+           <div class="profile">
+              <div class="profile_pic">
+                <img src="<?php if($foto){ echo $foto; }else{ echo "img/profiles/platin.jpg"; }; ?>" style="width:56px; height:56px;"  alt="..." class="img-circle profile_img">
+              </div>
+              <div class="profile_info">
+                <span>Welcome,</span>
+                <h2><?php   echo $_SESSION['username']; ?></h2>
+              </div>
+            </div>
+			
+			<div class="clearfix"></div>
             <hr style="background:#ddd; height:2px;" />
 			  <div class="clearfix"></div>
             <!-- sidebar menu -->
@@ -151,7 +160,7 @@ if(!$logged){
 				<ul class="nav navbar-nav navbar-right">
 					<li class="">
 					  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-						<img src="img/profiles/platin.jpg" alt=""><?php   echo $_SESSION['username']; ?>
+						<img src="<?php if($foto){ echo $foto; }else{ echo "img/profiles/platin.jpg"; }; ?>" alt=""><?php   echo $_SESSION['username']; ?>
 						<span class=" fa fa-angle-down"></span>
 					  </a>
 					  <ul class="dropdown-menu dropdown-usermenu pull-right">

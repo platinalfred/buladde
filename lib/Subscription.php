@@ -14,6 +14,10 @@ class Subscription extends Db {
 		$result_array = $this->getarray(self::$table_name, "", "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
+	public function findMemberSubscriptions($pno){
+		$result_array = $this->getarray(self::$table_name, "", "person_number=".$pno, "");
+		return !empty($result_array) ? $result_array : false;
+	}
 	public function findSubscriptionAmount($id){
 		$result = $this->getfrec(self::$table_name, "amount", "id=".$id, "", "");
 		return !empty($result) ? $result['amount'] : false;

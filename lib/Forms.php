@@ -49,10 +49,16 @@ Class Forms{
 			case 'loan_type.add';
 				$this->addLoanType();
 			break;
+			case 'loan_repayment_durarion.add';
+				$this->addLoanRepaymentDuration();
+			break;
+			
 			case 'access_level.add';
 				$this->addAccessLevel();
 			break;
-			
+			case 'expensetype.add';
+				$this->addExpenseType();
+			break;
 			default:
 				$this->defaultDisplay();
 			break;
@@ -433,13 +439,13 @@ Class Forms{
 	function addShares(){
 		$member = new Member();
 		$shares = new Shares();
-		
+		$pno = $member->findMemberPersonNumber($_GET['member_id']);
 		?>
 		<div class="row">
 		  <div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="x_panel">
 			  <div class="x_title">
-				<h2>Add Subscription <small></small></h2>
+				<h2>Manage Shares <small></small></h2>
 				<ul class="nav navbar-right panel_toolbox">
 				  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
 				</ul>
@@ -447,35 +453,17 @@ Class Forms{
 			  </div>
 			  <div class="x_content">
 				<form class="form-horizontal form-label-left" novalidate>
-					<input type="hidden" name="add_subscription" value="add_subscription">
+					<input type="hidden" name="add_share" value="add_share">
+					<input type="hidden" name="person_number" value="<?php echo $pno; ?>">
 					  <div class="item form-group">
-						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Subscription Amount<span class="required">*</span>
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="amount">Amount<span class="required">*</span>
 						</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
 							<input type="number"  name="amount"  required="required" class="form-control col-md-7 col-xs-12">
 						  </div>
 					  </div>
 					  <div class="item form-group">
-						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">Subscription Year <span class="required">*</span>
-						</label>
-						<div class="col-md-6 col-sm-6 col-xs-12">
-							<select class="form-control" name="subscription_year">
-								<?php 
-								for($i = 0; $i < 5; $i++){ 
-									$year = date('Y', strtotime('+'.$i.' year'));
-									if(!$subscription->isSubscribedForYear($_GET['member_id'], $year)){
-										?>
-										<option value="<?php echo $year; ?>" ><?php echo $year; ?> </option>
-										<?php
-									}
-								}
-								?>
-							  </select>
-						</div>
-					  </div>
-					  
-					  <div class="item form-group">
-						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">Paid By <span class="required">*</span>
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="paid_by">Paid By <span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
 							<input type="text"  name="paid_by"  class="form-control col-md-7 col-xs-12">
@@ -486,13 +474,13 @@ Class Forms{
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
 						  <input type="text" disabled="disabled" name="received_by"  value="<?php echo $member->findMemberNames($_SESSION['person_number']); ?>" class="form-control col-md-7 col-xs-12">
-						  <input type="hidden" name="received_by"  value="<?php $_SESSION['person_number'] ; ?>" class="form-control col-md-7 col-xs-12">
+						  <input type="hidden" name="received_by"  value="<?php echo $_SESSION['person_number'] ; ?>" class="form-control col-md-7 col-xs-12">
 						</div>
 					  </div>
 					  <div class="ln_solid"></div>
 					  <div class="form-group">
 						<div class="col-md-6 col-md-offset-3">
-						  <button id="send" type="button" class="btn btn-success loginbtn">Add Subscription</button>
+						  <button id="send" type="button" class="btn btn-success loginbtn save_data">Add Shares</button>
 						</div>
 					  </div>
 				</form>
@@ -567,90 +555,101 @@ Class Forms{
 		<?php
 	}
 	function nextOfKin(){
+		$member = new Member();
+		$shares = new Shares();
+		$pno = $member->findMemberPersonNumber($_GET['member_id']);
 		?>
 		<div class="row">
 		  <div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="x_panel">
 			  <div class="x_title">
-				<h2>Add Next of Kin (NOK) for this Member <small></small></h2>
+				<h2>Next of Kin (NOK)<small> Add form</small></h2>
 				<ul class="nav navbar-right panel_toolbox">
 				  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
 				</ul>
 				<div class="clearfix"></div>
 			  </div>
 			  <div class="x_content">
-				<form class="form-horizontal form-label-left" novalidate>
-				 <div class="item form-group">
-					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">First Name <span class="required">*</span>
-					</label>
-					<div class="col-md-6 col-sm-6 col-xs-12">
-					  <input id="name" class="form-control col-md-7 col-xs-12" data-validate-length-range="6" data-validate-words="2" name="name" placeholder="both name(s) e.g Jon Doe" required="required" type="text">
-					</div>
-				  </div>
-					</div>
-					  em form-group">
-					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="gender">Gender<span class="required">*</span>
-					</label>
-					<div class="col-md-6 col-sm-6 col-xs-12">
-					  <select class="form-control" name="gender">
-						<option value="1" >Development</option>
-						<option value="2">Member</option>
-					  </select>
-					</div>
-				  </div>					
-				  <div class="item form-group">
-					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Date of Birth<span class="required">*</span>
-					</label>
-					<div class="col-md-6 col-sm-6 col-xs-12">
-					  <input type="email" id="email2" name="confirm_email" data-validate-linked="email" required="required" readonly = "readonly"  value="<?php echo $_SESSION['branch_number']; ?>" class="form-control col-md-7 col-xs-12">
-					</div>
-				  </div>
-				  <div class="item form-group">
-					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="gender">Marital Status<span class="required">*</span>
-					</label>
-					<div class="col-md-6 col-sm-6 col-xs-12">
-					  <select class="form-control" name="gender">
-						<option value="1" >Development</option>
-						<option value="2">Member</option>
-					  </select>
-					</div>
-				  </div>	
-				  <div class="item form-group">
-					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone">Telephone<span class="required">*</span>
-					</label>
-					<div class="col-md-6 col-sm-6 col-xs-12">
-					  <input type="text"  name="phone" required="required" data-validate-minmax="10,100" class="form-control col-md-7 col-xs-12">
-					</div>
-				  </div>
-				  <div class="item form-group">
-					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="website">Postal address<span class="required">*</span>
-					</label>
-					<div class="col-md-6 col-sm-6 col-xs-12">
-					  <textarea id="textarea" required="required" name="textarea" class="form-control col-md-7 col-xs-12"></textarea>
-					</div>
-				  </div>
-				  <div class="item form-group">
-					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="occupation">Physical Address<span class="required">*</span>
-					</label>
-					<div class="col-md-6 col-sm-6 col-xs-12">
-					  <textarea id="textarea" required="required" name="textarea" class="form-control col-md-7 col-xs-12"></textarea>
-					</div>
-				  </div>
-				  <div class="item form-group">
-					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="telephone">Added By <span class="required">*</span>
-					</label>
-					<div class="col-md-6 col-sm-6 col-xs-12">
-					  <input type="tel" id="telephone" readonly = "readonly" name="phone" required="required" data-validate-length-range="8,20" class="form-control col-md-7 col-xs-12">
-					</div>
-				  </div>
-				  <div class="ln_solid"></div>
-				  <div class="form-group">
-					<div class="col-md-6 col-md-offset-3">
-					  <button type="submit" class="btn btn-primary">Cancel</button>
-					  <button id="send" type="submit" class="btn btn-success loginbtn">Submit</button>
-					</div>
-				  </div>
-				</form>
+					<form class="form-horizontal form-label-left" novalidate>
+						<input type="hidden" name="addnok" value="addnok">
+						<input type="hidden" name="person_number" value="<?php echo $pno; ?>">
+						<div class="item form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Name <span class="required">*</span>
+							</label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+							  <input id="name" class="form-control col-md-7 col-xs-12" data-validate-length-range="6" data-validate-words="2" name="name" placeholder="both name(s) e.g Platin Alfred Mugasa" required="required" type="text">
+							</div>
+						</div>
+						<div class="item form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="relationship">Relationship</label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+								<select class="form-control" name="relationship">
+									<option value="Husband">Husband</option>
+									<option value="Wife" >Wife</option>
+									<option value="Father">Father</option>
+									<option value="Mother">Mother</option>
+									<option value="Uncle">Uncle</option>
+									<option value="Auntie">Auntie</option>
+									<option value="Brother">Brother</option>
+									<option value="Sister">Sister</option>
+								</select>
+							</div>
+						</div>
+						<div class="item form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="gender">Gender<span class="required">*</span>
+							</label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+							  <div class="col-md-6 col-sm-6 col-xs-12">
+									Male: <input type="radio" class="flat" name="gender" id="genderM" value="Male" checked=""  /> Female:
+									<input type="radio" class="flat" name="gender" id="genderF" value="Female" />
+								</div>
+							</div>
+						 </div>	
+						  <div class="item form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="marital">Marital Status</label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+								<select class="form-control" name="marital_status">
+									<option value="single" >Single</option>
+									<option value="married">Maried</option>
+									<option value="divorced">Divorced</option>
+								</select>
+							</div>
+						  </div>	
+						  <div class="item form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone">Telephone<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+								<input type="text"  name="phone"  data-inputmask="'mask' : '9999 999-999'" required="required" data-validate-minmax="10,100" class="form-control col-md-7 col-xs-12">
+							</div>
+						  </div>
+						  <div class="item form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="physical_address">Physical Address<span class="required">*</span>
+							</label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+							  <textarea id="physical_address" required="required" name="physical_address" class="form-control col-md-7 col-xs-12"></textarea>
+							</div>
+						  </div>
+						  <div class="item form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="postal_address">Postal address
+							</label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+							  <textarea id="postal_address"  name="postal_address" class="form-control col-md-7 col-xs-12"></textarea>
+							</div>
+						  </div>
+						  <div class="item form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="added_by">Added By 
+							</label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+							  <input type="text" id="added_by" value="<?php echo   $member->findMemberNames($_SESSION['person_number']); ?>"  readonly = "readonly" class="form-control col-md-7 col-xs-12">
+							   <input type="hidden"  name="added_by" required="required"  value="<?php echo $_SESSION['person_number']; ?>" class="form-control col-md-7 col-xs-12">
+							</div>
+						  </div>
+						  <div class="ln_solid"></div>
+						  <div class="form-group">
+							<div class="col-md-6 col-md-offset-3">
+							  <button id="send" type="button" class="btn btn-success loginbtn save_data">Submit</button>
+							</div>
+						  </div>
+					</form>
 			  </div>
 			</div>
 		  </div>
@@ -1083,6 +1082,114 @@ Class Forms{
 					  <button id="send" type="button" class="btn btn-success loginbtn save_data">Submit</button>
 					</div>
 				  </div>
+				</form>
+			  </div>
+			</div>
+		  </div>
+		</div>
+			
+		 <div class="clearfix"></div>
+	<?php 
+	}
+	function addExpenseType(){
+		?>
+		<div class="row">
+		  <div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="x_panel">
+			  <div class="x_title">
+				<h2>Add Access Level <small> </small></h2>
+				<ul class="nav navbar-right panel_toolbox">
+				  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+				</ul>
+				<div class="clearfix"></div>
+			  </div>
+			  <div class="x_content">
+				<form class="form-horizontal form-label-left" novalidate>
+					<input type="hidden" name="add_access_level" value="access_level">
+				  <div class="item form-group">
+					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Name<span class="required">*</span>
+					</label>
+					<div class="col-md-6 col-sm-6 col-xs-12">
+					  <input type="text"  name="name"  required="required"   class="form-control col-md-7 col-xs-12 required_f">
+					</div>
+				  </div>
+				  <div class="item form-group">
+					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="description">Description </label>
+					<div class="col-md-6 col-sm-6 col-xs-12">
+					  <textarea id="textarea" name="description" class="form-control col-md-7 col-xs-12"></textarea>
+					</div>
+				  </div>
+				  <div class="ln_solid"></div>
+				  <div class="form-group">
+					<div class="col-md-6 col-md-offset-3">
+					  <button type="button" class="btn btn-primary cancel">Cancel</button>
+					  <button id="send" type="button" class="btn btn-success loginbtn save_data">Submit</button>
+					</div>
+				  </div>
+				</form>
+			  </div>
+			</div>
+		  </div>
+		</div>
+			
+		 <div class="clearfix"></div>
+	<?php 
+	}
+	function addLoanRepaymentDuration(){
+		?>
+		<div class="row">
+		  <div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="x_panel">
+			  <div class="x_title">
+				<h2>Add Loan Repayment Duration <small> </small></h2>
+				<ul class="nav navbar-right panel_toolbox">
+				  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+				</ul>
+				<div class="clearfix"></div>
+			  </div>
+			  <div class="x_content">
+				<form class="form-horizontal form-label-left" novalidate>
+					<input type="hidden" name="repayment_duration" value="repayment_duration">
+					  <div class="item form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Name<span class="required">*</span>
+						</label>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+						  <input type="text"  name="name"  required="required"   class="form-control col-md-7 col-xs-12 required_f">
+						</div>
+					  </div>
+					  <div class="item form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Loan Period(Days)<span class="required">*</span>
+						</label>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+						   <select class="form-control" name="payback_days">
+								<option value="7"> One Week (7 days)</option>
+								<option value="30">One Month (30 days)</option>
+								<option value="365">1 Year (365 days)</option>
+								<option value="730">2 years (365 days)</option>
+								<option value="1825">5 years (365 days)</option>
+								<option value="3650">10 years (365 days)</option>
+								<?php 
+								for($i=1000; $i >2 ;  $i--){ ?>
+									<option value="<?php echo $i; ?>"><?php echo $i; ?> days</option>
+									<?php
+								}
+								?>
+								
+							</select>
+						</div>
+					  </div>
+					  <div class="item form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="description">Description </label>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+						  <textarea id="textarea" name="description" class="form-control col-md-7 col-xs-12"></textarea>
+						</div>
+					  </div>
+					  <div class="ln_solid"></div>
+					  <div class="form-group">
+						<div class="col-md-6 col-md-offset-3">
+						  <button id="send" type="button" class="btn btn-success loginbtn save_data">Submit</button>
+						</div>
+					  </div>
 				</form>
 			  </div>
 			</div>

@@ -17,6 +17,9 @@ class Member extends Db {
 		$result = $this->getfrec("person", "firstname, lastname, othername", "id=".$pno, "", "");
 		return !empty($result) ? $result['firstname']." ".$result['othername']." ".$result['lastname'] : false;
 	}
+	public function noOfMembers(){
+		return $this->count("member", "");
+	}
 	public function findMemberPersonNumber($id){
 		$result = $this->getfrec(self::$table_name, "person_number", "id=".$id, "", "");
 		return !empty($result) ? $result['person_number'] : false;

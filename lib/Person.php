@@ -23,6 +23,7 @@ class Person extends Db {
 		$result_array = $this->getarray(self::$table_name, "","id DESC", "");
 		return !empty($result_array) ? $result_array : false;
 	}
+	
 	public function findNamesByPersonNumber($pno){
 		$result = $this->getfrec(self::$table_name, "first_name, last_name, other_names", "person_number='$pno'", "", "");
 		return !empty($result) ? $result['first_name']." ".$result['other_names']." ".$result['last_name'] : false;

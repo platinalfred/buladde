@@ -11,6 +11,9 @@ $locations = new Locations();
 $all_members = array();
 $found_member = array();
 $names  = "";
+if(isset($_POST['photo_upload'])){
+	print_r($_FILES);
+}
 if($_GET['member_id']){
 	$member_data  = $member->findById($_GET['member_id']);
 	$person_data = $person->findByid($member_data['person_number']);
@@ -34,10 +37,41 @@ if($_GET['member_id']){
 		</ul>
 		<div class="clearfix"></div>
 	  </div>
+	  
 	  <div class="x_content" id="member-details">
 		<div class="row" >
 		  <div class="col-md-2 col-sm-12 col-xs-12 form-group">
-			<?php  if($person_data['photograph'] !="" && file_exists($person_data['photograph'])){?> <img src="<?php echo $person_data['photograph']; ?>" style="width:100%;"><?php }else{?> <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plus"></i> Add a Photograph</button> <?php } ?>
+			
+				<?php  
+				if($person_data['photograph'] !="" && file_exists($person_data['photograph'])){?> 
+					<img style="width:100%; height:100%;" height="100%" src="<?php echo $person_data['photograph']; ?>" > <a  href="" type="button"  data-toggle="modal" data-target=".add_photo"><i class="fa fa-edit"></i> Change photo</a>
+					<?php 
+				}else{?>
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".add_photo"><i class="fa fa-plus"></i> Add a Photograph</button> <?php 
+				} ?>
+				<div class="modal fade add_photo" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+					  <div class="modal-content">
+							<form method="post" action="photo_upload.php" id="photograph">
+								<div class="modal-header">
+								  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+								  </button>
+								  <h4 class="modal-title" id="myModalLabel2">Add member photograph</h4>
+								</div>
+								<div class="modal-body">
+									<input type="hidden" name="photo_upload" >
+								  <input type="hidden" name="person_number" value="<?php echo $member_data['person_number']; ?>">
+								  <input id="myFileInput" type="file" name="photograph" accept="image/*;capture=camera">
+								</div>
+								<div class="modal-footer">
+								  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								  <button type="submit" class="btn btn-primary photo_upload">Upload a Photo</button>
+								</div>
+							</form>
+							
+					  </div>
+					</div>
+				  </div>
 		  </div>
 		  <div class="col-md-10 col-sm-12 col-xs-12 form-group">
 				<div class="col-md-12 col-sm-12 col-xs-12 details">
@@ -98,7 +132,7 @@ if($_GET['member_id']){
 			<div class="col-md-12 col-sm-12 col-xs-12 form-group" style="border-top:1px solid #09A; padding-top:10px;">
 				<ul class="nav navbar-left panel_toolbox">
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=loan.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Loan</a> </li>
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=subscription.add" class="btn btn-primary"><i class="fa fa-plus"></i>Subscribe</a></li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=subscription.add" class="btn btn-primary"><i class="fa fa-plus"></i>Add Subscription</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=shares.add" class="btn btn-primary"><i class="fa fa-plus"></i>Add Shares</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=nok.add" class="btn btn-primary"><i class="fa fa-plus"></i></i> Add Next of Kin</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=deposit.add" class="btn btn-primary"><i class="fa fa-plus"></i> Deposit Saving</a></li>
@@ -108,10 +142,10 @@ if($_GET['member_id']){
 				</ul>
 				<ul class="nav navbar-right panel_toolbox">
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=client_loans" class="btn btn-success"><i class="fa fa-folder-open-o"></i> View Loans</a></li>
-				   <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=subscritions" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Subscriptions</a></li>
+				   <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=mysubscritions" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Subscriptions</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=myshares" class="btn btn-success"><i class="fa fa-folder-open-o"></i>My Shares</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=nok" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Next of kin details</a></li>
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=savings" class="btn btn-success"><i class="fa fa-folder-open-o"></i>My savings</a></li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=mysavings" class="btn btn-success"><i class="fa fa-folder-open-o"></i>My savings</a></li>
 				   <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=client_trasaction_history" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Transaction History</a></li>
 				</ul>
 			</div>

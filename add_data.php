@@ -1,6 +1,40 @@
 <?php 
 require_once("lib/Libraries.php");
-if(isset($_POST['add_subscription'])){
+if(isset($_POST['repayment_duration'])){
+	$data = $_POST;
+	$loan_repayment_duration = new LoanRepaymentDuration();
+	 if($loan_repayment_duration->addLoanRepaymentDuration($data)){
+		echo "success";
+		return;
+	}  
+	return false;
+}elseif(isset($_POST['addnok'])){
+	$data = $_POST;
+	$nok = new Nok();
+	$data['date_added'] = date("Y-m-d");
+	 if($nok->addNok($data)){
+		echo "success";
+		return;
+	}  
+	return false;
+}elseif(isset($_POST['add_share'])){
+	$data = $_POST;
+	$member = new Member();
+	$shares = new Shares();
+	$income = new Income();
+	$data['date_paid'] = date("Y-m-d");
+	 if($shares->addShares($data)){
+		$data['income_type'] = 2;
+		$data['date_added'] = date("Y-m-d");
+		$data['added_by'] = $data['received_by'];
+		$data['description'] = "Shares bought by ".$member->findMemberNames($data['person_number'])." on ".$data['date_added'];
+		if($income->addIncome($data)){
+			echo "success";
+			return;
+		}
+	}  
+	return false;
+}elseif(isset($_POST['add_subscription'])){
 	$data = $_POST;
 	$member = new Member();
 	$subscription = new Subscription();
@@ -17,7 +51,7 @@ if(isset($_POST['add_subscription'])){
 		}
 	}  
 	return false;
-}if(isset($_POST['add_deposit'])){
+}elseif(isset($_POST['add_deposit'])){
 	$data = $_POST;
 	$accounts = new Accounts();
 	if($accounts->addDeposit($data)){

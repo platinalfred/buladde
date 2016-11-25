@@ -40,6 +40,15 @@ class Db{
 			return $cnt;
 		}
 	}
+	function count($table, $where) {
+		if ($where != "") 	$sel = "SELECT COUNT(*) AS cnt FROM ".$table." WHERE ".$where;
+		else $sel = "SELECT COUNT(*) AS cnt FROM ".$table;
+		$res  = $this->conn->query($sel);
+		$q = $res->fetch_array();	
+		$cnt = $q{'cnt'};
+		$res->close();
+		return $cnt;
+	}
 	function destroySessions(){
 		if(!isset($_SESSION)) {
 		  session_start();
@@ -95,6 +104,7 @@ class Db{
             return $array;
         }
     }
+	
 	function formatDate($date) {
 		$mydate = explode('-', $date);
 		$mymonth = "";

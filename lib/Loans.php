@@ -21,9 +21,28 @@ class Loans extends Db {
 		 $results  = $this->getfrec("loantype", "name", "id=".$type, "", "");
 		 return !empty($results) ? $results['name'] : false;
 	}
+	public function isLoanAboutToExpire($id, $duratn){
+		$days = $this->findLoanPayBackDays($duratn);
+		$six_days_to = $days-14; 
+		if($this->count(self::$table_name, "loan_date < DATE_SUB(DATE(now()), INTERVAL ".$six_days_to." DAY) AND id=".$id) > 0){
+			return true;
+		}
+		return false;
+	}
 	public function findLoanPaymentDuration($duratn){
 		 $results  = $this->getfrec("repaymentduration", "name", "id=".$duratn, "", "");
 		 return !empty($results) ? $results['name'] : false;
+	}
+	public function findLoanPayBackDays($duratn){
+		 $results  = $this->getfrec("repaymentduration", "payback_days", "id=".$duratn, "", "");
+		 return !empty($results) ? $results['payback_days'] : false;
+	}
+	public function findExpectedPayBackDate($id){
+		 $results  = $this->getfrec("repaymentduration", "payback_days", "id=".$id, "", "");
+		 if($results){
+			return date('j F, Y', strtotime("+".$results['payback_days']." day"));
+		 }
+		 return false;
 	}
 	public function updateImage($data){
 		if($this->update(self::$table_name, array('photo'), array('photo'=>$data['photo']), "id=".$data['id'])){

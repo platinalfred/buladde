@@ -42,7 +42,7 @@ $all_staff =  $staff->findAll();
 						<th></th>
 						<?php 
 						
-						$header_keys = array("Person Number", "Name", "Position","Date of Birth", "Branch", "Photograph");
+						$header_keys = array("Person Number", "Name", "Position","Date of Birth", "Branch", "Action");
 						foreach($header_keys as $key){ ?>
 							
 							<th><?php echo $key; ?></th>
@@ -65,12 +65,7 @@ $all_staff =  $staff->findAll();
 							  <td><?php echo date("j F, Y", strtotime($person_data['dateofbirth'])); ?></td>
 							  <td><?php  echo $person->findBranchByBranchNo($single['branch_number']);  ?></td>
 							  <td>
-								<?php 
-								if($person_data['photograph'] != "" && file_exists($person_data['photograph'])){ ?>
-									<img src="<?php echo $person_data['photograph'];?>"/> <?php 
-								}else{ ?> 
-									<a href="#" class="btn btn-danger"><i class="fa fa-picture-o"> Add photo</i></a> <?php 
-								} ?>
+									<a href="#" class="btn btn-success"><i class="fa fa-edit"> Edit</i></a> 
 							  </td>
 							  
 							</tr>

@@ -78,38 +78,43 @@ $all_expenses = array();
 			</div>
 			<div class="modal-body">
 				<form class="form-horizontal form-label-left" novalidate>
+					<input type="hidden" name="add_expense">
 					<div class="item form-group">
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="expense_type">Expense Type<span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-						  <select class="form-control" name="expense_type">
-							<option value="1" >Development</option>
-							<option value="2">Member</option>
-						  </select>
+							<?php $person->loadList("SELECT * FROM expensetypes", "expenses", "name", "id"); ?>
 						</div>
 					  </div>
 					  <div class="item form-group">
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="staff">Staff <span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-						  <select class="form-control" name="staff">
-							<option value="1" >Development</option>
-							<option value="2">Member</option>
-						  </select>
+							<select class="form-control" name="title">
+								<?php 
+								$all_staff = $person->queryData("SELECT p.firstname, p.lastname, p.id FROM staff s ,person p WHERE p.id = s.person_number");
+								if($all_staff){
+									foreach($all_staff as $single){ ?>
+										<option value="<?php echo $single['id']; ?>" ><?php echo $single['firstname']."".$single['lastname']; ?></option>
+										<?php
+									}
+								}
+								?>
+							</select>
 						</div>
 					  </div>
 					  <div class="item form-group">
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="office_phone">Amount Used<span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-						  <input type="text"  name="amount_used"  required="required"   class="form-control col-md-7 col-xs-12">
+						  <input type="number"  name="amount_used"  required="required"   class="form-control col-md-7 col-xs-12">
 						</div>
 					  </div>
 					  <div class="item form-group">
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="amount_description">Description
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-						  <input type="text"  name="amount_description"    class="form-control col-md-7 col-xs-12">
+						  <textarea   name="amount_description"    class="form-control col-md-7 col-xs-12"></textarea>
 						</div>
 					  </div>
 					  
@@ -117,7 +122,7 @@ $all_expenses = array();
 					  <div class="form-group">
 						<div class="col-md-6 col-md-offset-3">
 						  <button type="submit" class="btn btn-primary">Cancel</button>
-						  <button id="send" type="submit" class="btn btn-success">Submit</button>
+						  <button id="send" type="button" class="btn btn-success save_data">Submit</button>
 						</div>
 					  </div>
 				</form>
