@@ -462,7 +462,6 @@ var Guarantor = function() {
                 total += parseInt("0" + selectedGuarantor.guarantor().savings);
             };
         });
-        //$.each(self.selectedGuarantors(), function() { total += parseInt(this.guarantor.shares) })
         return total;
     });
     self.totalShares = ko.pureComputed(function() {
@@ -474,13 +473,6 @@ var Guarantor = function() {
         });
         return sum;
     });
-	
-    /* self.dataToSave = $.map(self.selectedGuarantors(), function(selectedGuarantor) {
-			var data = selectedGuarantor.guarantor() ? {
-                person_number: selectedGuarantor.guarantor().person_number
-            } : undefined;
-            return data;
-    }); */
  
     // Operations
     self.addGuarantor = function() { self.selectedGuarantors.push(new GuarantorSelection()) };

@@ -48,6 +48,33 @@ class Db{
 		$cnt = $q{'cnt'};
 		$res->close();
 		return $cnt;
+	//Query used by datatables to populate the table data
+	//returns a count of records according to the custom query passed to the function
+	function prepareStatement($query){
+		$statement = $this->conn->prepare($query);
+		if($statement === false) {
+			trigger_error('Wrong SQL: ' . $query . ' Error: ' . $this->conn->errno . ' ' . $this->conn->error, E_USER_ERROR);
+		}
+		return $statement;
+	}
+	function bindParam($preparedStatement, $a_params){
+		/* $preparedStatement->bind_param($data_type, $a_params);
+		
+		/* The problem
+
+		$preparedStatement->bind_param() does not accept params array. So, how to bind params, if their number is variable, depending on user input in your application?
+
+		A workaround is to use call_user_func_array to pass dynamically the params array.*/
+		call_user_func_array(array($preparedStatement, 'bind_param'), $a_params);
+	}
+	function fetchResult($preparedStatement){
+		$preparedStatement->execute();
+		
+		return $preparedStatement->get_result(); /* $statement->fetch_array(MYSQLI_ASSOC);*/
+	}
+	//returns a count of records according to the custom query passed to the function
+	function getFilteredTotal(){
+		return $this->conn->query('SELECT FOUND_ROWS()')->fetch_array();
 	}
 	function destroySessions(){
 		if(!isset($_SESSION)) {

@@ -2,7 +2,7 @@
 $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Expenses extends Db {
-	protected static $table_name  = "withdraws";
+	protected static $table_name  = "expense";
 	protected static $db_fields = array("id", "amount","expense_type","expense_by", "date_of_expense", "entered_by");
 	
 	public function findById($id){

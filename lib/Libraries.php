@@ -22,4 +22,5 @@ require_once("Income.php");
 require_once("Shares.php");
 require_once("Nok.php");
 require_once("LoanRepaymentDuration.php");
+require_once("Guarantor.php");
 ?>

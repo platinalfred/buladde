@@ -25,7 +25,7 @@ class Member extends Db {
 		return !empty($result) ? $result['person_number'] : false;
 	}
 	public function findAll(){
-		$result_array = $this->getarray(self::$table_name, "","id DESC", "");
+		$result_array = $this->queryData("SELECT `member`.`id`, `member`.`person_number`, `firstname`, `lastname`, `othername`, `phone`, `email`, `postal_address`, `physical_address`, `dateofbirth`, `gender`, `date_registered`, `photograph`, `member_type`, `date_added`, `branch_number`, `added_by` FROM `member` JOIN `person` ON `member`.`person_number` = `person`.`id`");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findGuarantors($person_no){

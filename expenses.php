@@ -4,12 +4,7 @@ $show_table_js = true;
 include("includes/header.php"); 
 require_once("lib/Libraries.php");
 require_once("lib/Forms.php");
-$member = new Member();
-$person = new Person();
-$locations = new Locations();
-$all_members = array();
-$found_member = array();
-$names  = "";
+$expense = new Expenses();
 
 $all_expenses = array();
 ?>
@@ -33,7 +28,7 @@ $all_expenses = array();
 				<thead>
 					<tr>
 						<?php 
-						$header_keys = array("Expense Type", "Expensed Staff", "Amount", "Date of Expense", "Description");
+						$header_keys = array("Expense No", "Expense Type", "Expensed Staff", "Amount", "Description", "Date of Expense");
 						foreach($header_keys as $key){ ?>
 							<th><?php echo $key; ?></th>
 							<?php
@@ -42,26 +37,6 @@ $all_expenses = array();
 					</tr>
 				</thead>
 				<tbody>
-					<?php 
-					if($all_expenses){
-						foreach($all_expenses as $single){ 
-							$person_data = $person->findById($single['person_number']);
-							?>
-							<tr>
-							  <td><a href="member-details.php?member_id=<?php echo $single['id']; ?>"><?php echo $person_data['person_number']; ?></A></td>
-							  <td><?php echo $person->Username($person_data['firstname'], $person_data['lastname'], $person_data['othername']); ?></td>
-							  <td><?php echo $person_data['phone'] ?></td>
-							  <td><?php echo date("j F, Y", strtotime($person_data['dateofbirth'])); ?></td>
-							  <td><?php   ?></td>
-							  <td><?php  ?></td>
-								<td><?php  ?></td>
-								<td><?php  ?></td>
-							</tr>
-							<?php
-						}
-					}
-					
-					?>
 				</tbody>
 			</table>
 		</div>
@@ -141,6 +116,24 @@ include("includes/footer.php");
 	  if ($("#datatable-buttons").length) {
 		$("#datatable-buttons").DataTable({
 		  dom: "Bfrtip",
+		  "processing": true,
+		  "serverSide": true,
+		  "deferRender": true,
+		  "ajax": {
+			  "url":"server_processing.php",
+			  "type": "POST",
+			  "data":  {'page':'view_expenses'}
+		  },"columnDefs": [ {
+			  "targets": [0],
+			  "orderable": false
+		  }],
+		  columns:[ { data: 'id', render: function ( data, type, full, meta ) {return '<a href="expense-details.php?expense_id='+data+'" title="Update details">'+data+'</a>';}},
+				{ data: 'name'},
+				{ data: 'firstname', render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname;}},
+				{ data: 'date_of_expense', render: function ( data, type, full, meta ) {return moment(data).format('LL');}},
+				{ data: 'amount_used' },
+				{ data: 'amount_description'}
+				] ,
 		  buttons: [
 			{
 			  extend: "copy",
@@ -177,22 +170,6 @@ include("includes/footer.php");
 		}
 	  };
 	}();
-
-	
-
-	var $datatable = $('#datatable-checkbox');
-
-	$datatable.dataTable({
-	  'order': [[ 1, 'asc' ]],
-	  'columnDefs': [
-		{ orderable: false, targets: [0] }
-	  ]
-	});
-	$datatable.on('draw.dt', function() {
-	  $('input').iCheck({
-		checkboxClass: 'icheckbox_flat-green'
-	  });
-	});
 
 	TableManageButtons.init();
   });
