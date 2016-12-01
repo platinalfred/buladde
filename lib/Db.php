@@ -48,6 +48,7 @@ class Db{
 		$cnt = $q{'cnt'};
 		$res->close();
 		return $cnt;
+	}
 	//Query used by datatables to populate the table data
 	//returns a count of records according to the custom query passed to the function
 	function prepareStatement($query){
