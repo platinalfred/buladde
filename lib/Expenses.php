@@ -3,7 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Expenses extends Db {
 	protected static $table_name  = "expense";
-	protected static $db_fields = array("id", "amount","expense_type","expense_by", "date_of_expense", "entered_by");
+	protected static $db_fields = array("id", "amount_used","expense_type","staff", "date_of_expense", "amount_description");
 	
 	public function findById($id){
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
@@ -17,13 +17,13 @@ class Expenses extends Db {
 		}
 		return !empty($result) ? $result['amount']:false;
 	}
-	public function findAllExpenses(){
-		$result_array = $this->getarray(self::$table_name, "","id DESC", "");
+	public function findAllExpenses($where = 1){
+		$result_array = $this->getarray(self::$table_name, $where,"id DESC", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	
 	public function findAmountExpensed($id){
-		$result = $this->getfrec(self::$table_name, "amount", "id='$id'", "");
+		$result = $this->getfrec(self::$table_name, "amount_used", "id='$id'", "");
 		return !empty($result) ? $result['amount']:false;
 	}
 	

@@ -5,7 +5,6 @@ require_once("lib/Member.php");
 require_once("lib/Dashboard.php");
 $member = new Member();
 $dashboard = new Dashboard();
-
 ?>
 <!-- page content -->
 <div class="right_col" role="main">
@@ -17,13 +16,13 @@ $dashboard = new Dashboard();
 		  <span class="count_bottom"><i class="green">4% </i> From last Week</span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-		  <span class="count_top"><i class="fa fa-money"></i> Total Paid Subsciption</span>
-		  <div class="count"><?php echo $dashboard->findTotalSumOfSubscriptions(); ?></div>
+		  <span class="count_top"><i class="fa fa-money"></i> Total Paid Subscription</span>
+		  <div class="count"><?php echo $dashboard->getSumOfSubscriptions(); ?></div>
 		  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
 		  <span class="count_top"><i class="fa fa-money"></i> Total Shares</span>
-		  <div class="count green"><?php echo $dashboard->findTotalSumOfShares(); ?></div>
+		  <div class="count green"><?php echo $dashboard->getSumOfShares(); ?></div>
 		  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
@@ -47,10 +46,9 @@ $dashboard = new Dashboard();
 	    <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
               <div class="dashboard_graph">
-
                 <div class="row x_title">
                   <div class="col-md-6">
-                    <h3>Transaction Activities <small>Graph title will be here</small></h3>
+                    &nbsp;
                   </div>
                   <div class="col-md-6">
                     <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
@@ -59,98 +57,168 @@ $dashboard = new Dashboard();
                     </div>
                   </div>
                 </div>
-
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                  <div id="placeholder33" style="height: 300px; display: none" class="demo-placeholder"></div>
-                  <div style="width: 100%;">
-                    <div id="canvas_dahs" class="demo-placeholder" style="width: 100%; height:270px;"></div>
-                  </div>
-                </div>
-                <div class="clearfix"></div>
               </div>
             </div>
+		</div>
+	    <div class="row"> <!-- Graphs -->
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="x_panel">
 
-          </div>
-          <br />
+                <div class="x_title">
+                    <h2>Transaction Activities <small>summary</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                <div class="clearfix"></div>
+                </div>
+                  <div class="x_content">
+                    <canvas id="barChart"></canvas>
+                  </div>
+              </div>
+            </div>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Active loans <small>Performance</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <canvas id="lineChart"></canvas>
+                  </div>
+                </div>
+              </div>
+		</div>
+	    <div class="row"><!-- row -->
+            <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Non performing <small>loans</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <table id="nploans" class="table table-hover">
+                    </table>
+
+                  </div>
+                </div>
+              </div>
+            <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>NP&P Loans <small>Pie Chart</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <canvas id="pieChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Performing Loans <small>top 10</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <table id="ploans" class="table table-hover">
+                    </table>
+                  </div>
+                </div>
+              </div>
+		</div>
+	    <div class="row"><!-- row -->
+            <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Income <small>top 10</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <table id="income" class="table table-hover">
+                    </table>
+
+                  </div>
+                </div>
+              </div>
+            <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Expenses <small>top 10</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <table id="expenses" class="table table-hover">
+                    </table>
+
+                  </div>
+                </div>
+              </div>
+            <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>All Loans <small>top 10</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <table id="actvloans" class="table table-hover">
+                      <thead>
+                    </table>
+
+                  </div>
+                </div>
+              </div>
+		</div>
+</div>
+<br />
 
 </div>
 <!-- /page content -->
 <?php 
 include("includes/footer.php"); 
 ?>
-   <!-- Flot -->
-    <script>
-      $(document).ready(function() {
-        var data1 = [
-          [gd(2012, 1, 1), 17],
-          [gd(2012, 1, 2), 74],
-          [gd(2012, 1, 3), 6],
-          [gd(2012, 1, 4), 39],
-          [gd(2012, 1, 5), 20],
-          [gd(2012, 1, 6), 85],
-          [gd(2012, 1, 7), 7]
-        ];
-
-        var data2 = [
-          [gd(2012, 1, 1), 82],
-          [gd(2012, 1, 2), 23],
-          [gd(2012, 1, 3), 66],
-          [gd(2012, 1, 4), 9],
-          [gd(2012, 1, 5), 119],
-          [gd(2012, 1, 6), 6],
-          [gd(2012, 1, 7), 9]
-        ];
-        $("#canvas_dahs").length && $.plot($("#canvas_dahs"), [
-          data1, data2
-        ], {
-          series: {
-            lines: {
-              show: false,
-              fill: true
-            },
-            splines: {
-              show: true,
-              tension: 0.4,
-              lineWidth: 1,
-              fill: 0.4
-            },
-            points: {
-              radius: 0,
-              show: true
-            },
-            shadowSize: 2
-          },
-          grid: {
-            verticalLines: true,
-            hoverable: true,
-            clickable: true,
-            tickColor: "#d5d5d5",
-            borderWidth: 1,
-            color: '#fff'
-          },
-          colors: ["rgba(38, 185, 154, 0.38)", "rgba(3, 88, 106, 0.38)"],
-          xaxis: {
-            tickColor: "rgba(51, 51, 51, 0.06)",
-            mode: "time",
-            tickSize: [1, "day"],
-            //tickLength: 10,
-            axisLabel: "Date",
-            axisLabelUseCanvas: true,
-            axisLabelFontSizePixels: 12,
-            axisLabelFontFamily: 'Verdana, Arial',
-            axisLabelPadding: 10
-          },
-          yaxis: {
-            ticks: 8,
-            tickColor: "rgba(51, 51, 51, 0.06)",
-          },
-          tooltip: false
-        });
-
-        function gd(year, month, day) {
-          return new Date(year, month - 1, day).getTime();
-        }
-      });
-    </script>
-    <!-- /Flot -->
   
