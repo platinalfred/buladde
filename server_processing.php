@@ -10,7 +10,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
 
 	$primary_key = "`member`.`id`";
 
-	$columns = array( "`person`.`person_number`", "`firstname`", "`lastname`", "`othername`", "`phone`", "`date_added`", "`member_type`", ", `shares`", "`savings`", "`member`.`person_number` `member_id`", "`loans`", "`dateofbirth`", "`gender`", "`email`", "`postal_address`", "`physical_address`", "`branch_number`" );
+	$columns = array( "`person`.`person_number`", "`firstname`", "`lastname`", "`othername`", "`phone`", "`date_added`", "`member_type`", ", `shares`", "`savings`", "`member`.`id` as `member_id`", "`loans`", "`dateofbirth`", "`gender`", "`email`", "`postal_address`", "`physical_address`", "`branch_number`" );
 	// Get the data
 	$data_table->get($table, $primary_key, $columns);
 }

@@ -64,7 +64,7 @@ $foto = $staff->findPersonsPhoto($_SESSION['person_number']);
             <div class="clearfix"></div>
            <div class="profile">
               <div class="profile_pic">
-                <img src="<?php if($foto){ echo $foto; }else{ echo "img/profiles/platin.jpg"; }; ?>" style="width:56px; height:56px;"  alt="..." class="img-circle profile_img">
+                <img src="<?php if($foto){ echo $foto; }else{ echo "img/profiles/blank.png"; }; ?>" style="width:56px; height:56px;"  alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
@@ -160,7 +160,7 @@ $foto = $staff->findPersonsPhoto($_SESSION['person_number']);
 				<ul class="nav navbar-nav navbar-right">
 					<li class="">
 					  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-						<img src="<?php if($foto){ echo $foto; }else{ echo "img/profiles/platin.jpg"; }; ?>" alt=""><?php   echo $_SESSION['username']; ?>
+						<img src="<?php if($foto){ echo $foto; }else{ echo "img/profiles/blank.png"; }; ?>" alt=""><?php   echo $_SESSION['username']; ?>
 						<span class=" fa fa-angle-down"></span>
 					  </a>
 					  <ul class="dropdown-menu dropdown-usermenu pull-right">

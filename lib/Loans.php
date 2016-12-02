@@ -59,10 +59,16 @@ class Loans extends Db {
 			return false;
 		}
 	}
-	
+	public function calculateLoandEndDate($id){
+		 $results  = $this->getfrec("repaymentduration", "payback_days", "id=".$id, "", "");
+		 if($results){
+			return date("Y-m-d H:i:s", strtotime("+".$results['payback_days']." day"));
+		 }
+		 return false;
+	}
 	public function addLoan($data){
-		$loan_date = $this->formatDate($data['loan_date']);
-		$result = $this->add(self::$table_name, array("person_number", "loan_number", "branch_number","loan_type", "loan_date", "loan_end_date", "loan_amount","loan_amount_word", "interest_rate", "expected_payback", "daily_default_amount", "approved_by", "repayment_duration", "comments"), array("person_number"=>$data['person_number'], "loan_number"=>$data['loan_number'], "branch_number"=>$data['branch_number'], "loan_type"=>$data['loan_type'],"loan_date"=>$data['loan_date'],"loan_amount"=>$data['loan_amount'], "loan_amount_word"=>$data['loan_amount_word'], "interest_rate"=>$data['interest_rate'],"expected_payback"=>$data['expected_payback'],"daily_default_amount"=>$data['daily_default_amount'], "loan_date"=>$loan_date, "loan_end_date"=>$loan_date, "approved_by"=>$data['approved_by'], "repayment_duration"=>$data['repayment_duration'], "comments"=>$data['comments']));
+		$loan_end_date = $this->calculateLoandEndDate($data['repayment_duration']);
+		$result = $this->add(self::$table_name, array("person_number", "loan_number", "branch_number","loan_type", "loan_date", "loan_end_date", "loan_amount","loan_amount_word", "interest_rate", "expected_payback", "daily_default_amount", "approved_by", "repayment_duration", "comments"), array("person_number"=>$data['person_number'], "loan_number"=>$data['loan_number'], "branch_number"=>$data['branch_number'], "loan_type"=>$data['loan_type'],"loan_date"=>$data['loan_date'],"loan_amount"=>$data['loan_amount'], "loan_amount_word"=>$data['loan_amount_word'], "interest_rate"=>$data['interest_rate'],"expected_payback"=>$data['expected_payback'],"daily_default_amount"=>$data['daily_default_amount'], "loan_date"=>$data['loan_date'], "loan_end_date"=>$loan_end_date, "approved_by"=>$data['approved_by'], "repayment_duration"=>$data['repayment_duration'], "comments"=>$data['comments']));
 		if($result){
 			return $result;
 		}else{

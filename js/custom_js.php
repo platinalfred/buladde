@@ -41,8 +41,8 @@
 		var interest_rate = parseFloat($("#interest_rate").val());
 		var total  = 0 ;
 		var interest = 0;
-		if(loan_amount.trim() != ""){
-			if(interest_rate.trim() != ""){
+		if(loan_amount != ""){
+			if(interest_rate != ""){
 				interest  = ((parseInt(interest_rate)/100)* parseInt(loan_amount));
 				total = parseInt(interest) + parseInt(loan_amount);
 				if(!isNaN(total)){
@@ -194,12 +194,12 @@
 							setTimeout(function(){
 								form[0].reset();
 								$("#number_words, #expected_payback").html( "");
-							}, 4000);
+							}, 8000);
 						}else{
 							showStatusMessage(response  + "Could not add data,please try again. If the problem persisits contact the technical team for assistance!", "error");
 							setTimeout(function(){
 								
-							}, 4000);
+							}, 8000);
 						}
 					}
 				});

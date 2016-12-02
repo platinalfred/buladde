@@ -3,7 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Dashboard extends Db {
 	public function totalActiveLoans($where = 1){
-		return $this->count("loan", "active=1");
+		return $this->count("loan", "cleared=1");
 	}
 	public function getCountOfLoans($where = 1){
 		$result = $this->getfrec("loan", "count(`id`) loanCount ", $where, "", "");
