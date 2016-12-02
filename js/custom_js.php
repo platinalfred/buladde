@@ -485,7 +485,7 @@ ko.applyBindings(guarantor);
 	var cb = function(start, end, label) {
 		console.log(start.toISOString(), end.toISOString(), label);
 		$('#reportrange span').html(start.format('D MMMM, YYYY') + ' - ' + end.format('D MMMM, YYYY'));
-		};
+	};
    var optionSet1 = {
           startDate: moment().subtract(29, 'days'),
           endDate: moment(),
@@ -523,7 +523,7 @@ ko.applyBindings(guarantor);
             monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             firstDay: 1
           }
-        };
+    };
 		$('#reportrange span').html(moment().subtract(29, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
 		
 		$('#reportrange').daterangepicker(optionSet1, cb);
@@ -541,8 +541,13 @@ ko.applyBindings(guarantor);
 			if(isset($_GET['member_id'])){ ?>
 				findReportRange(<?php echo $_GET['member_id']; ?>, picker.startDate.format('MMMM D, YYYY'), picker.endDate.format('MMMM D, YYYY'));
 			<?php
-			}
-			?>
+			}else{?>
+				//assumption is that we are at the dashboard page
+				var start_date=picker.startDate.format('YYYY-MM-DD'), end_date = picker.endDate.format('YYYY-MM-DD');
+				//getDashboardData("barChart",start_date,end_date);
+				var elements = ["nploans","ploans","actvloans","income","expenses","barChart","lineChart","pieChart"];
+				getDashboardData(elements,start_date,end_date);
+			<?php } ?>
 		});
 		$('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
 			console.log("cancel event fired");
@@ -577,7 +582,152 @@ ko.applyBindings(guarantor);
 				}
 			});
 		}
+			
 	//End client transaction details 
+		function getDashboardData(elements, startDate, endDate){
+			$.each(elements, function(key, value){
+				$.ajax({
+					type: "post",
+					data:{element:value, start_date:startDate, end_date:endDate},
+					url: "dashboard_data.php",
+					success: function(response){
+						switch(value){
+							case "barChart":
+								var data = JSON.parse(response);
+								//Get the returned json data
+								//barChart.clear();
+								/* barChart.data.datasets[0].data = data.loans_count;
+								barChart.data.datasets[1].data = data.shares_count;
+								barChart.data.datasets[2].data = data.subscriptions_count;
+								barChart.data.labels = data.data_points;
+								barChart.update();
+								barChart.render(300,true); */
+								draw_bar_chart(data)
+							break;
+							case "lineChart":
+								var data = JSON.parse(response);
+								//lineChart.clear();
+								draw_line_chart(data)
+								/* lineChart.data.datasets[0].data = data.loans_sum;
+								lineChart.data.datasets[1].data = data.subscriptions_sum;
+								lineChart.data.labels = data.data_points;
+								lineChart.update();
+								lineChart.render(300,true); */
+							break;
+								case "pieChart":
+								//draw the pie chart
+								var data = JSON.parse(response);
+								draw_pie_chart(data);
+								/* pieChart.clear();
+								pieChart.data.datasets[0].data = data;
+								pieChart.update();
+								pieChart.render(300,true); */
+								break;
+							default:
+								$("#"+value).html(response);
+								break;
+						}
+					}
+				});
+			});
+		}
+      //Bar chart
+	  function draw_bar_chart(url_data){
+		  $("#barChart").replaceWith('<canvas id="barChart"></canvas>');
+		  var ctx = $("#barChart").get(0).getContext("2d");
+		  var barChart = new Chart(ctx, {
+			type: 'bar',
+			data: {
+			  labels: url_data.data_points,
+			  datasets: [{
+				label: 'Loans',
+				backgroundColor: "#26B99A",
+				data: url_data.loans_count
+			  }, {
+				label: 'Shares',
+				backgroundColor: "#03586A",
+				data: url_data.shares_count
+			  }, {
+				label: 'Subscriptions',
+				backgroundColor: "#B9264A",
+				data: url_data.subscriptions_count
+			  }]
+			},
+
+			options: {
+			  scales: {
+				yAxes: [{
+				  ticks: {
+					beginAtZero: true
+				  }
+				}]
+			  }
+			}
+		  });
+	  }
+      // Line chart
+	  function draw_line_chart(url_data){
+		  $("#lineChart").replaceWith('<canvas id="lineChart"></canvas>');
+		  var ctx = $("#lineChart").get(0).getContext("2d");
+		  var lineChart = new Chart(ctx, {
+			type: 'line',
+			data: {
+			  labels: url_data.data_points,
+			  datasets: [{
+				label: "Loans",
+				backgroundColor: "rgba(38, 185, 154, 0.31)",
+				borderColor: "rgba(38, 185, 154, 0.7)",
+				pointBorderColor: "rgba(38, 185, 154, 0.7)",
+				pointBackgroundColor: "rgba(38, 185, 154, 0.7)",
+				pointHoverBackgroundColor: "#fff",
+				pointHoverBorderColor: "rgba(220,220,220,1)",
+				pointBorderWidth: 1,
+				data: url_data.loans_sum
+			  }, {
+				label: "Subscriptions",
+				backgroundColor: "rgba(3, 88, 106, 0.3)",
+				borderColor: "rgba(3, 88, 106, 0.70)",
+				pointBorderColor: "rgba(3, 88, 106, 0.70)",
+				pointBackgroundColor: "rgba(3, 88, 106, 0.70)",
+				pointHoverBackgroundColor: "#fff",
+				pointHoverBorderColor: "rgba(151,187,205,1)",
+				pointBorderWidth: 1,
+				data: url_data.subscriptions_sum
+			  }]
+			},
+		  });
+	  }
+	  // Pie chart
+	  function draw_pie_chart(url_data){
+		  $("#pieChart").replaceWith('<canvas id="pieChart"></canvas>');
+		  var ctx = $("#pieChart").get(0).getContext("2d");
+		  var data = {
+			datasets: [{
+			  data: url_data,
+			  backgroundColor: [
+				"#356AA0",
+				"#B54C4C"
+			  ],
+			  label: 'My dataset' // for legend
+			}],
+			labels: [
+			  "Perf. Loans",
+			  "NP Loans"
+			]
+		  };
+
+		  var pieChart = new Chart(ctx, {
+			data: data,
+			type: 'pie',
+			otpions: {
+			  legend: false
+			}
+		  });
+	  }
+		if(document.getElementById("nploans")){
+			var elements = ["nploans","ploans","actvloans","income","expenses","barChart","lineChart","pieChart"];
+			getDashboardData(elements, moment().subtract(29, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
+		}
   });
   
 </script>

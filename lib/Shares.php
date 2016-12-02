@@ -10,8 +10,8 @@ class Shares extends Db {
 		return !empty($result) ? $result:false;
 	}
 	
-	public function findAll(){
-		$result_array = $this->getarray(self::$table_name, "", "", "");
+	public function findAll($where = 1){
+		$result_array = $this->getarray(self::$table_name, $where, "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findMemberShares($pno){

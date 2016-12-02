@@ -137,9 +137,9 @@ Class Forms{
 					<span class="btn btn-primary" data-toggle="modal" data-target=".guarantors-modal"><i class="fa fa-plus"></i>/<i class="fa fa-minus"></i> Guarantors</span>
 					</div>
 					<div class="col-md-4 col-sm-4 col-xs-12" data-bind="foreach: selectedGuarantors">
-						<span class='btn' data-bind='with: guarantor'>
-							<i data-bind='text: member_names' > </i>
-						</span>
+											<span class='btn' data-bind='with: guarantor'>
+												<i data-bind='text: member_names' > </i>
+											</span>
 					</div>
 				  </div>
 				  <div class="item form-group">
@@ -1204,4 +1204,5 @@ Class Forms{
 		 <div class="clearfix"></div>
 	<?php 
 	}
-}?>
+}
+	?>

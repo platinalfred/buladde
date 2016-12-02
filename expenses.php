@@ -5,6 +5,7 @@ include("includes/header.php");
 require_once("lib/Libraries.php");
 require_once("lib/Forms.php");
 $expense = new Expenses();
+$person = new Person();
 
 $all_expenses = array();
 ?>
@@ -58,7 +59,7 @@ $all_expenses = array();
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="expense_type">Expense Type<span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-							<?php $person->loadList("SELECT * FROM expensetypes", "expenses", "name", "id"); ?>
+							<?php $person->loadList("SELECT * FROM expensetypes", "expense_type", "name", "id"); ?>
 						</div>
 					  </div>
 					  <div class="item form-group">

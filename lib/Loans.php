@@ -3,7 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Loans extends Db {
 	protected static $table_name  = "loan";
-	protected static $db_fields = array("id", "person_number", "loan_number","branch_number", "loan_type", "loan_date","loan_amount", "loan_amount_word", "interest_rate", "default_amount", "approved_by", "repayment_duration", "comments"," loan_agreement_path");
+	protected static $db_fields = array("id", "person_number", "loan_number","branch_number", "loan_type", "loan_date","loan_amount", "loan_amount_word", "interest_rate", "daily_default_amount", "expected_payback", "approved_by", "repayment_duration", "comments"," loan_agreement_path");
 	
 	public function findById($id){
 		$result = $this->getRecord(self::$table_name, "id=".$id, "");
@@ -13,8 +13,8 @@ class Loans extends Db {
 		 $results  = $this->getarray(self::$table_name, "person_number=".$pno, "", "");
 		 return !empty($results) ? $results : false;
 	}
-	public function findAll(){
-		$result_array = $this->getarray(self::$table_name, "", "loan_date DESC", "");
+	public function findAll($where = 1){
+		$result_array = $this->getarray(self::$table_name, $where, "loan_date DESC", "");
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findLoanType($type){
@@ -62,7 +62,7 @@ class Loans extends Db {
 	
 	public function addLoan($data){
 		$loan_date = $this->formatDate($data['loan_date']);
-		$result = $this->add(self::$table_name, array("person_number", "loan_number", "branch_number","loan_type", "loan_date", "loan_amount","loan_amount_word", "interest_rate", "expected_payback", "daily_default_amount", "approved_by", "repayment_duration", "comments"), array("person_number"=>$data['person_number'], "loan_number"=>$data['loan_number'], "branch_number"=>$data['branch_number'], "loan_type"=>$data['loan_type'],"loan_date"=>$data['loan_date'],"loan_amount"=>$data['loan_amount'], "loan_amount_word"=>$data['loan_amount_word'], "interest_rate"=>$data['interest_rate'],"expected_payback"=>$data['expected_payback'],"daily_default_amount"=>$data['daily_default_amount'], "loan_date"=>$loan_date, "approved_by"=>$data['approved_by'], "repayment_duration"=>$data['repayment_duration'], "comments"=>$data['comments']));
+		$result = $this->add(self::$table_name, array("person_number", "loan_number", "branch_number","loan_type", "loan_date", "loan_end_date", "loan_amount","loan_amount_word", "interest_rate", "expected_payback", "daily_default_amount", "approved_by", "repayment_duration", "comments"), array("person_number"=>$data['person_number'], "loan_number"=>$data['loan_number'], "branch_number"=>$data['branch_number'], "loan_type"=>$data['loan_type'],"loan_date"=>$data['loan_date'],"loan_amount"=>$data['loan_amount'], "loan_amount_word"=>$data['loan_amount_word'], "interest_rate"=>$data['interest_rate'],"expected_payback"=>$data['expected_payback'],"daily_default_amount"=>$data['daily_default_amount'], "loan_date"=>$loan_date, "loan_end_date"=>$loan_date, "approved_by"=>$data['approved_by'], "repayment_duration"=>$data['repayment_duration'], "comments"=>$data['comments']));
 		if($result){
 			return $result;
 		}else{
@@ -75,7 +75,7 @@ class Loans extends Db {
 	public function updateLoan($data){
 		$loan_date = $this->formatDate($data['loan_date']);
 	
-		if($this->update(self::$table_name,array("person_number", "loan_number", "branch_number","loan_type", "loan_date", "loan_amount","loan_amount_word", "interest_rate", "expected_payback", "daily_default_amount", "approved_by", "repayment_duration", "comments"), array("person_number"=>$data['person_number'], "loan_number"=>$data['loan_number'], "branch_number"=>$data['branch_number'], "loan_type"=>$data['loan_type'],"loan_date"=>$data['loan_date'],"loan_amount"=>$data['loan_amount'], "loan_amount_word"=>$data['loan_amount_word'], "interest_rate"=>$data['interest_rate'],"expected_payback"=>$data['expected_payback'],"daily_default_amount"=>$data['daily_default_amount'], "loan_date"=>$loan_date, "approved_by"=>$data['approved_by'], "repayment_duration"=>$data['repayment_duration'], "comments"=>$data['comments']), "id=".$data['id'])){
+		if($this->update(self::$table_name,array("person_number", "loan_number", "branch_number","loan_type", "loan_date", "loan_end_date", "loan_amount","loan_amount_word", "interest_rate", "expected_payback", "daily_default_amount", "approved_by", "repayment_duration", "comments"), array("person_number"=>$data['person_number'], "loan_number"=>$data['loan_number'], "branch_number"=>$data['branch_number'], "loan_type"=>$data['loan_type'],"loan_date"=>$data['loan_date'],"loan_amount"=>$data['loan_amount'], "loan_amount_word"=>$data['loan_amount_word'], "interest_rate"=>$data['interest_rate'],"expected_payback"=>$data['expected_payback'],"daily_default_amount"=>$data['daily_default_amount'], "loan_date"=>$loan_date, "loan_end_date"=>$loan_date, "approved_by"=>$data['approved_by'], "repayment_duration"=>$data['repayment_duration'], "comments"=>$data['comments']), "id=".$data['id'])){
 			return true;
 		}else{
 			echo "Failed to update";

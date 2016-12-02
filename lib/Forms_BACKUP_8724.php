@@ -1204,4 +1204,5 @@ Class Forms{
 		 <div class="clearfix"></div>
 	<?php 
 	}
-}?>
+}
+?>
