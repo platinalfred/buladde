@@ -64,10 +64,10 @@ function getGraphData($start_date, $end_date){
 		
 		foreach($weeks as $week){
 			$between = "BETWEEN '".$week['start']."' AND '".$week['end']."')";
-			$loans_sum_graph_data[] = $dashboard->getSumOfLoans("`loan_end_date` >= '".$week['start']."'");
+			$loans_sum_graph_data[] = $dashboard->getSumOfLoans("`loan_date` <= '".$week['end']."' AND `active` = 1");
 			$shares_sum_graph_data[] = $dashboard->getSumOfShares("(`date_paid` ".$between);
 			$subscriptions_sum_graph_data[] = $dashboard->getSumOfSubscriptions("(`date_paid` ".$between);
-			$loans_count_graph_data[] = $dashboard->getCountOfLoans("`loan_end_date` >= '".$week['start']."'");
+			$loans_count_graph_data[] = $dashboard->getCountOfLoans("`loan_date` <= '".$week['end']."' AND `active` = 1");
 			$shares_count_graph_data[] = $dashboard->getCountOfShares("(`date_paid` ".$between);
 			$subscriptions_count_graph_data[] = $dashboard->getCountOfSubscriptions("(`date_paid` ".$between);
 			$data_points[] = date('j/M', strtotime($week['start']))."-".date('j/M', strtotime($week['end']));
@@ -100,10 +100,10 @@ function getGraphData($start_date, $end_date){
 		}
 		foreach($months as $month){
 			$between = "BETWEEN '".$month['start']."' AND '".$month['end']."')";
-			$loans_sum_graph_data[] = $dashboard->getSumOfLoans("`loan_end_date` >= '".$month['start']."'");
+			$loans_sum_graph_data[] = $dashboard->getSumOfLoans("`loan_date` <= '".$month['end']."' AND `active` = 1");
 			$shares_sum_graph_data[] = $dashboard->getSumOfShares("(`date_paid` ".$between);
 			$subscriptions_sum_graph_data[] = $dashboard->getSumOfSubscriptions("(`date_paid` ".$between);
-			$loans_count_graph_data[] = $dashboard->getCountOfLoans("`loan_end_date` >= '".$month['start']."'");
+			$loans_count_graph_data[] = $dashboard->getCountOfLoans("`loan_date` <= '".$month['end']."' AND `active` = 1");
 			$shares_count_graph_data[] = $dashboard->getCountOfShares("(`date_paid` ".$between);
 			$subscriptions_count_graph_data[] = $dashboard->getCountOfSubscriptions("(`date_paid` ".$between);
 			$data_points[] = date('M, Y', strtotime($month['start']));
@@ -136,7 +136,7 @@ function getGraphData($start_date, $end_date){
 				draw_loans_table($loans);
 			break;
 			case "actvloans":
-				$loans = $loan->findAll("`loan_end_date` >= '".$start_date."'");
+				$loans = $loan->findAll("`loan_end_date` <= '".$start_date."' AND `expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE `transaction_date`<'".$end_date."' AND `loan_id` = `loan`.`id`),0)");
 				draw_loans_table($loans);
 			break;
 			case "ploans":

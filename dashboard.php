@@ -65,7 +65,7 @@ $dashboard = new Dashboard();
               <div class="x_panel">
 
                 <div class="x_title">
-                    <h2>Transaction Activities <small>summary</small></h2>
+                    <h2>Transactions <small>summary</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -82,7 +82,7 @@ $dashboard = new Dashboard();
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Active loans <small>Performance</small></h2>
+                    <h2>Performance<small>Loans + Subscriptions</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -195,7 +195,7 @@ $dashboard = new Dashboard();
             <div class="col-md-4 col-sm-4 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>All Loans <small>top 10</small></h2>
+                    <h2>Defaulters <small>top 10</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
