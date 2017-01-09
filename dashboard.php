@@ -12,32 +12,32 @@ $dashboard = new Dashboard();
 	  <div class="row tile_count">
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
 		  <span class="count_top"><i class="fa fa-user"></i> Total Members</span>
-		  <div class="count"><?php echo $member->noOfMembers(); ?></div>
+		  <div class="count"><a class="count dash_link" href="view_members.php" title="Details"><?php echo $member->noOfMembers(); ?></a></div>
 		  <span class="count_bottom"><i class="green">4% </i> From last Week</span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
 		  <span class="count_top"><i class="fa fa-money"></i> Total Paid Subscription</span>
-		  <div class="count"><?php echo $dashboard->getSumOfSubscriptions(); ?></div>
+		  <div class="count"><a class="count dash_link" href="view_subscriptions.php" title="Details"><?php echo $dashboard->getSumOfSubscriptions(); ?></a></div>
 		  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
 		  <span class="count_top"><i class="fa fa-money"></i> Total Shares</span>
-		  <div class="count green"><?php echo $dashboard->getSumOfShares(); ?></div>
+		  <div><a class="count green dash_link" href="view_shares.php" title="Details"><?php echo $dashboard->getSumOfShares(); ?></a></div>
 		  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-		  <span class="count_top"><i class="fa fa-user"></i> Total Active Loans</span>
-		  <div class="count"><?php echo $dashboard->totalActiveLoans(); ?></div>
+		  <span class="count_top"><i class="fa fa-money"></i> Total Active Loans</span>
+		  <div class="count"><a class="dash_link" href="view_loans.php?type=3" title="Details"><?php echo $dashboard->totalActiveLoans(); ?></a></div>
 		  <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
 		  <span class="count_top"><i class="fa fa-money"></i> Total Loan Repayment Collections</span>
-		  <div class="count">2,315</div>
+		  <div class="count"><a href="view_loan_payments.php" class="dash_link" title="Details"><?php echo $dashboard->getCountOfLoanRepayments(); ?></a></div>
 		  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-		  <span class="count_top"><i class="fa fa-user"></i> Total Due Loans</span>
-		  <div class="count">100</div>
+		  <span class="count_top"><i class="fa fa-money"></i> Total Due Loans</span>
+		  <div class="count"><a href="view_loans.php?type=4" class="dash_link" title="Details"><?php //echo $dashboard->getCountOfDueLoans(); ?>100</a></div>
 		  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
 		</div>
 	  </div>
@@ -113,7 +113,7 @@ $dashboard = new Dashboard();
                   <div class="x_content">
                     <table id="nploans" class="table table-hover">
                     </table>
-
+					<p class="pull-right"><a href="view_loans.php?type=2" class="btn btn-info dash_link">View all...</a></p>
                   </div>
                 </div>
               </div>
@@ -137,7 +137,7 @@ $dashboard = new Dashboard();
             <div class="col-md-4 col-sm-4 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Performing Loans <small>top 10</small></h2>
+                    <h2>Performing loans <small>top 10</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -149,6 +149,7 @@ $dashboard = new Dashboard();
                   <div class="x_content">
                     <table id="ploans" class="table table-hover">
                     </table>
+					<p class="pull-right"><a href="view_loans.php?type=1" class="btn btn-info dash_link">View all...</a></p>
                   </div>
                 </div>
               </div>
@@ -169,7 +170,7 @@ $dashboard = new Dashboard();
                   <div class="x_content">
                     <table id="income" class="table table-hover">
                     </table>
-
+					<p class="pull-right"><a href="view_income.php" class="btn btn-info dash_link">View all...</a></p>
                   </div>
                 </div>
               </div>
@@ -188,14 +189,14 @@ $dashboard = new Dashboard();
                   <div class="x_content">
                     <table id="expenses" class="table table-hover">
                     </table>
-
+					<p class="pull-right"><a href="view_expenses.php" class="btn btn-info dash_link">View all...</a></p>
                   </div>
                 </div>
               </div>
             <div class="col-md-4 col-sm-4 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Defaulters <small>top 10</small></h2>
+                    <h2>Active loans <small>top 10</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -208,7 +209,7 @@ $dashboard = new Dashboard();
                     <table id="actvloans" class="table table-hover">
                       <thead>
                     </table>
-
+					<p class="pull-right"><a href="view_loans.php?type=3" class="btn btn-info dash_link">View all...</a></p>
                   </div>
                 </div>
               </div>

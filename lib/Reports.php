@@ -15,7 +15,7 @@ Class Reports{
 			case 'client_loans';
 				$this->memberLoans();
 			break;
-			case 'mysubscritions';
+			case 'mysubscriptions';
 				$this->subScriptions();
 			break;
 			case 'myshares';
@@ -130,14 +130,14 @@ Class Reports{
 											<td class="a-center ">
 												<input type="checkbox" value="<?php echo $single['id']; ?>" class="flat" name="table_records">
 											</td>
-											<td class=" "><?php echo $single['loan_number']; ?></td>
-											<td class=" "><?php echo $loans->findLoanType($single['loan_type']); ?> </td>
-											<td class=" "><?php echo $single['loan_amount']; ?> </td>
-											<td class=" "><?php  echo $interest; ?></td>
+											<td class=""><?php echo $single['loan_number']; ?></td>
+											<td class=""><?php echo $loans->findLoanType($single['loan_type']); ?> </td>
+											<td class=""><?php echo $single['loan_amount']; ?> </td>
+											<td class=""><?php  echo $interest; ?></td>
 											<td class=" "><?php echo $single['loan_amount'] + $interest; ?></td>
-											<td class="a-right a-right "><?php echo date("j F, Y", strtotime($single['loan_date'])); ?></td>
-											<td class="a-right a-right "><?php echo $loans->findLoanPaymentDuration($single['repayment_duration']); ?></td>
-											<td class="a-right a-right "><?php echo $loans->findExpectedPayBackDate($single['repayment_duration']); ?></td>
+											<td class="a-right a-right"><?php echo date("j F, Y", strtotime($single['loan_date'])); ?></td>
+											<td class="a-right a-right"><?php $months = round((($single['loan_duration']>0)?($single['loan_duration']/30):0),1); echo $months; ?> month<?php echo $months==1?"":"s"; ?></td>
+											<td class="a-right a-right"><?php echo date("F j, Y", strtotime($single['loan_end_date'])); ?></td>
 											<td class=" last"><a href="#" class="btn btn-primary">View</a></td>
 										</tr>
 										<?php
@@ -168,7 +168,7 @@ Class Reports{
 		 <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2><?php echo $account_names['firstname']." ".$account_names['lastname']; ?> <small> Subscritions </small></h2>
+                    <h2><?php echo $account_names['firstname']." ".$account_names['lastname']; ?> <small> Subscriptions </small></h2>
                     <div class="clearfix"></div>
                   </div>
 
@@ -231,7 +231,7 @@ Class Reports{
 		 <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2><?php echo $account_names['firstname']." ".$account_names['lastname']; ?> <small> Subscritions </small></h2>
+                    <h2><?php echo $account_names['firstname']." ".$account_names['lastname']; ?> <small> Shares </small></h2>
                     <div class="clearfix"></div>
                   </div>
 

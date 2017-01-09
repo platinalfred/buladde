@@ -107,13 +107,13 @@ if($_GET['member_id']){
 					</div>
 					<div class="col-md-3 col-sm-12 col-xs-12 form-group">
 						<p class="lead" >District</p>
-						<p class="p"><?php echo $locations->findDistrict($person_data["district"]); ?></p>
+						<p class="p"><?php  echo $locations->findDistrict($person_data["district"]); ?></p>
 					</div>
 				</div>
 				<div class="col-md-12 col-sm-12 col-xs-12 details">
 					<div class="col-md-3 col-sm-12 col-xs-12 form-group">
 						<p class="lead" >County</p>
-						<p class="p"><?php  echo  $locations->findCounty($person_data["county"]); ?></p>
+						<p class="p"><?php echo  $locations->findCounty($person_data["county"]); ?></p>
 					</div>
 					<div class="col-md-3 col-sm-12 col-xs-12 form-group ">
 						<p class="lead" >Sub County</p>
@@ -142,7 +142,7 @@ if($_GET['member_id']){
 				</ul>
 				<ul class="nav navbar-right panel_toolbox">
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=client_loans" class="btn btn-success"><i class="fa fa-folder-open-o"></i> View Loans</a></li>
-				   <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=mysubscritions" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Subscriptions</a></li>
+				   <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=mysubscriptions" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Subscriptions</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=myshares" class="btn btn-success"><i class="fa fa-folder-open-o"></i>My Shares</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=nok" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Next of kin details</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=mysavings" class="btn btn-success"><i class="fa fa-folder-open-o"></i>My savings</a></li>

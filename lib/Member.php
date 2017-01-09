@@ -13,6 +13,18 @@ class Member extends Db {
 		$result = $this->getrec(self::$table_name, "person_number=".$pno, "", "");
 		return !empty($result) ? $result:false;
 	}
+	public function findGenger($g){
+		if($g=="F"){
+			return "Female";
+		}elseif($g == "M"){
+			return "Male";
+		}
+		return false;
+	}
+	public function findBranch($br){
+		$result = $this->getfrec("branch", "branch_name", "branch_number='$br'","","");
+		return !empty($result) ? $result['branch_name'] : false;
+	}
 	public function findMemberNames($pno){
 		$result = $this->getfrec("person", "firstname, lastname, othername", "id=".$pno, "", "");
 		return !empty($result) ? $result['firstname']." ".$result['othername']." ".$result['lastname'] : false;

@@ -128,7 +128,8 @@ Class Forms{
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="branch_id">Awarding Branch<span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-						  <input type="text" id="branch_number" name="branch_number"  readonly = "readonly"  value="<?php echo $_SESSION['branch_number']; ?>" class="form-control col-md-7 col-xs-12">
+						<input type="hidden" value="<?php echo $_SESSION['branch_number']; ?>" name="branch_number">
+						  <input type="text" id="branch_number" name=""  readonly = "readonly"  value="<?php echo  $branch['branch_name']; ?>" class="form-control col-md-7 col-xs-12">
 						</div>
 					  </div>					
 					  <div class="item form-group">
@@ -173,16 +174,29 @@ Class Forms{
 						<input  type="hidden" id="add_loan"  name="add_loan" value="">
 					  </div>
 					  <div class="item form-group">
-						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="repayment_duration">Repayment Duration <span class="required">*</span>
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="loan_duration">Loan Duration <span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-						  <?php
-							$db->loadList("Select * from repaymentduration", "repayment_duration", "id","name","repayment_duration");
-							?>
+							<select name="loan_duration" id="loan_duration" class="form-control col-md-7 col-xs-12">
+								<option>Please select </option>
+								<option value="7"> 1 week</option>
+								<option value="30">1 month</option>
+						   <?php for($i=2; $i<25;$i++){?>}
+								<option value="<?php echo ($i*30);?>"> <?php echo $i; ?> months</option>
+							<?php }?>
+							</select>
 						</div>
 					  </div>
 					  <div class="item form-group">
-						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="daily_default">Daily Charge Upon Default 	</label>
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="loan_end_date">Loan End Date <span class="required">*</span>
+						</label>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<input  type="hidden" id="loan_end_date"  name="loan_end_date">
+						  <input  type="text" id="loan_end_date1" readonly name="" class="form-control  col-md-7 col-xs-12">
+						</div>
+					  </div>
+					  <div class="item form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="daily_default">Daily Charge Upon Default (%) 	</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
 						  <input id="daily_default_amount" type="number" name="daily_default_amount"  class="optional form-control col-md-7 col-xs-12">
 						</div>
@@ -1168,18 +1182,11 @@ Class Forms{
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
 						   <select class="form-control" name="payback_days">
-								<option value="7"> One Week (7 days)</option>
-								<option value="30">One Month (30 days)</option>
-								<option value="365">1 Year (365 days)</option>
-								<option value="730">2 years (730 days)</option>
-								<option value="1095">3 years (1,095 days)</option>
-								<option value="1460">4 years (1,465 days)</option>
-								<option value="1825">5 years (1,825 days)</option>
-								<option value="2190">6 years (2,190 days)</option>
-								<option value="2555">7 years (2,555 days)</option>
-								<option value="2920">8 years (2,920 days)</option>
-								<option value="3285">9 years (3,285 days)</option>
-								<option value="3650">10 years (3650 days)</option>
+								<option value="7"> 1 Week</option>
+								<option value="30">1 Month</option>
+						   <?php for($i=2; $i<25;$i++){?>}
+								<option value="<?php echo ($i*30);?>"> <?php echo $i; ?> months</option>
+							<?php }?>
 							</select>
 						</div>
 					  </div>

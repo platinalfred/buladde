@@ -131,24 +131,29 @@ function getGraphData($start_date, $end_date){
 				$pieChartData[] = $dashboard->getSumOfLoans("`loan_end_date` >= '".$start_date."' AND id IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)");
 				echo json_encode($pieChartData);
 			break;
+			//List of non performing loans
 			case "nploans":
-				$loans = $loan->findAll("`loan_end_date` >= '".$start_date."' AND id NOT IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)");
+				$loans = $loan->findAll("`loan_end_date` >= '".$start_date."' AND id NOT IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)", "expected_payback DESC", "10");
 				draw_loans_table($loans);
 			break;
+			//List of all the active loans
 			case "actvloans":
-				$loans = $loan->findAll("`loan_end_date` <= '".$start_date."' AND `expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE `transaction_date`<'".$end_date."' AND `loan_id` = `loan`.`id`),0)");
-				draw_loans_table($loans);
+				$loans = $loan->findAll("`loan_end_date` <= '".$start_date."' AND `expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE `transaction_date`<'".$end_date."' AND `loan_id` = `loan`.`id`),0)", "expected_payback DESC", "10");
+				if($loans){
+					draw_loans_table($loans);
+				}
 			break;
+			//list of all the performing loans
 			case "ploans":
-				$loans = $loan->findAll("`loan_end_date` >= '".$start_date."' AND id IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)");
+				$loans = $loan->findAll("`loan_end_date` >= '".$start_date."' AND id IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)", "expected_payback DESC", "10");
 				draw_loans_table($loans);
 			break;
 			case "income":
-				$income = $income->findAll("`date_added` BETWEEN '".$start_date."' AND '".$end_date."'");?>
+				$income = $income->findAll("`date_added` BETWEEN '".$start_date."' AND '".$end_date."'", "amount DESC", "10");?>
                       <thead>
                         <tr>
 						<?php 
-						$header_keys = array("#", "Description", "Amount");
+						$header_keys = array("#", "Income type", "Amount");
 						foreach($header_keys as $key){ ?>
 							<th><?php echo $key; ?></th>
 						<?php } ?>
@@ -161,11 +166,10 @@ function getGraphData($start_date, $end_date){
 							foreach($income as $single){ ?>
 							<tr>
 							  <td><a href="#<?php echo $single['id']; ?>"><?php echo $single['id']; ?></A></td>
-							  <td><?php echo substr($single['description'],0,20); ?></td>
+							  <td><?php echo substr($single['name'],0,20); ?></td>
 							  <td><?php echo number_format($single['amount']); $total += $single['amount'];?></td>
 							</tr>
-							<?php }
-						}?>
+							<?php }?>
                       </tbody>
                       <tfoot>
                         <tr>
@@ -174,9 +178,13 @@ function getGraphData($start_date, $end_date){
                           <th><?php echo number_format($total); ?></th>
                         </tr>
                       </tfoot>
+							<?php }else{?>
+						<tr><td colspan="3">No income records found</td></tr>
+                      </tbody>
+						<?php }?>
 			<?php	break;
 			case "expenses":
-				$expenses = $expense->findAllExpenses("`date_of_expense` BETWEEN '".$start_date."' AND '".$end_date."'");?>
+				$expenses = $expense->findAllExpenses("`date_of_expense` BETWEEN ".$start_date." AND ".$end_date, "amount_used DESC", "10");?>
                       <thead>
                         <tr>
 						<?php 
@@ -196,8 +204,7 @@ function getGraphData($start_date, $end_date){
 							  <td><?php echo $single['amount_description']; ?></td>
 							  <td><?php echo number_format($single['amount_used']); $total += $single['amount_used']; ?></td>
 							</tr>
-							<?php }
-						}?>
+							<?php }?>
                       </tbody>
                       <tfoot>
                         <tr>
@@ -206,6 +213,10 @@ function getGraphData($start_date, $end_date){
                           <th><?php echo number_format($total); ?></th>
                         </tr>
                       </tfoot>
+						<?php }else{?>
+						<tr><td colspan="3">No expense records found</td></tr>
+                      </tbody>
+					<?php }?>
 			<?php	break;
 			default:
 				;//$shares = $share->findAll("`date_paid` BETWEEN '".$start_date."' AND '".$end_date."'");
@@ -215,7 +226,7 @@ function getGraphData($start_date, $end_date){
                       <thead>
                         <tr>
 						<?php 
-						$header_keys = array("#", "Names", "Amount", "Balance");
+						$header_keys = array("Loan No", "Amount", "Balance");
 						foreach($header_keys as $key){ ?>
 							<th><?php echo $key; ?></th>
 						<?php } ?>
@@ -224,25 +235,26 @@ function getGraphData($start_date, $end_date){
                       <tbody>
 						<?php
 						$amount = $balance = 0;
-						if($loans){
+						if($loans_data){
 							foreach($loans_data as $single){ ?>
 							<tr>
-							  <td><a href="#<?php echo $single['id']; ?>"><?php echo $single['id']; ?></A></td>
-							  <td><?php echo $single['comments']; ?></td>
+							  <td><a href="#<?php echo $single['id']; ?>" title="View details"><?php echo $single['loan_number']; ?></a></td>
 							  <td><?php echo number_format($single['expected_payback']); $amount += $single['expected_payback']; ?></td>
 							  <td><?php echo number_format($single['loan_amount']); $balance += $single['loan_amount']; ?></td>
 							</tr>
-							<?php }
-						}?>
+							<?php }?>
                       </tbody>
                       <tfoot>
                         <tr>
                           <th scope="row">Total</th>
-                          <th>&nbsp;</th>
                           <th><?php echo number_format($amount); ?></th>
                           <th><?php echo number_format($balance); ?></th>
                         </tr>
                       </tfoot>
+						<?php }else{?>
+							<tr><td colspan="3">No loans data</td></tr>
+                      </tbody>
+					<?php }?>
 			<?php
 	}			
 ?>

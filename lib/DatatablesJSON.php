@@ -13,7 +13,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class DataTable extends Db{
 	
-	public function get($table, $index_column, $columns) {
+	public function get($table, $index_column, $columns, $where = "", $group_by = "") {
 		// Paging
 		$sLimit = "";
 		if ( isset( $_POST['start'] ) && $_POST['length'] != '-1' ) {
@@ -25,6 +25,11 @@ class DataTable extends Db{
 		if ( isset( $_POST['order'][0]['column'] ) && $_POST['columns'][$_POST['order'][0]['column']]['orderable'] == "true" ) {
 			$sOrder = "ORDER BY ".$columns[$_POST['order'][0]['column']]." ".$_POST['order'][0]['dir'];
 		}
+		// Grouping
+		$sGroupBy = "";
+		if ( $group_by != "" ) {
+			$sGroupBy = "GROUP BY ".$group_by;
+		}
 		
 		/* 
 		 * Filtering
@@ -33,8 +38,16 @@ class DataTable extends Db{
 		 * on very large tables, and MySQL's regex functionality is very limited
 		 */
 		$sWhere = "";
+		if( $where !== ""){
+			$sWhere = "WHERE " . $where;
+		}
 		if ( isset($_POST['search']['value']) && $_POST['search']['value'] != "" ) {
-			$sWhere = "WHERE (";
+			if ( $sWhere == "" ) {
+				$sWhere = "WHERE (";
+			}
+			else {
+				$sWhere .= " AND (";
+			}
 			for ( $i=0 ; $i<count($columns) ; $i++ ) {
 				if ( isset($_POST['columns'][$i]['searchable']) && $_POST['columns'][$i]['searchable'] == "true" ) {
 					$sWhere .= $columns[$i]." LIKE ? OR ";
@@ -64,6 +77,8 @@ class DataTable extends Db{
 			$table.
 			" ".
 			$sWhere.
+			" ".
+			$sGroupBy;
 			" ".
 			$sOrder.
 			" ".

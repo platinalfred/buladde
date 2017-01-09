@@ -84,19 +84,17 @@ $foto = $staff->findPersonsPhoto($_SESSION['person_number']);
                   </li>
                   <li><a><i class="fa fa-edit"></i> Reports <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="form.html">General Reports</a></li>
-                       <li><a href="#">General Reports</a></li>
-                      <li><a href="#">Accounts</a></li>
-                      <li><a href="#">Members</a></li>
-					  <li><a href="#">Loans</a></li>
-                      <li><a href="#">Savings</a></li>
-                      <li><a href="#">Deposits</a></li>
-                      <li><a href="#">Loans</a></li>
+					  <li><a href="view_loans.php">Loans</a></li>
+                      <li><a href="view_shares.php">Shares</a></li>
+                       <li><a href="view_income.php">Income</a></li>
+                      <li><a href="view_subscriptions.php">Subscriptions</a></li>
+                      <li><a href="view_members.php">Members</a></li>
+                      <li><a href="view_member_savings.php">Member's Savings</a></li>
                     </ul>
                   </li>
                   <li><a href="view_members.php"><i class="fa fa-users"></i> Members <span class="fa fa-chevron-right"></span></a> </li>
                   <li><a href="staff.php"><i class="fa fa-users"></i>Staff<span class="fa fa-chevron-right"></span></a></li>
-                  <li><a href="expenses.php"><i class="fa fa-table"></i>Expenses <span class="fa fa-chevron-right"></span></a></li>
+                  <li><a href="view_expenses.php"><i class="fa fa-table"></i>Expenses <span class="fa fa-chevron-right"></span></a></li>
                   <li><a href="manage_accounts.php"><i class="fa fa-money"></i>Manage Accounts <span class="fa fa-chevron-right"></span></a> </li>
                 </ul>
               </div>

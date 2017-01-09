@@ -1,10 +1,27 @@
 <script>
-
+var dTable;//Global datatables variable
+var st_date = <?php echo isset($_GET['s_dt'])?"'{$_GET['s_dt']}'":"null"; ?>, //start date for the datatable
+	ed_date = <?php echo isset($_GET['e_dt'])?"'{$_GET['e_dt']}'":"null"; ?>; //end date for the datatable
+  function getStartDate(){
+	  return st_date;
+  }
+  function getEndDate(){
+	  return ed_date;
+  }
  $(document).ready(function() {
 	saveData();
 	
 	removeRedBorderOnRequiredField();
 	cancelFormFields();
+	
+	$('.date-picker').daterangepicker({
+	  singleDatePicker: true,
+	  calender_style: "picker_1"
+	}, function(start, end, label) {
+	  console.log(start.toISOString(), end.toISOString(), label);
+	});
+		
+		
 /* ADD MEMBER JS */
 	$(".photo_upload").click(function(){
 		var formData = new FormData($("form#photograph")[0]);
@@ -141,7 +158,12 @@
 			$("#loan_amount_word").val("");
 		}
 		
-	})
+	});
+	$("#loan_duration").change(function(){
+		var loan_duration = parseInt($(this).val());
+		$("#loan_end_date").val(moment().add(loan_duration, 'days').format('YYYY-MM-DD HH:mm:ss'));
+		$("#loan_end_date1").val(moment().add(loan_duration, 'days').format('D MMMM, YYYY'));
+	});
 	$("#deposit_amount, #withdraw_amount").keyup(function(){
 		var currentInput  = parseInt($(this).val());
 		var words  = getWords(currentInput);
@@ -194,12 +216,12 @@
 							setTimeout(function(){
 								form[0].reset();
 								$("#number_words, #expected_payback").html( "");
-							}, 8000);
+							}, 3000);
 						}else{
 							showStatusMessage(response  + "Could not add data,please try again. If the problem persisits contact the technical team for assistance!", "error");
 							setTimeout(function(){
 								
-							}, 8000);
+							}, 3000);
 						}
 					}
 				});
@@ -483,7 +505,7 @@ ko.applyBindings(guarantor);
 
 //Date range picker
 	var cb = function(start, end, label) {
-		console.log(start.toISOString(), end.toISOString(), label);
+		//console.log(start.toISOString(), end.toISOString(), label);
 		$('#reportrange span').html(start.format('D MMMM, YYYY') + ' - ' + end.format('D MMMM, YYYY'));
 	};
    var optionSet1 = {
@@ -524,17 +546,17 @@ ko.applyBindings(guarantor);
             firstDay: 1
           }
     };
-		$('#reportrange span').html(moment().subtract(29, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+		var start_date = moment().subtract(29, 'days'), end_date = moment();
+		$('#reportrange span').html(start_date.format('MMMM D, YYYY') + ' - ' + end_date.format('MMMM D, YYYY'));
+		format_hrefs(start_date.format('YYYY-MM-DD'), end_date.format('YYYY-MM-DD'));
 		
 		$('#reportrange').daterangepicker(optionSet1, cb);
 		
-		
-		
 		$('#reportrange').on('show.daterangepicker', function() {
-			console.log("show event fired");
+			//console.log("show event fired");
 		});
 		$('#reportrange').on('hide.daterangepicker', function() {
-		console.log("hide event fired");
+		//console.log("hide event fired");
 		});
 		$('#reportrange').on('apply.daterangepicker', function(ev, picker) {
 			<?php 
@@ -542,11 +564,15 @@ ko.applyBindings(guarantor);
 				findReportRange(<?php echo $_GET['member_id']; ?>, picker.startDate.format('MMMM D, YYYY'), picker.endDate.format('MMMM D, YYYY'));
 			<?php
 			}else{?>
-				//assumption is that we are at the dashboard page
 				var start_date=picker.startDate.format('YYYY-MM-DD'), end_date = picker.endDate.format('YYYY-MM-DD');
-				//getDashboardData("barChart",start_date,end_date);
-				var elements = ["nploans","ploans","actvloans","income","expenses","barChart","lineChart","pieChart"];
-				getDashboardData(elements,start_date,end_date);
+				
+				//when at the dashboard page
+				if(document.getElementById("nploans")){
+					var elements = ["nploans","ploans","actvloans","income","expenses","barChart","lineChart","pieChart"];
+					getDashboardData(elements, moment().subtract(29, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
+					format_hrefs(start_date, end_date);
+				}
+				searchTable(start_date,end_date); /* */
 			<?php } ?>
 		});
 		$('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
@@ -573,6 +599,17 @@ ko.applyBindings(guarantor);
 		<?php 
 		}
 		?>
+		//add params to the urls at the dashboard page
+		function format_hrefs(start_date, end_date){
+			$(".dash_link").each(function(){
+				var cur_url = $(this).attr("href"), params = "s_dt="+start_date+"&e_dt="+end_date;
+				
+				params = (cur_url.search(/\?(type)/)!==-1)?"&"+params:"?"+params;
+				cur_url = cur_url.replace(/(\?|\&)s_dt(.+)/gi, "");
+				$(this).attr("href", cur_url+params);
+			});
+		}
+		//find results for report given the date range
 		function findReportRange(member, start_date, end_date){
 			$.ajax({
 				type: "get",
@@ -582,7 +619,12 @@ ko.applyBindings(guarantor);
 				}
 			});
 		}
-			
+		// Apply the search on the table
+		function searchTable(startDate,endDate){
+			st_date = startDate;
+			ed_date = endDate;
+			dTable.ajax.reload();
+		}	
 	//End client transaction details 
 		function getDashboardData(elements, startDate, endDate){
 			$.each(elements, function(key, value){
@@ -594,14 +636,6 @@ ko.applyBindings(guarantor);
 						switch(value){
 							case "barChart":
 								var data = JSON.parse(response);
-								//Get the returned json data
-								//barChart.clear();
-								/* barChart.data.datasets[0].data = data.loans_count;
-								barChart.data.datasets[1].data = data.shares_count;
-								barChart.data.datasets[2].data = data.subscriptions_count;
-								barChart.data.labels = data.data_points;
-								barChart.update();
-								barChart.render(300,true); */
 								draw_bar_chart(data)
 							break;
 							case "lineChart":
@@ -618,10 +652,6 @@ ko.applyBindings(guarantor);
 								//draw the pie chart
 								var data = JSON.parse(response);
 								draw_pie_chart(data);
-								/* pieChart.clear();
-								pieChart.data.datasets[0].data = data;
-								pieChart.update();
-								pieChart.render(300,true); */
 								break;
 							default:
 								$("#"+value).html(response);

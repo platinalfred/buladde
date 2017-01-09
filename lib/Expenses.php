@@ -17,8 +17,8 @@ class Expenses extends Db {
 		}
 		return !empty($result) ? $result['amount']:false;
 	}
-	public function findAllExpenses($where = 1){
-		$result_array = $this->getarray(self::$table_name, $where,"id DESC", "");
+	public function findAllExpenses($where = 1, $orderby = "id DESC", $limit = ""){
+		$result_array = $this->getarray(self::$table_name, $where, $orderby, $limit);
 		return !empty($result_array) ? $result_array : false;
 	}
 	

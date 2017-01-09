@@ -3,6 +3,7 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Income extends Db {
 	protected static $table_name  = "income";
+	protected static $table_name2  = "income JOIN income_sources ON income_type = income_sources.id";
 	protected static $db_fields = array("id", "income_type", "amount", "date_added", "added_by", "description");
 	
 	public function findById($id){
@@ -10,8 +11,8 @@ class Income extends Db {
 		return !empty($result) ? $result:false;
 	}
 	
-	public function findAll($where = 1){
-		$result_array = $this->getarray(self::$table_name, $where, "", "");
+	public function findAll($where = 1, $orderby = "", $limit = ""){
+		$result_array = $this->getarray(self::$table_name2, $where, $orderby, $limit );
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findSubscriptionAmount($id){

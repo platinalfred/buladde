@@ -31,7 +31,7 @@ $locations = new Locations();
 					<li><a href="?task=access_level.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Access Level</a></li>
 					<li><a href="?task=income_types.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Income Type</a></li>
 					<li><a href="?task=loan_type.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Loan Type</a></li>
-					<li><a href="?task=loan_repayment_durarion.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Loan Repayment Duration</a></li>
+					<!--li><a href="?task=loan_repayment_durarion.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Loan Repayment Duration</a></li-->
 				</ul>
 				<ul class="nav navbar-right panel_toolbox">
 					<li><a href="?view=expensetypes" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Expense Types </a></li>

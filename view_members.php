@@ -10,28 +10,6 @@ $person = new Person();
 <!-- page content -->
 <div class="right_col" role="main">
   <div class="">
-	<div class="page-title">
-	  <div class="title_left">
-		<h3>Members <small>All active members</small></h3>
-	  </div>
-
-	  <div class="title_right">
-		<div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-		<form method="post" action="" >
-			<div class="input-group">
-			
-				<input type="text" name="person_number" class="form-control" placeholder="Search by person no...">
-				<span class="input-group-btn">
-				  <button class="btn btn-default" type="submit">Go!</button>
-				</span>
-			
-			</div>
-		  </form>
-		</div>
-	  </div>
-	</div>
-
-	<div class="clearfix"></div>
 
 	<div class="row">
 	  <div class="col-md-12 col-sm-12 col-xs-12">
@@ -102,7 +80,7 @@ include("includes/footer.php");
   $(document).ready(function() {
 	var handleDataTableButtons = function() {
 	  if ($("#datatable-buttons").length) {
-$('#datatable-buttons').DataTable({
+		  dTable = $('#datatable-buttons').DataTable({
 		  dom: "Bfrtip",
 		  "processing": true,
 		  "serverSide": true,
@@ -111,7 +89,11 @@ $('#datatable-buttons').DataTable({
 		  "ajax": {
 			  "url":"server_processing.php",
 			  "type": "POST",
-			  "data":  {'page':'view_members'}
+			  "data":  function(d){
+				d.page = 'view_members';
+				d.start_date = getStartDate();
+				d.end_date = getEndDate();
+				}
 		  },"columnDefs": [ {
 			  "targets": [7,8],
 			  "orderable": false,
@@ -166,21 +148,6 @@ $('#datatable-buttons').DataTable({
 		}
 	  };
 	}();
-/* 
-	var $datatable = $('#datatable-checkbox');
-
-	$datatable.dataTable({
-	  'order': [[ 1, 'asc' ]],
-	  'columnDefs': [
-		{ orderable: false, targets: [0] }
-	  ]
-	});
-	$datatable.on('draw.dt', function() {
-	  $('input').iCheck({
-		checkboxClass: 'icheckbox_flat-green'
-	  });
-	});
- */
 	TableManageButtons.init();
   });
 </script>

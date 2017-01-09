@@ -1,8 +1,6 @@
 <?php 
 require_once("lib/Libraries.php");
-print_r($_POST);
 if(isset($_POST['add_loan'])){
-	print_r($_POST);
 	$data = $_POST;
 	$loan = new Loans();
 	$guarantor = new Guarantor();

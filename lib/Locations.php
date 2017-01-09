@@ -3,8 +3,8 @@ $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
 class Locations extends Db {
 	protected static $tbl_country  = "country";
-	protected static $tbl_district  = "district";
-	protected static $tbl_county  = "county";
+	protected static $tbl_district  = "districts";
+	protected static $tbl_county  = "counties";
 	protected static $tbl_subcounty  = "subcounty";
 	protected static $tbl_parish  = "parish";
 	protected static $tbl_village  = "village";
