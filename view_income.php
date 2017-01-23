@@ -1,11 +1,13 @@
 <?php 
 //This will prevent data tables js from showing on every page for speed increase
 $show_table_js = true;
+$page_title = "Income";
 include("includes/header.php"); 
 require_once("lib/Libraries.php");
 $income = new Income();
 
 ?>
+<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
 <!-- page content -->
 <div class="right_col" role="main">
   <div class="">
@@ -76,15 +78,15 @@ $income = new Income();
 	  </div>      
 	</div>
 <!-- /page content -->
-<?php 
-include("includes/footer.php"); 
-?>
+<?php }?> 
+<?php include("includes/footer.php"); ?>
+<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
 <!-- Datatables -->
 <script>
   $(document).ready(function() {
 	var handleDataTableButtons = function() {
 	  if ($("#datatable-buttons").length) {
-$('#datatable-buttons').DataTable({
+		dTable = $('#datatable-buttons').DataTable({
 		  dom: "Bfrtip",
 		  "processing": true,
 		  "serverSide": true,
@@ -164,3 +166,4 @@ $('#datatable-buttons').DataTable({
 	TableManageButtons.init();
   });
 </script>
+<?php }?> 

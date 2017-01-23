@@ -1,11 +1,13 @@
 <?php 
 //This will prevent data tables js from showing on every page for speed increase
 $show_table_js = true;
+$page_title = "Member Subscriptions";
 include("includes/header.php"); 
 require_once("lib/Libraries.php");
 $income = new Income();
 
 ?>
+<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
 <!-- page content -->
 <div class="right_col" role="main">
   <div class="">
@@ -58,9 +60,11 @@ $income = new Income();
 </div>
 <div class="clearfix"></div>
 <!-- /page content -->
+<?php }?> 
 <?php 
 include("includes/footer.php"); 
 ?>
+<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
 <!-- Datatables -->
 <script>
   $(document).ready(function() {
@@ -74,7 +78,7 @@ include("includes/footer.php");
 		  "ajax": {
 			  "url":"server_processing.php",
 			  "type": "POST",
-			  "data":  function(d){
+			  "data": function(d){
 				d.page = 'view_subcriptns';
 				d.start_date = getStartDate();
 				d.end_date = getEndDate();
@@ -123,3 +127,4 @@ include("includes/footer.php");
 	TableManageButtons.init();
   });
 </script>
+<?php }?> 

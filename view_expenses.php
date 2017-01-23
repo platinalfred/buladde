@@ -1,12 +1,13 @@
 <?php 
 //This will prevent data tables js from showing on every page for speed increase
 $show_table_js = true;
-include("includes/header.php"); 
 require_once("lib/Libraries.php");
 require_once("lib/Forms.php");
 $expense = new Expenses();
 $person = new Person();
 
+$page_title = "Expenses";
+include("includes/header.php"); 
 $all_expenses = array();
 ?>
 <!-- page content -->
@@ -16,11 +17,14 @@ $all_expenses = array();
 		<h2>Expenses <small> manage expenses </small></h2>
 		<ul class="nav navbar-right panel_toolbox">
 		  <li>
-			<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".expense_modal">Add New Expense</button>
+			<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+			  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+			  <span>November 20, 2016 - December 19, 2016</span> <b class="caret"></b>
+			</div>
 		  </li>
-		  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+		  <li>
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".expense_modal"><i class="fa fa-plus"></i> Add New Expense</button>
 		  </li>
-		  
 		</ul>
 		<div class="clearfix"></div>
 	  </div>
@@ -115,7 +119,7 @@ include("includes/footer.php");
   $(document).ready(function() {
 	var handleDataTableButtons = function() {
 	  if ($("#datatable-buttons").length) {
-		$("#datatable-buttons").DataTable({
+		dTable = $("#datatable-buttons").DataTable({
 		  dom: "Bfrtip",
 		  "processing": true,
 		  "serverSide": true,
@@ -123,7 +127,11 @@ include("includes/footer.php");
 		  "ajax": {
 			  "url":"server_processing.php",
 			  "type": "POST",
-			  "data":  {'page':'view_expenses'}
+			  "data": function(d){
+				d.page = 'view_expenses';
+				d.start_date = getStartDate();
+				d.end_date = getEndDate();
+				}
 		  },"columnDefs": [ {
 			  "targets": [0],
 			  "orderable": false

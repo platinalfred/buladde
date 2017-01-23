@@ -1,9 +1,11 @@
 <?php 
 //This will prevent data tables js from showing on every page for speed increase
 $show_table_js = true;
+$page_title = "Shares";
 include("includes/header.php"); 
 require_once("lib/Libraries.php");
 ?>
+<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
 <!-- page content -->
 <div class="right_col" role="main">
   <div class="">
@@ -13,7 +15,15 @@ require_once("lib/Libraries.php");
 	  <div class="col-md-12 col-sm-12 col-xs-12">
 		<div class="x_panel">
 		  <div class="x_title">
-			<h2>Shares <small>list</small></h2>
+			  <div class="col-md-6">
+				<h3>Shares <small>list</small></h3>
+			  </div>
+			  <div class="col-md-6">
+				<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+				  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+				  <span>November 20, 2016 - December 19, 2016</span> <b class="caret"></b>
+				</div>
+			  </div>
 			<div class="clearfix"></div>
 		  </div>
 		  <div class="x_content">
@@ -51,9 +61,11 @@ require_once("lib/Libraries.php");
 </div>
 <div class="clearfix"></div>
 <!-- /page content -->
+<?php }?> 
 <?php 
 include("includes/footer.php"); 
 ?>
+<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
 <!-- Datatables -->
 <script>
   $(document).ready(function() {
@@ -67,7 +79,7 @@ include("includes/footer.php");
 		  "order": [[ 1, 'asc' ]],
 		  "ajax": {
 			  "url":"server_processing.php",
-			  "type": "POST"
+			  "type": "POST",
 			  "data":  function(d){
 				d.page = 'view_shares';
 				d.start_date = getStartDate();
@@ -116,3 +128,4 @@ include("includes/footer.php");
 	TableManageButtons.init();
   });
 </script>
+<?php }?> 

@@ -6,8 +6,15 @@ require_once("lib/DatatablesJSON.php");
 $data_table = new DataTable();
 $primary_key = $columns = $table = $where = $group_by = "";
 if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
-	if(isset($_POST['start_date']) && isset($_POST['end_date'])){
+	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 		$where = "(`member`.`date_added` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
+	}
+	if(isset($_SESSION['access_level'])&&!in_array($_SESSION['access_level'],array(1,2))){
+		if(strlen($where)>0){
+			$where .= " AND added_by = ".$_SESSION['user_id'];
+		}else{
+			$where = " added_by = ".$_SESSION['user_id'];
+		}
 	}
 	$table = "`member` JOIN `person` ON `member`.`person_number` = `person`.`id` LEFT JOIN (SELECT SUM(`amount`) savings, `person_number` FROM `transaction` WHERE `transaction_type`=1 GROUP BY `person_number`) `client_savings` ON `member`.`person_number` = `client_savings`.`person_number` LEFT JOIN (SELECT SUM(`amount`) `shares`, `person_number` FROM `shares` GROUP BY `person_number`) `client_shares` ON `member`.`person_number` = `client_shares`.`person_number` LEFT JOIN (SELECT COUNT(`id`) `loans`, `person_number` FROM `loan` GROUP BY `person_number`) `client_loans` ON `member`.`person_number` = `client_loans`.`person_number`";
 
@@ -17,9 +24,16 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
 }
 //list of all the expenses
 if ( isset($_POST['page']) && $_POST['page'] == "view_expenses" ) {
-	if(isset($_POST['start_date']) && isset($_POST['end_date'])){
+	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 		$where = "(`date_of_expense` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
-	}	
+	}
+	if(isset($_SESSION['access_level'])&&!in_array($_SESSION['access_level'],array(1,2))){
+		if(strlen($where)>0){
+			$where .= " AND staff = ".$_SESSION['user_id'];
+		}else{
+			$where = " staff = ".$_SESSION['user_id'];
+		}
+	}
 	$table = "`expense` JOIN `person` ON `expense`.`staff` = `person`.`id` JOIN `expensetypes` ON `expense_type` = `expensetypes`.`id`";
 
 	$primary_key = "`expense`.`id`";
@@ -30,30 +44,45 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_expenses" ) {
 if ( isset($_POST['page']) && $_POST['page'] == "view_loans" ) {
 	if(isset($_POST['type']) && $_POST['type'] == 1){ //performing loans
 		
-		if(isset($_POST['start_date']) && isset($_POST['end_date'])){
-			$where = "`loan_end_date` >= '".$_POST['start_date']."' AND `loan`.`id` IN (SELECT `loan_id` FROM `loan_repayment` WHERE DATEDIFF('".$_POST['end_date']."',`transaction_date`)<61)";
+		if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
+			
+			$where = "`loan`.`id` IN (SELECT `loan_id` FROM `loan_repayment` WHERE DATEDIFF('".$_POST['end_date']."',`transaction_date`)<61)";
 		}else{
 			$where = "`loan`.`id` IN (SELECT `loan_id` FROM `loan_repayment` WHERE DATEDIFF(`transaction_date`,CURDATE())<61)";
 		}
 	}
 	if(isset($_POST['type']) && $_POST['type'] == 2){ //non-performing loans
 		
-		if(isset($_POST['start_date']) && isset($_POST['end_date'])){
-			$where = " `loan_end_date` >= '".$_POST['start_date']."' AND `loan`.`id` NOT IN (SELECT `loan_id` FROM `loan_repayment` WHERE DATEDIFF('".$_POST['end_date']."',`transaction_date`)<61)";
+		if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
+			
+			$where = "(`loan_date` <= '".$_POST['end_date']."') AND `expected_payback` > COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id`),0) AND `loan`.`id` NOT IN (SELECT `loan_id` FROM `loan_repayment` WHERE DATEDIFF('".$_POST['end_date']."',`transaction_date`)<61)";
 		}else{
 			$where = "`loan`.`id` NOT IN (SELECT `loan_id` FROM `loan_repayment` WHERE DATEDIFF(`transaction_date`,CURDATE())<61)";
 		}
 	}
 	if(isset($_POST['type']) && $_POST['type'] == 3){ //active loans
-		if(isset($_POST['start_date']) && isset($_POST['end_date'])){
-			$where = "`loan_end_date` <= '".$_POST['start_date']."' AND `expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE `transaction_date`<'".$_POST['end_date']."' AND `loan_id` = `loan`.`id`),0)";
+		if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
+			
+			$where = "(`loan_date` <= '".$_POST['end_date']."') AND `expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE (`transaction_date` < '".$_POST['end_date']."') AND `loan_id` = `loan`.`id`),0)";
 		}else{
 			$where = "`expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE `loan_id` = `loan`.`id`),0)";
 		}
 		
 	}
 	if(isset($_POST['type']) && $_POST['type'] == 4){ //due loans
-		$where = "`expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE `loan_id` = `loan`.`id`),0)";
+		if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
+			$where = "(`loan_date` <= '".$_POST['end_date']."') AND (DAY('".$_POST['end_date']."') >= DAY(`loan_date`)) AND `loan`.`id` NOT IN (SELECT loan_id FROM `loan_repayment` WHERE DAY(`transaction_date`) BETWEEN DAY(`loan_date`) AND DAY('".$_POST['end_date']."'))";
+		}
+		else{
+			$where = "(DAY(CURDATE()) >= DAY(`loan_date`)) AND `loan`.`id` NOT IN (SELECT loan_id FROM `loan_repayment` WHERE DAY(`transaction_date`) BETWEEN DAY(`loan_date`) AND DAY(CURDATE()))";
+		}
+	}
+	if(isset($_SESSION['access_level'])&&!in_array($_SESSION['access_level'],array(1,2))){
+		if(strlen($where)>0){
+			$where .= " AND approved_by = ".$_SESSION['user_id'];
+		}else{
+			$where = " approved_by = ".$_SESSION['user_id'];
+		}
 	}
 
 	$table = "`loan` JOIN `person` ON `loan`.`person_number` = `person`.`id` JOIN `loan_type` ON `loan`.`loan_type` = `loan_type`.`id`";
@@ -64,7 +93,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_loans" ) {
 }
 //list of the income transactions
 if ( isset($_POST['page']) && $_POST['page'] == "view_income" ) {
-	if(isset($_POST['start_date']) && isset($_POST['end_date'])){
+	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 		$where = "(`date_added` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
 	}
 	$table = "`income` JOIN `income_sources` ON `income_type` = `income_sources`.`id`";
@@ -76,7 +105,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_income" ) {
 //list of all the shares held by the clients
 if ( isset($_POST['page']) && $_POST['page'] == "view_shares" ) {
 	
-	if(isset($_POST['start_date']) && isset($_POST['end_date'])){
+	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 		$where = "(`date_paid` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
 	}
 	
@@ -91,7 +120,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_shares" ) {
 //list of all the client subscriptions
 if ( isset($_POST['page']) && $_POST['page'] == "view_subcriptns" ) {
 	
-	if(isset($_POST['start_date']) && isset($_POST['end_date'])){
+	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 		$where = "(`date_paid` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
 	}
 	
@@ -106,7 +135,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_subcriptns" ) {
 //list of all the client loan payments
 if ( isset($_POST['page']) && $_POST['page'] == "view_loan_payments" ) {
 	
-	if(isset($_POST['start_date']) && isset($_POST['end_date'])){
+	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 		$where = "(`transaction_date` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
 	}
 	
@@ -116,11 +145,11 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_loan_payments" ) {
 
 	$columns = array( "`firstname`", "`lastname`", "`othername`", "`amount`", "`comments`", "`transaction_date`", "`loan_number`", "`loan_id`");
 }
-//list of all the client loan payments
+//list of all the member savings
 if ( isset($_POST['page']) && $_POST['page'] == "member_savings" ) {
 		$where = "transaction_type=1";
 	
-	if(isset($_POST['start_date']) && isset($_POST['end_date'])){
+	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 		$where .= " AND (`transaction_date` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
 	}	
 	$table = "`transaction` JOIN `person` ON `transaction`.`person_number` = `person`.`id`";

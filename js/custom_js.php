@@ -1,13 +1,27 @@
 <script>
 var dTable;//Global datatables variable
-var st_date = <?php echo isset($_GET['s_dt'])?"'{$_GET['s_dt']}'":"null"; ?>, //start date for the datatable
-	ed_date = <?php echo isset($_GET['e_dt'])?"'{$_GET['e_dt']}'":"null"; ?>; //end date for the datatable
+var start_date = <?php echo isset($_GET['s_dt'])?"moment('{$_GET['s_dt']}','YYYY-MM-DD')":"moment().subtract(29, 'days')"; ?>,
+end_date = <?php echo isset($_GET['e_dt'])?"moment('{$_GET['e_dt']}','YYYY-MM-DD')":"moment()"; ?>;
+
+var st_date = start_date.format('YYYY-MM-DD'), //start date for the datatable
+	ed_date = end_date.format('YYYY-MM-DD'), //end date for the datatable
+	loan_type = <?php echo isset($_GET['type'])?"'{$_GET['type']}'":0; ?>; //loan_type for the datatable
+	
   function getStartDate(){
 	  return st_date;
   }
   function getEndDate(){
 	  return ed_date;
   }
+  function getLoanType(){
+	  return loan_type;
+  }
+//format numbers to currency format
+function format1(n) {
+	return n.toString().replace(/./g, function(c, i, a) {
+		return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+	});
+}
  $(document).ready(function() {
 	saveData();
 	
@@ -509,12 +523,12 @@ ko.applyBindings(guarantor);
 		$('#reportrange span').html(start.format('D MMMM, YYYY') + ' - ' + end.format('D MMMM, YYYY'));
 	};
    var optionSet1 = {
-          startDate: moment().subtract(29, 'days'),
-          endDate: moment(),
+          startDate: start_date,
+          endDate: end_date,
           minDate: '01/01/2012',
           maxDate: '12/31/2020',
           dateLimit: {
-            days: 60
+            days: 123
           },
           showDropdowns: true,
           showWeekNumbers: true,
@@ -546,7 +560,6 @@ ko.applyBindings(guarantor);
             firstDay: 1
           }
     };
-		var start_date = moment().subtract(29, 'days'), end_date = moment();
 		$('#reportrange span').html(start_date.format('MMMM D, YYYY') + ' - ' + end_date.format('MMMM D, YYYY'));
 		format_hrefs(start_date.format('YYYY-MM-DD'), end_date.format('YYYY-MM-DD'));
 		
@@ -564,15 +577,14 @@ ko.applyBindings(guarantor);
 				findReportRange(<?php echo $_GET['member_id']; ?>, picker.startDate.format('MMMM D, YYYY'), picker.endDate.format('MMMM D, YYYY'));
 			<?php
 			}else{?>
-				var start_date=picker.startDate.format('YYYY-MM-DD'), end_date = picker.endDate.format('YYYY-MM-DD');
+				var startDate=picker.startDate.format('YYYY-MM-DD'), endDate = picker.endDate.format('YYYY-MM-DD');
 				
 				//when at the dashboard page
 				if(document.getElementById("nploans")){
-					var elements = ["nploans","ploans","actvloans","income","expenses","barChart","lineChart","pieChart"];
-					getDashboardData(elements, moment().subtract(29, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
-					format_hrefs(start_date, end_date);
+					getDashboardData(startDate, endDate);
+					format_hrefs(startDate, endDate);
 				}
-				searchTable(start_date,end_date); /* */
+				searchTable(startDate,endDate);
 			<?php } ?>
 		});
 		$('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
@@ -587,15 +599,19 @@ ko.applyBindings(guarantor);
 		$('#destroy').click(function() {
 		$('#reportrange').data('daterangepicker').remove();
 		});
+		$('#loan_types').on('change', function() {
+			loan_type = $(this).val();
+			dTable.ajax.reload();
+		});
 	//Clients transaction details
 		<?php 
 		if(isset($_GET['view']) && $_GET['view'] == "client_trasaction_history"){ ?>
 			//Get the initial range
 			var initial_range = $("#reportrange span").html().split("-");
-			var start_date = initial_range[0];
-			var end_date = initial_range[1];
+			var start_date1 = initial_range[0];
+			var end_date1 = initial_range[1];
 			var member = <?php echo $_GET['member_id']; ?>;
-			findReportRange(member, start_date, end_date);
+			findReportRange(member, start_date1, end_date1);
 		<?php 
 		}
 		?>
@@ -626,41 +642,121 @@ ko.applyBindings(guarantor);
 			dTable.ajax.reload();
 		}	
 	//End client transaction details 
-		function getDashboardData(elements, startDate, endDate){
-			$.each(elements, function(key, value){
-				$.ajax({
-					type: "post",
-					data:{element:value, start_date:startDate, end_date:endDate},
-					url: "dashboard_data.php",
-					success: function(response){
-						switch(value){
-							case "barChart":
-								var data = JSON.parse(response);
-								draw_bar_chart(data)
-							break;
-							case "lineChart":
-								var data = JSON.parse(response);
-								//lineChart.clear();
-								draw_line_chart(data)
-								/* lineChart.data.datasets[0].data = data.loans_sum;
-								lineChart.data.datasets[1].data = data.subscriptions_sum;
-								lineChart.data.labels = data.data_points;
-								lineChart.update();
-								lineChart.render(300,true); */
-							break;
-								case "pieChart":
-								//draw the pie chart
-								var data = JSON.parse(response);
-								draw_pie_chart(data);
-								break;
-							default:
-								$("#"+value).html(response);
-								break;
+		function getDashboardData(startDate, endDate){
+			$.ajax({
+				type: "post",
+				dataType: "json",
+				data:{start_date:startDate, end_date:endDate},
+				url: "dashboard_data.php",
+				success: function(response){
+					draw_bar_chart(response.lineBarChart);
+					
+					draw_line_chart(response.lineBarChart);
+					//draw the pie chart
+					draw_pie_chart(response.pieChart);
+					//display the figures
+					//var figures = ["no_members","total_scptions","total_shares","total_actv_loans","loan_payments","due_loans"];
+					$.each(response.figures, function(key, value){
+						$("#"+key).html(value);
+					});
+					//iterate over the percentages
+					$.each(response.percents, function(key, value){
+						var cur_ele = $("#"+key);
+						if(parseFloat(value)>=0){
+							$(cur_ele).removeClass("red fa-sort-desc").addClass("green fa-sort-asc").html(value+"%");
 						}
-					}
-				});
+						else{
+							$(cur_ele).removeClass("green fa-sort-asc").addClass("red fa-sort-desc").html(value+"%");
+						}
+					});
+					var elements = ["nploans","ploans","actvloans"];
+					//draw the tables
+					$.each(elements, function(key, value){
+						$("#"+value).html(draw_loans_table(response.tables[value]));
+					});
+					//draw the income table
+					$("#income").html(draw_income_table(response.tables.income));
+					//draw the expenses table
+					$("#expenses").html(draw_expense_table(response.tables.expenses));
+				}
 			});
 		}
+	//draw income table
+	function draw_income_table(income_data){
+		var total = 0;
+		var html_data = "<thead>"+
+					"<tr><th>#</th><th>Income type</th><th>Amount</th></tr>"+
+				"</thead>"+
+				  "<tbody>";
+		$.each(income_data, function(key, value){
+			html_data += "<tr>"+
+						  "<td><a href='#"+value.id+"' title='View details'>"+value.id+"</a></td>"+
+						  "<td>"+value.name+"</td>"+
+						  "<td>"+format1(parseInt(value.amount))+"</td>"+
+						"</tr>";
+						total += parseInt(value.amount);
+		});
+		html_data += "</tbody>"+
+				  "<tfoot>"+
+					"<tr>"+
+					  "<th scope='row'>Total</th>"+
+					  "<th>&nbsp;</th>"+
+					  "<th>"+format1(total)+"</th>"+
+					"</tr>"+
+				  "</tfoot>";
+		return html_data;
+	}
+	//draw expense table
+	function draw_expense_table(expense_data){
+		var total = 0;
+		var html_data = "<thead>"+
+					"<tr><th>#</th><th>Description</th><th>Amount</th></tr>"+
+				"</thead>"+
+				  "<tbody>";
+		$.each(expense_data, function(key, value){
+			html_data += "<tr>"+
+						  "<td><a href='#"+value.id+"' title='View details'>"+value.id+"</a></td>"+
+						  "<td>"+value.amount_description+"</td>"+
+						  "<td>"+format1(parseInt(value.amount_used))+"</td>"+
+						"</tr>";
+						total += parseInt(value.amount_used);
+		});
+		html_data += "</tbody>"+
+				  "<tfoot>"+
+					"<tr>"+
+					  "<th scope='row'>Total</th>"+
+					  "<th>&nbsp;</th>"+
+					  "<th>"+format1(total)+"</th>"+
+					"</tr>"+
+				  "</tfoot>";
+		return html_data;
+	}
+	//draw loans table
+	function draw_loans_table(loans_data){
+		var amount = balance = 0;
+		var html_data = "<thead>"+
+					"<tr><th>Loan No</th><th>Amount</th><th>Balance</th></tr>"+
+				"</thead>"+
+				  "<tbody>";
+		$.each(loans_data, function(key, value){
+			html_data += "<tr>"+
+						  "<td><a href='#"+value.id+"' title='View details'>"+value.loan_number+"</a></td>"+
+						  "<td>"+format1(parseInt(value.expected_payback))+"</td>"+
+						  "<td>"+format1(parseInt(value.loan_amount))+"</td>"+
+						"</tr>";
+						amount += parseInt(value.expected_payback); 
+						balance += parseInt(value.loan_amount);
+		});
+		html_data += "</tbody>"+
+				  "<tfoot>"+
+					"<tr>"+
+					  "<th scope='row'>Total</th>"+
+					  "<th>"+format1(amount)+"</th>"+
+					  "<th>"+format1(balance)+"</th>"+
+					"</tr>"+
+				  "</tfoot>";
+		return html_data;
+	}
       //Bar chart
 	  function draw_bar_chart(url_data){
 		  $("#barChart").replaceWith('<canvas id="barChart"></canvas>');
@@ -755,8 +851,7 @@ ko.applyBindings(guarantor);
 		  });
 	  }
 		if(document.getElementById("nploans")){
-			var elements = ["nploans","ploans","actvloans","income","expenses","barChart","lineChart","pieChart"];
-			getDashboardData(elements, moment().subtract(29, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
+			getDashboardData(moment().subtract(29, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
 		}
   });
   

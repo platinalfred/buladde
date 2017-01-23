@@ -1,44 +1,42 @@
 <?php 
 $show_table_js = false;
-include("includes/header.php"); 
-require_once("lib/Member.php");
-require_once("lib/Dashboard.php");
-$member = new Member();
-$dashboard = new Dashboard();
+include("includes/header.php");
 ?>
+
+<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
 <!-- page content -->
 <div class="right_col" role="main">
 	 <!-- top tiles -->
 	  <div class="row tile_count">
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
 		  <span class="count_top"><i class="fa fa-user"></i> Total Members</span>
-		  <div class="count"><a class="count dash_link" href="view_members.php" title="Details"><?php echo $member->noOfMembers(); ?></a></div>
-		  <span class="count_bottom"><i class="green">4% </i> From last Week</span>
+		  <div class="count"><a class="count dash_link" href="view_members.php" title="Details" id="no_members">0</a></div>
+		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="members_percent">4% </i></span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
 		  <span class="count_top"><i class="fa fa-money"></i> Total Paid Subscription</span>
-		  <div class="count"><a class="count dash_link" href="view_subscriptions.php" title="Details"><?php echo $dashboard->getSumOfSubscriptions(); ?></a></div>
-		  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span>
+		  <div class="count"><a class="count dash_link" href="view_subscriptions.php" title="Details" id="total_scptions">0</a></div>
+		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="scptions_percent">3% </i></span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
 		  <span class="count_top"><i class="fa fa-money"></i> Total Shares</span>
-		  <div><a class="count green dash_link" href="view_shares.php" title="Details"><?php echo $dashboard->getSumOfShares(); ?></a></div>
-		  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
+		  <div><a class="count green dash_link" href="view_shares.php" title="Details" id="total_shares">0</a></div>
+		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="shares_percent">34% </i></span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
 		  <span class="count_top"><i class="fa fa-money"></i> Total Active Loans</span>
-		  <div class="count"><a class="dash_link" href="view_loans.php?type=3" title="Details"><?php echo $dashboard->totalActiveLoans(); ?></a></div>
-		  <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span>
+		  <div class="count"><a class="dash_link" href="view_loans.php?type=3" title="Details" id="total_actv_loans">0</a></div>
+		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="actv_loans_percent">12% </i></span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
 		  <span class="count_top"><i class="fa fa-money"></i> Total Loan Repayment Collections</span>
-		  <div class="count"><a href="view_loan_payments.php" class="dash_link" title="Details"><?php echo $dashboard->getCountOfLoanRepayments(); ?></a></div>
-		  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
+		  <div class="count"><a href="view_loan_payments.php" class="dash_link" title="Details" id="loan_payments">0</a></div>
+		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="loan_payments_percent">34% </i></span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
 		  <span class="count_top"><i class="fa fa-money"></i> Total Due Loans</span>
-		  <div class="count"><a href="view_loans.php?type=4" class="dash_link" title="Details"><?php //echo $dashboard->getCountOfDueLoans(); ?>100</a></div>
-		  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
+		  <div class="count"><a href="view_loans.php?type=4" class="dash_link" title="Details" id="due_loans">0</a></div>
+		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="due_loans_percent">34% </i></span>
 		</div>
 	  </div>
 	  <!-- /top tiles -->
@@ -219,6 +217,7 @@ $dashboard = new Dashboard();
 
 </div>
 <!-- /page content -->
+<?php }?> 
 <?php 
 include("includes/footer.php"); 
 ?>

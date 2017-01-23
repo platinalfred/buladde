@@ -1,9 +1,11 @@
 <?php 
 //This will prevent data tables js from showing on every page for speed increase
 $show_table_js = true;
+$page_title = "Loans payments";
 include("includes/header.php");
 
 ?>
+<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
 <!-- page content -->
 <div class="right_col" role="main">
   <div class="">
@@ -11,7 +13,7 @@ include("includes/header.php");
 	
 	<div class="row x_title">
 	  <div class="col-md-6">
-		<h3>Loans <small>list</small></h3>
+		<h3>Loans <small>payments</small></h3>
 	  </div>
 	  <div class="col-md-6">
 		<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
@@ -62,9 +64,9 @@ include("includes/header.php");
 </div>
 <div class="clearfix"></div>
 <!-- /page content -->
-<?php 
-include("includes/footer.php"); 
-?>
+<?php }?> 
+<?php include("includes/footer.php"); ?>
+<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
 <!-- Datatables -->
 <script>
   $(document).ready(function() {
@@ -129,3 +131,4 @@ include("includes/footer.php");
 	TableManageButtons.init();
   });
 </script>
+<?php }?> 

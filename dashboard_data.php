@@ -5,14 +5,95 @@ require_once("lib/Expenses.php");
 require_once("lib/Shares.php");
 require_once("lib/Income.php");
 require_once("lib/Dashboard.php");
+require_once("lib/Member.php");
+$member = new Member();
 $loan = new Loans();
 $expense = new Expenses();
 $share = new Shares();
 $income = new Income();
+$dashboard = new Dashboard();
 
-$start_date = isset($_POST['start_date'])?$_POST['start_date']:date('Y-m-d',strtotime("-7 day"));
+$start_date = isset($_POST['start_date'])?$_POST['start_date']:date('Y-m-d',strtotime("-30 day"));
 $end_date = isset($_POST['end_date'])?$_POST['end_date']:date('Y-m-d');
-	
+
+//set the respective variables to be received from the calling page
+$figures = $tables = $percents = array();
+
+
+//line and barchart
+$_result['lineBarChart'] = getGraphData($start_date, $end_date);
+//pie chart
+$_result['pieChart'][] = $dashboard->getSumOfLoans("`loan_date` <= '".$end_date."' AND id IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)");
+$_result['pieChart'][] = $dashboard->getSumOfLoans("`loan_date` <= '".$end_date."' AND id NOT IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)");
+
+//Non performing loans
+$tables['nploans'] = $loan->findAll("(`loan_date` <= '".$end_date."') AND `expected_payback` > COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id`),0) AND `id` NOT IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)", "expected_payback DESC", "10");
+
+//active loans
+$tables['actvloans'] = $loan->findAll("((`loan_date` <= '".$end_date."') AND `expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE (`transaction_date` <= '".$end_date."') AND `loan_id` = `loan`.`id`),0))", "expected_payback DESC", "10");
+
+//Performing loans
+$tables['ploans'] = $loan->findAll("`id` IN (SELECT `loan_id` FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)", "expected_payback DESC", "10");
+
+//No of members
+//1 in this period
+$figures['no_members'] = $member->noOfMembers("(`date_added` BETWEEN '".$start_date."' AND '".$end_date."')");
+//before this period
+$members_b4 = $member->noOfMembers("(`date_added` < '".$start_date."')");
+$percents['members_percent'] = $members_b4>0?round((($members_b4 - $figures['no_members'])/$members_b4)*100,2):0;
+
+//Total amount of paid subscriptions
+//1 in this period
+$figures['total_scptions'] = $dashboard->getSumOfSubscriptions("(`date_paid` BETWEEN '".$start_date."' AND '".$end_date."')");
+//before this period
+$total_scptions_b4 = $dashboard->getSumOfSubscriptions("(`date_paid` < '".$start_date."')");
+//percentage increase/decrease
+$percents['scptions_percent'] = $total_scptions_b4>0?round((($total_scptions_b4 - $figures['total_scptions'])/$total_scptions_b4)*100,2):0;
+
+//Total shares bought
+//1 in this period
+$figures['total_shares'] = $dashboard->getSumOfShares("(`date_paid` BETWEEN '".$start_date."' AND '".$end_date."')");
+//before this period
+$total_shares_b4 = $dashboard->getSumOfShares("(`date_paid` < '".$start_date."')");
+//percentage increase/decrease
+$percents['shares_percent'] = $total_shares_b4>0?round((($total_shares_b4 - $figures['total_shares'])/$total_shares_b4)*100,2):0;
+
+//Total active loans
+//1 in this period
+$figures['total_actv_loans'] = $dashboard->totalActiveLoans("(`loan_date` <= '".$end_date."') AND `expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE (`transaction_date` <= '".$end_date."') AND `loan_id` = `loan`.`id`),0)");
+//before this period
+$total_actv_loans_b4 = $dashboard->totalActiveLoans("(`loan_date` < '".$start_date."') AND `expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE (`transaction_date` < '".$start_date."') AND `loan_id` = `loan`.`id`),0)");
+//percentage increase/decrease
+$percents['actv_loans_percent'] = $total_actv_loans_b4>0?round((($total_actv_loans_b4 - $figures['total_actv_loans'])/$total_actv_loans_b4)*100,2):0;
+
+//Total loan payments
+//1 in this period
+$figures['loan_payments'] = $dashboard->getCountOfLoanRepayments("(`transaction_date` BETWEEN '".$start_date."' AND '".$end_date."')");
+//before this period
+$loan_payments_b4 = $dashboard->getCountOfLoanRepayments("(`transaction_date` < '".$start_date."')");
+//percentage increase/decrease
+$percents['loan_payments_percent'] = $loan_payments_b4>0?round((($loan_payments_b4 - $figures['loan_payments'])/$loan_payments_b4)*100,2):0;
+
+//Due loans
+//1 in this period
+$figures['due_loans'] = $dashboard->getCountOfDueLoans("(`loan_date` <= '".$end_date."') AND (DAY('".$end_date."') >= DAY(`loan_date`)) AND `loan`.`id` NOT IN (SELECT loan_id FROM `loan_repayment` WHERE DAY(`transaction_date`) BETWEEN DAY(`loan_date`) AND DAY('".$end_date."'))");
+//before this period
+$due_loans_b4 = $dashboard->getCountOfDueLoans("(`loan_date` <= '".$start_date."') AND (DAY('".$start_date."') >= DAY(`loan_date`)) AND `loan`.`id` NOT IN (SELECT loan_id FROM `loan_repayment` WHERE DAY(`transaction_date`) BETWEEN DAY(`loan_date`) AND DAY('".$start_date."'))");
+//percentage increase/decrease
+$percents['due_loans_percent'] = $due_loans_b4>0?round((($due_loans_b4 - $figures['due_loans'])/$due_loans_b4)*100,2):0;
+
+//Income
+$tables['income'] = $income->findAll("`date_added` BETWEEN '".$start_date."' AND '".$end_date."'", "amount DESC", "10");
+
+//Expenses"
+$tables['expenses'] = $expense->findAllExpenses("`date_of_expense` BETWEEN '".$start_date."' AND '".$end_date."'", "amount_used DESC", "10");
+
+$_result['figures'] = $figures;
+$_result['tables'] = $tables;
+$_result['percents'] = $percents;
+
+echo json_encode($_result);
+
 function getGraphData($start_date, $end_date){
 	$days = round((strtotime($end_date)-strtotime($start_date))/86400);
 	$dashboard = new Dashboard();
@@ -116,145 +197,41 @@ function getGraphData($start_date, $end_date){
 	$graph_data['shares_count'] = $shares_count_graph_data;
 	$graph_data['subscriptions_count'] = $subscriptions_count_graph_data;
 	$graph_data['data_points'] = $data_points;
-	
-	echo json_encode($graph_data);
+	return $graph_data;
 }
-	if(isset($_POST['element'])&&strlen($_POST['element'])>0){
-		switch($_POST['element']){
-			case "barChart":
-			case "lineChart":
-				getGraphData($start_date, $end_date);
-			break;
-			case "pieChart":
-				$dashboard = new Dashboard();
-				$pieChartData[] = $dashboard->getSumOfLoans("`loan_end_date` >= '".$start_date."' AND id NOT IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)");
-				$pieChartData[] = $dashboard->getSumOfLoans("`loan_end_date` >= '".$start_date."' AND id IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)");
-				echo json_encode($pieChartData);
-			break;
-			//List of non performing loans
-			case "nploans":
-				$loans = $loan->findAll("`loan_end_date` >= '".$start_date."' AND id NOT IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)", "expected_payback DESC", "10");
-				draw_loans_table($loans);
-			break;
-			//List of all the active loans
-			case "actvloans":
-				$loans = $loan->findAll("`loan_end_date` <= '".$start_date."' AND `expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE `transaction_date`<'".$end_date."' AND `loan_id` = `loan`.`id`),0)", "expected_payback DESC", "10");
-				if($loans){
-					draw_loans_table($loans);
-				}
-			break;
-			//list of all the performing loans
-			case "ploans":
-				$loans = $loan->findAll("`loan_end_date` >= '".$start_date."' AND id IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)", "expected_payback DESC", "10");
-				draw_loans_table($loans);
-			break;
-			case "income":
-				$income = $income->findAll("`date_added` BETWEEN '".$start_date."' AND '".$end_date."'", "amount DESC", "10");?>
-                      <thead>
-                        <tr>
-						<?php 
-						$header_keys = array("#", "Income type", "Amount");
-						foreach($header_keys as $key){ ?>
-							<th><?php echo $key; ?></th>
-						<?php } ?>
-                        </tr>
-                      </thead>
-                      <tbody>
-						<?php
-						$total = 0;
-						if($income){
-							foreach($income as $single){ ?>
-							<tr>
-							  <td><a href="#<?php echo $single['id']; ?>"><?php echo $single['id']; ?></A></td>
-							  <td><?php echo substr($single['name'],0,20); ?></td>
-							  <td><?php echo number_format($single['amount']); $total += $single['amount'];?></td>
-							</tr>
-							<?php }?>
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                          <th scope="row">Total</th>
-                          <th>&nbsp;</th>
-                          <th><?php echo number_format($total); ?></th>
-                        </tr>
-                      </tfoot>
-							<?php }else{?>
-						<tr><td colspan="3">No income records found</td></tr>
-                      </tbody>
+function draw_loans_table($loans_data){?>
+				  <thead>
+					<tr>
+					<?php 
+					$header_keys = array("Loan No", "Amount", "Balance");
+					foreach($header_keys as $key){ ?>
+						<th><?php echo $key; ?></th>
+					<?php } ?>
+					</tr>
+				  </thead>
+				  <tbody>
+					<?php
+					$amount = $balance = 0;
+					if($loans_data){
+						foreach($loans_data as $single){ ?>
+						<tr>
+						  <td><a href="#<?php echo $single['id']; ?>" title="View details"><?php echo $single['loan_number']; ?></a></td>
+						  <td><?php echo number_format($single['expected_payback']); $amount += $single['expected_payback']; ?></td>
+						  <td><?php echo number_format($single['loan_amount']); $balance += $single['loan_amount']; ?></td>
+						</tr>
 						<?php }?>
-			<?php	break;
-			case "expenses":
-				$expenses = $expense->findAllExpenses("`date_of_expense` BETWEEN ".$start_date." AND ".$end_date, "amount_used DESC", "10");?>
-                      <thead>
-                        <tr>
-						<?php 
-						$header_keys = array("#", "Description", "Amount");
-						foreach($header_keys as $key){ ?>
-							<th><?php echo $key; ?></th>
-						<?php } ?>
-                        </tr>
-                      </thead>
-                      <tbody>
-						<?php
-						$total = 0;
-						if($expenses){
-							foreach($expenses as $single){ ?>
-							<tr>
-							  <td><a href="#<?php echo $single['id']; ?>"><?php echo $single['id']; ?></A></td>
-							  <td><?php echo $single['amount_description']; ?></td>
-							  <td><?php echo number_format($single['amount_used']); $total += $single['amount_used']; ?></td>
-							</tr>
-							<?php }?>
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                          <th scope="row">Total</th>
-                          <th>&nbsp;</th>
-                          <th><?php echo number_format($total); ?></th>
-                        </tr>
-                      </tfoot>
-						<?php }else{?>
-						<tr><td colspan="3">No expense records found</td></tr>
-                      </tbody>
-					<?php }?>
-			<?php	break;
-			default:
-				;//$shares = $share->findAll("`date_paid` BETWEEN '".$start_date."' AND '".$end_date."'");
-		}
-	}
-	function draw_loans_table($loans_data){?>
-                      <thead>
-                        <tr>
-						<?php 
-						$header_keys = array("Loan No", "Amount", "Balance");
-						foreach($header_keys as $key){ ?>
-							<th><?php echo $key; ?></th>
-						<?php } ?>
-                        </tr>
-                      </thead>
-                      <tbody>
-						<?php
-						$amount = $balance = 0;
-						if($loans_data){
-							foreach($loans_data as $single){ ?>
-							<tr>
-							  <td><a href="#<?php echo $single['id']; ?>" title="View details"><?php echo $single['loan_number']; ?></a></td>
-							  <td><?php echo number_format($single['expected_payback']); $amount += $single['expected_payback']; ?></td>
-							  <td><?php echo number_format($single['loan_amount']); $balance += $single['loan_amount']; ?></td>
-							</tr>
-							<?php }?>
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                          <th scope="row">Total</th>
-                          <th><?php echo number_format($amount); ?></th>
-                          <th><?php echo number_format($balance); ?></th>
-                        </tr>
-                      </tfoot>
-						<?php }else{?>
-							<tr><td colspan="3">No loans data</td></tr>
-                      </tbody>
-					<?php }?>
-			<?php
-	}			
+				  </tbody>
+				  <tfoot>
+					<tr>
+					  <th scope="row">Total</th>
+					  <th><?php echo number_format($amount); ?></th>
+					  <th><?php echo number_format($balance); ?></th>
+					</tr>
+				  </tfoot>
+					<?php }else{?>
+						<tr><td colspan="3">No loans data</td></tr>
+				  </tbody>
+				<?php }?>
+		<?php
+}			
 ?>

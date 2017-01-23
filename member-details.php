@@ -1,7 +1,7 @@
 <?php 
 //This will prevent data tables js from showing on every page for speed increase
 $show_table_js = true;
-include("includes/header.php"); 
+
 require_once("lib/Libraries.php");
 require_once("lib/Forms.php");
 require_once("lib/Reports.php");
@@ -21,6 +21,8 @@ if($_GET['member_id']){
 }else{
 	header("Location:view_members.php");
 }
+$page_title = $names;
+include("includes/header.php"); 
 
 ?>
 <!-- page content -->

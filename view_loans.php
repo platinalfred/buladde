@@ -1,6 +1,8 @@
 <?php 
 //This will prevent data tables js from showing on every page for speed increase
 $show_table_js = true;
+
+$page_title = "Loans";
 include("includes/header.php");
 
 ?>
@@ -10,24 +12,29 @@ include("includes/header.php");
 	<div class="clearfix"></div>
 	
 	<div class="row x_title">
-	  <div class="col-md-6">
+	  <div class="col-md-5">
 		<h3>Loans <small>list</small></h3>
 	  </div>
-	  <div class="col-md-6">
+	  <div class="col-md-5">
 		<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
 		  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
 		  <span>November 20, 2016 - December 19, 2016</span> <b class="caret"></b>
 		</div>
+	  </div>
+	  <div class="col-md-2">
+		<select id="loan_types" class="form-control">
+		  <option>All loans</option>
+		  <option value="1" <?php echo (isset($_GET['type'])&&$_GET['type']==1)?"selected":"";?>>Performing loans</option>
+		  <option value="2" <?php echo (isset($_GET['type'])&&$_GET['type']==2)?"selected":"";?>> NP loans</option>
+		  <option value="3" <?php echo (isset($_GET['type'])&&$_GET['type']==3)?"selected":"";?>> Active loans</option>
+		  <option value="4" <?php echo (isset($_GET['type'])&&$_GET['type']==4)?"selected":"";?>> Due loans</option>
+		</select>
 	  </div>
 	</div>
 
 	<div class="row">
 	  <div class="col-md-12 col-sm-12 col-xs-12">
 		<div class="x_panel">
-		  <div class="x_title">
-			<h2>Loans <small></small></h2>
-			<div class="clearfix"></div>
-		  </div>
 		  <div class="x_content">
 			<table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap">
 				<thead>
@@ -81,7 +88,7 @@ include("includes/footer.php");
 			  "type": "POST",
 			  "data":  function(d){
 				d.page = 'view_loans';
-				<?php echo isset($_GET['type'])?",'d.type':".$_GET['type']:"";?>
+				d.type = getLoanType();
 				d.start_date = getStartDate();
 				d.end_date = getEndDate();
 				}
@@ -89,11 +96,11 @@ include("includes/footer.php");
 		  columns:[ { data: 'loan_number', render: function ( data, type, full, meta ) {return '<a href="#" title="View details">'+data+'</a>';}},
 				{ data: 'firstname', render: function ( data, type, full, meta ) {return full.firstname+' '+full.lastname+' '+full.othername;}},
 				{ data: 'name'},
-				{ data: 'loan_amount' },
+				{ data: 'loan_amount' , render: function ( data, type, full, meta ) {return format1(parseFloat(data));}},
 				{ data: 'interest_rate', render: function ( data, type, full, meta ) {return data+'%';}},
-				{ data: 'expected_payback'},
-				{ data: 'loan_date'},
-				{ data: 'loan_end_date',  render: function ( data, type, full, meta ) {return moment(data, 'YYYY-MM-DD hh:mm:ss');}},
+				{ data: 'expected_payback', render: function ( data, type, full, meta ) {return format1(parseFloat(data));}},
+				{ data: 'loan_date',  render: function ( data, type, full, meta ) {return moment(data, 'YYYY-MM-DD hh:mm:ss').format('YYYY-MM-DD');}},
+				{ data: 'duration'},
 				{ data: 'loan_end_date'}
 				] ,
 		  buttons: [

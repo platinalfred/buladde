@@ -17,7 +17,14 @@ $person = new Person();
 		  <div class="x_title">
 			<h2>Members <small></small></h2>
 			<ul class="nav navbar-right panel_toolbox">
-			  <li><a class="btn btn-primary" data-toggle="modal" data-target=".member_modal"> <i class="fa fa-plus"></i> Add New Member</a></li></ul>
+				<li>
+					<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+						<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+						<span>November 20, 2016 - December 19, 2016</span> <b class="caret"></b>
+					</div>
+				</li>
+			  <li><a class="btn btn-primary" data-toggle="modal" data-target=".member_modal"> <i class="fa fa-plus"></i> Add New Member</a></li>
+			</ul>
 			<div class="clearfix"></div>
 		  </div>
 		  <div class="x_content">
@@ -25,7 +32,11 @@ $person = new Person();
 				<thead>
 					<tr>
 						<?php 
-						$header_keys = array("Person Number", "Name", "Phone", "Member since", "Subscription", "Shares", "Savings", "Loans", "Edit");
+						if(isset($_SESSION['access_level'])&&!in_array($_SESSION['access_level'],array(1,2))){
+							$header_keys = array("Person Number", "Name", "Phone", "Member since", "Subscription", "Shares", "Savings", "Loans");
+						}else{
+							array_push($header_keys, "Edit");
+						}
 						foreach($header_keys as $key){ ?>
 							<th><?php echo $key; ?></th>
 							<?php
@@ -94,11 +105,13 @@ include("includes/footer.php");
 				d.start_date = getStartDate();
 				d.end_date = getEndDate();
 				}
-		  },"columnDefs": [ {
+		  },
+			"columnDefs": [ <?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
+		  {
 			  "targets": [7,8],
 			  "orderable": false,
 			  "searchable": false
-		  }, {
+		  },<?php }?> {
 			  "targets": [0],
 			  "orderable": false
 		  }],
@@ -109,8 +122,8 @@ include("includes/footer.php");
 				{ data: 'member_type', render: function ( data, type, full, meta ) {return '<a href="member-details.php?member_id='+full.member_id+'&view=subscritions" title="View subscriptions">'+((data == 1)?"Member and Share Holder": "Member")+'</a>'; }},
 				{ data: 'shares', render: function ( data, type, full, meta ) {return data>0?'<a href="member-details.php?member_id='+full.member_id+'&view=myshares" title="View shares">'+data+'</a>':0;} },
 				{ data: 'savings', render: function ( data, type, full, meta ) {return data>0?'<a href="member-details.php?member_id='+full.member_id+'&view=savings" title="View savings">'+data+'</a>':0;} },
-				{ data: 'loans', render: function ( data, type, full, meta ) {return data>0?'<a href="member-details.php?member_id='+full.member_id+'&view=client_loans" title="View loans">'+data+'</a>':0;}},
-				{ data: 'member_id', render: function ( data, type, full, meta ) {return '<button type="submit" class="btn btn-success">Edit</button><button type="submit" class="btn btn-danger">Delete</button>';}}
+				{ data: 'loans', render: function ( data, type, full, meta ) {return data>0?'<a href="member-details.php?member_id='+full.member_id+'&view=client_loans" title="View loans">'+data+'</a>':0;}}<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>,
+				{ data: 'member_id', render: function ( data, type, full, meta ) {return '<button type="submit" class="btn btn-success">Edit</button><button type="submit" class="btn btn-danger">Delete</button>';}}<?php }?>
 				] ,
 		  buttons: [
 			{
