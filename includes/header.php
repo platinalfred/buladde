@@ -89,7 +89,6 @@ $foto = $staff->findPersonsPhoto($_SESSION['person_number']);
                       <li><a href="view_shares.php">Shares</a></li>
                        <li><a href="view_income.php">Income</a></li>
                       <li><a href="view_subscriptions.php">Subscriptions</a></li>
-                      <li><a href="view_members.php">Members</a></li>
                       <li><a href="view_member_savings.php">Member's Savings</a></li>
                     </ul>
                   </li>

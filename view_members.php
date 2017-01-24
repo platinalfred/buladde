@@ -32,6 +32,7 @@ $person = new Person();
 				<thead>
 					<tr>
 						<?php 
+						$header_keys = array();
 						if(isset($_SESSION['access_level'])&&!in_array($_SESSION['access_level'],array(1,2))){
 							$header_keys = array("Person Number", "Name", "Phone", "Member since", "Subscription", "Shares", "Savings", "Loans");
 						}else{
