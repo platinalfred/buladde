@@ -31,9 +31,8 @@ $person = new Person();
 			<table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap">
 				<thead>
 					<tr>
-						<?php
-						$header_keys = array("Person Number", "Name", "Phone", "Member since", "Subscription", "Shares", "Savings", "Loans");
-
+						<?php 
+						$header_keys = array("Person Number", "Name", "Phone", "Member since", "Subscription", "Shares", "Savings", "Loans", "Edit");
 						foreach($header_keys as $key){ ?>
 							<th><?php echo $key; ?></th>
 							<?php
@@ -46,11 +45,12 @@ $person = new Person();
 				</tbody>
 				<tfoot>
 					<tr>
-						<th class="right_remove">Total</th>
-						<th colspan="4"></th>
-						<th class="right_remove left_remove"></th>
-						<th class="right_remove left_remove"></th>
-						<th class="right_remove left_remove"></th>
+						<?php 
+						foreach($header_keys as $key){ ?>
+							<th><?php echo $key; ?></th>
+							<?php
+						}
+						?>
 					</tr>
 				</tfoot>
 			</table>
@@ -101,17 +101,11 @@ include("includes/footer.php");
 				d.start_date = getStartDate();
 				d.end_date = getEndDate();
 				}
-		  },
-		  "footerCallback": function (tfoot, data, start, end, display ) {
-            var api = this.api(), cols = [5,6,7];
-			//set the totals at the appropriate columns
-			$.each(cols, function(index, value){
-				total = api.column(value).data().sum();
-				$(api.column(value).footer()).html( format1(total) );
-			});
-			
-		  },
-			"columnDefs": [ {
+		  },"columnDefs": [ {
+			  "targets": [7,8],
+			  "orderable": false,
+			  "searchable": false
+		  }, {
 			  "targets": [0],
 			  "orderable": false
 		  }],
@@ -122,7 +116,8 @@ include("includes/footer.php");
 				{ data: 'member_type', render: function ( data, type, full, meta ) {return '<a href="member-details.php?member_id='+full.member_id+'&view=subscritions" title="View subscriptions">'+((data == 1)?"Member and Share Holder": "Member")+'</a>'; }},
 				{ data: 'shares', render: function ( data, type, full, meta ) {return data>0?'<a href="member-details.php?member_id='+full.member_id+'&view=myshares" title="View shares">'+data+'</a>':0;} },
 				{ data: 'savings', render: function ( data, type, full, meta ) {return data>0?'<a href="member-details.php?member_id='+full.member_id+'&view=savings" title="View savings">'+data+'</a>':0;} },
-				{ data: 'loans', render: function ( data, type, full, meta ) {return data>0?'<a href="member-details.php?member_id='+full.member_id+'&view=client_loans" title="View loans">'+data+'</a>':0;}}
+				{ data: 'loans', render: function ( data, type, full, meta ) {return data>0?'<a href="member-details.php?member_id='+full.member_id+'&view=client_loans" title="View loans">'+data+'</a>':0;}},
+				{ data: 'member_id', render: function ( data, type, full, meta ) {return '<button type="submit" class="btn btn-success">Edit</button><button type="submit" class="btn btn-danger">Delete</button>';}}
 				] ,
 		  buttons: [
 			{

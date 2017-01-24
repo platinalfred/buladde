@@ -2,12 +2,12 @@
 session_start();
 require_once("lib/Libraries.php");
 $staff = new Staff();
+$logged_in_user = $staff->findNamesById($_SESSION['id']);
 $logged = $_SESSION["Logged"];
 
 if(!$logged){
 	header("Location:index.php");
-}
-$logged_in_user = $staff->findNamesById($_SESSION['id']);
+} 
 $foto = $staff->findPersonsPhoto($_SESSION['person_number']);
 ?>
 <!DOCTYPE html>
@@ -64,11 +64,11 @@ $foto = $staff->findPersonsPhoto($_SESSION['person_number']);
             <div class="clearfix"></div>
            <div class="profile">
               <div class="profile_pic">
-                <img src="<?php if($foto){ echo $foto; }else{ echo "img/profiles/blank.png"; }; ?>" style="width:56px; height:56px;"  alt="profile photo" class="img-circle profile_img">
+                <img src="<?php if($foto){ echo $foto; }else{ echo "img/profiles/blank.png"; }; ?>" style="width:56px; height:56px;"  alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
-                <h2><?php echo $_SESSION['username']; ?></h2>
+                <h2><?php   echo $_SESSION['username']; ?></h2>
               </div>
             </div>
 			
@@ -80,7 +80,6 @@ $foto = $staff->findPersonsPhoto($_SESSION['person_number']);
               <div class="menu_section">
                 <!--<h3>General</h3>-->
                 <ul class="nav side-menu">
-			<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
                   <li><a href="dashboard.php"><i class="fa fa-home"></i> Dashboard</a>
                   </li>
                   <li><a><i class="fa fa-edit"></i> Reports <span class="fa fa-chevron-down"></span></a>
@@ -92,27 +91,18 @@ $foto = $staff->findPersonsPhoto($_SESSION['person_number']);
                       <li><a href="view_member_savings.php">Member's Savings</a></li>
                     </ul>
                   </li>
-				  <?php }else{?>
-                  <li><a href="view_loans.php"><i class="fa fa-money"></i> Loans</a> </li>
-				  <?php }?>
-				  
-                  <li><a href="view_members.php"><i class="fa fa-users"></i> Members</a> </li>
-				  
-				  <?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
-                  <li><a href="staff.php"><i class="fa fa-users"></i>Staff</a></li>
-				  <?php }?>
-				  
-                  <li><a href="view_expenses.php"><i class="fa fa-table"></i>Expenses</a></li>
-                  <li><a href="manage_accounts.php"><i class="fa fa-money"></i>Manage Accounts</a> </li>
+                  <li><a href="view_members.php"><i class="fa fa-users"></i> Members <span class="fa fa-chevron-right"></span></a> </li>
+                  <li><a href="staff.php"><i class="fa fa-users"></i>Staff<span class="fa fa-chevron-right"></span></a></li>
+                  <li><a href="view_expenses.php"><i class="fa fa-table"></i>Expenses <span class="fa fa-chevron-right"></span></a></li>
+                  <li><a href="manage_accounts.php"><i class="fa fa-money"></i>Manage Accounts <span class="fa fa-chevron-right"></span></a> </li>
                 </ul>
               </div>
-			<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
               <div class="menu_section">
                 <h3>More</h3>
                 <ul class="nav side-menu">
                   <li><a href="settings.php"><i class="fa fa-gear"></i> Settings <span class="fa fa-chevron-right"></span></a>
                     <ul class="nav child_menu">
-						<li><a href="#">Security Types</a></li>
+                      <li><a href="#">Security Types</a></li>
 						<li><a href="#">Member Types</a></li>
 						<li><a href="#">Person Types</a></li>
 						<li><a href="#">Account Type</a></li>
@@ -123,7 +113,6 @@ $foto = $staff->findPersonsPhoto($_SESSION['person_number']);
                   </li>
                 </ul>
               </div>
-			<?php }?>
 
             </div>
             <!-- /sidebar menu -->
@@ -133,6 +122,13 @@ $foto = $staff->findPersonsPhoto($_SESSION['person_number']);
               <a data-toggle="tooltip" href="settings.php" data-placement="top" title="Settings">
                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
               </a>
+			  <!--
+              <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="Lock">
+                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+              </a> -->
               <a data-toggle="tooltip" href="logout.php" data-placement="top" title="Logout">
                 <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
               </a>

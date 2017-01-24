@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -88,27 +89,16 @@
 		if($('.highlight').size() == 0){
 			$.ajax({
 				type: method,
-				dataType: "json",
 				url: "login_script.php",
 				data: formData,
 				success: function(response){
-					if(response.message != "success"){
-						
-						$("#login_message").html('<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><i class="fa fa-info-circle"></i> '+response.message+'</div>');
+					if(response.trim() != "success"){
+						$("#login_message").html('<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><i class="fa fa-info-circle"></i> '+response+'</div>');
 						setTimeout(function(){
 							$("#login_message").html("");
 						}, 8888000);
 					}else{
-						switch(response.access_level){
-							case '1':
-							case '2':
-							window.location = "dashboard.php";
-							break;
-							default:
-							window.location = "view_members.php";
-							break;
-						}
-						
+						window.location = "dashboard.php";
 					}
 				}
 			});

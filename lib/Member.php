@@ -29,6 +29,10 @@ class Member extends Db {
 		$result = $this->getfrec("person", "firstname, lastname, othername", "id=".$pno, "", "");
 		return !empty($result) ? $result['firstname']." ".$result['othername']." ".$result['lastname'] : false;
 	}
+	public function personDetails($id){
+		$results = $this->getrec(self::$table_name." mb, person p", "mb.id=".$id." AND mb.person_number = p.id", "", "");
+		return !empty($results) ? $results : false;
+	}
 	public function noOfMembers($where = 1){
 		return $this->count("member", $where);
 	}
@@ -62,7 +66,7 @@ class Member extends Db {
 		return false;
 	}
 	public function updateMember($data){
-		$fields = array_slice(1, self::$db_fields);
+		$fields = array_slice(self::$db_fields, 1);
 		$id = $data['id'];
 		unset($data['id']);
 		if($this->update(self::$table_name, $fields, $this->generateAddFields($fields, $data), "id=".$id)){
@@ -75,6 +79,13 @@ class Member extends Db {
 			return true;
 		}
 		return false;
+	}
+	public function deleteMember($id){
+		if($this->update_single(self::$table_name, "active", 0, "id=".$id)){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 }

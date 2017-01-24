@@ -1,44 +1,22 @@
 <script>
-
-var start_date = <?php echo isset($_GET['s_dt'])?"moment('{$_GET['s_dt']}','YYYY-MM-DD')":"moment().subtract(29, 'days')"; ?>,
-end_date = <?php echo isset($_GET['e_dt'])?"moment('{$_GET['e_dt']}','YYYY-MM-DD')":"moment()"; ?>;
-
-var st_date = start_date.format('YYYY-MM-DD'), //start date for the datatable
-	ed_date = end_date.format('YYYY-MM-DD'), //end date for the datatable
-	loan_type = <?php echo isset($_GET['type'])?"'{$_GET['type']}'":0; ?>; //loan_type for the datatable
-//format numbers to currency format
-function format1(n) {
-	return n.toString().replace(/./g, function(c, i, a) {
-		return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
-	});
-}
-<?php if($show_table_js):?>
-var dTable, dTable2;//Global datatables variable	
+var dTable;//Global datatables variable
+var st_date = <?php echo isset($_GET['s_dt'])?"'{$_GET['s_dt']}'":"null"; ?>, //start date for the datatable
+	ed_date = <?php echo isset($_GET['e_dt'])?"'{$_GET['e_dt']}'":"null"; ?>; //end date for the datatable
   function getStartDate(){
 	  return st_date;
   }
   function getEndDate(){
 	  return ed_date;
   }
-  function getLoanType(){
-	  return loan_type;
-  }
-jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
-    return this.flatten().reduce( function ( a, b ) {
-        if ( typeof a === 'string' ) {
-            a = a.replace(/[^\d.-]/g, '') * 1;
-        }
-        if ( typeof b === 'string' ) {
-            b = b.replace(/[^\d.-]/g, '') * 1;
-        }
- 
-        return a + b;
-    }, 0 );
-} );
-<?php endif;?>
+//format numbers to currency format
+function format1(n) {
+	return n.toString().replace(/./g, function(c, i, a) {
+		return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+	});
+}
  $(document).ready(function() {
 	saveData();
-	
+	deleteData();
 	removeRedBorderOnRequiredField();
 	cancelFormFields();
 	
@@ -59,7 +37,27 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 			data: formData,
 			async: false,
 			success: function (response) {
-				alert(response);
+				if(response.trim() == "success"){
+					window.location.reload(true);
+				}else{
+					showStatusMessage(response, "error");
+				}
+			},
+			cache: false,
+			contentType: false,
+			processData: false
+		});
+
+		return false;
+	});
+	$(".upload_document").click(function(){
+		var formData = new FormData($("form#document")[0]);
+		$.ajax({
+			url: "upload_doc.php",
+			type: 'POST',
+			data: formData,
+			async: false,
+			success: function (response) {
 				if(response.trim() == "success"){
 					window.location.reload(true);
 				}else{
@@ -175,6 +173,10 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 	}
 	$("#loan_amount").keyup(function(){
 		var currentInput  = parseInt($(this).val());
+		var interest_rate = parseFloat($("#interest_rate").val());
+		if(interest_rate > 0){
+			findExpectedPayBackAmount();
+		}
 		if(!isNaN(currentInput)){
 			var words  = getWords(currentInput);
 			$("#number_words").html( words +" Ugandan Shillings Only");
@@ -238,15 +240,21 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 					data: formData,
 					cache: false,
 					success: function(response){
-						
 						if(response.trim() == "success"){
+							<?php 
+							if(isset($_GET['task']) && ($_GET['task'] == "withdraw.add")){ ?>
+								window.location.reload(true);
+								<?php
+							}
+							?>
+							showStatusMessage("<strong>Successful!</strong> Your data was successfully added!", "success");
 							showStatusMessage("<strong>Successful!</strong> Your data was successfully added!", "success");
 							setTimeout(function(){
 								form[0].reset();
 								$("#number_words, #expected_payback").html( "");
 							}, 3000);
 						}else{
-							showStatusMessage(response  + "Could not add data,please try again. If the problem persisits contact the technical team for assistance!", "error");
+							showStatusMessage(response  + " Could not add data,please try again. If the problem persisits contact the technical team for assistance!", "error");
 							setTimeout(function(){
 								
 							}, 3000);
@@ -274,7 +282,70 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 		  });
 		
 	}
-			
+	function deleteData(){
+		$(".delete").click(function(){
+		var confirmation = confirm("Are sure you would like to delete this item?");
+			if(confirmation){
+				showStatusMessage("Deleting...", "Warning");
+				var tbl;
+				var id;
+				var d_id = $(this).attr("id");
+				var arr = d_id.split("_");
+				id = arr[0];
+				tbl = arr[1];
+				$.ajax({ // create an AJAX call...
+					url: "delete.php?id="+id+"&tbl="+tbl, // the file to call
+					success: function(response) { // on success..
+						if(response != "fail"){
+							showStatusMessage("Successfully deleted record", "success");
+							setTimeout(function(){
+								location.reload();
+							}, 1000);
+						}else{
+							showStatusMessage(response, "warning");
+						}
+					}			
+				});
+			}
+		});
+	}
+	$(".update_staff").click(function(){
+		updateStaff();
+	});
+	function updateStaff(){
+		if(!areAllFilled()){
+			showStatusMessage('Please fill in all the required fiels marked with (*)', "error");
+		}else{
+			if(!doPasswordsMatch()){
+				showStatusMessage('Please make sure all the passwords are the same!', "error");
+			}else{
+				$.ajax({
+					type: "post",
+					url: "add_data.php",
+					data: $('.form-horizontal').serialize(),
+					cache: false,
+					success: function(response){
+						
+						if(response.trim() == "success"){
+							showStatusMessage('A staff has been successfully updated!', "success");
+							setTimeout(function(){
+								window.location.reload();
+							}, 4000);
+						}else{  
+							showStatusMessage('Failed to update staff, please try again. If the problem persisits contact the technical team for assistance!', "error");
+							/* setTimeout(function(){
+								$($('.form-horizontal')[0]).each(function(){
+									$(this).reset();
+								})
+							}, 4000); */
+						}
+						
+					}
+				});
+			}
+		}
+	}	
+	
 	function submitStaff(){
 		if(!areAllFilled()){
 			showStatusMessage('Please fill in all the required fiels marked with (*)', "error");
@@ -294,7 +365,7 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 								window.location.reload();
 							}, 4000);
 						}else{  
-							showStatusMessage('Failed to a member, please try again. If the problem persisits contact the technical team for assistance!', "error");
+							showStatusMessage('Failed to add staff, please try again. If the problem persisits contact the technical team for assistance!', "error");
 							/* setTimeout(function(){
 								$($('.form-horizontal')[0]).each(function(){
 									$(this).reset();
@@ -356,10 +427,12 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 	
 	/* Geographical location load functions */
 		var country = $("#country_select").val();
+		
 		getDistricts(country);
 		function getChangeValues(){
 			$("#country_select").on('change',function(){
 				var id = $(this).val();
+				
 				getDistricts(id);
 			});
 			$("#district_select").on('change',function(){
@@ -537,12 +610,12 @@ ko.applyBindings(guarantor);
 		$('#reportrange span').html(start.format('D MMMM, YYYY') + ' - ' + end.format('D MMMM, YYYY'));
 	};
    var optionSet1 = {
-          startDate: start_date,
-          endDate: end_date,
+          startDate: moment().subtract(29, 'days'),
+          endDate: moment(),
           minDate: '01/01/2012',
           maxDate: '12/31/2020',
           dateLimit: {
-            days: 123
+            days: 60
           },
           showDropdowns: true,
           showWeekNumbers: true,
@@ -574,6 +647,7 @@ ko.applyBindings(guarantor);
             firstDay: 1
           }
     };
+		var start_date = moment().subtract(29, 'days'), end_date = moment();
 		$('#reportrange span').html(start_date.format('MMMM D, YYYY') + ' - ' + end_date.format('MMMM D, YYYY'));
 		format_hrefs(start_date.format('YYYY-MM-DD'), end_date.format('YYYY-MM-DD'));
 		
@@ -591,14 +665,14 @@ ko.applyBindings(guarantor);
 				findReportRange(<?php echo $_GET['member_id']; ?>, picker.startDate.format('MMMM D, YYYY'), picker.endDate.format('MMMM D, YYYY'));
 			<?php
 			}else{?>
-				var startDate=picker.startDate.format('YYYY-MM-DD'), endDate = picker.endDate.format('YYYY-MM-DD');
+				var start_date=picker.startDate.format('YYYY-MM-DD'), end_date = picker.endDate.format('YYYY-MM-DD');
 				
 				//when at the dashboard page
 				if(document.getElementById("nploans")){
-					getDashboardData(startDate, endDate);
-					format_hrefs(startDate, endDate);
+					getDashboardData(start_date, end_date);
+					format_hrefs(start_date, end_date);
 				}
-				searchTable(startDate,endDate);
+				searchTable(start_date,end_date);
 			<?php } ?>
 		});
 		$('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
@@ -613,19 +687,15 @@ ko.applyBindings(guarantor);
 		$('#destroy').click(function() {
 		$('#reportrange').data('daterangepicker').remove();
 		});
-		$('#loan_types').on('change', function() {
-			loan_type = $(this).val();
-			dTable.ajax.reload();
-		});
 	//Clients transaction details
 		<?php 
 		if(isset($_GET['view']) && $_GET['view'] == "client_trasaction_history"){ ?>
 			//Get the initial range
 			var initial_range = $("#reportrange span").html().split("-");
-			var start_date1 = initial_range[0];
-			var end_date1 = initial_range[1];
+			var start_date = initial_range[0];
+			var end_date = initial_range[1];
 			var member = <?php echo $_GET['member_id']; ?>;
-			findReportRange(member, start_date1, end_date1);
+			findReportRange(member, start_date, end_date);
 		<?php 
 		}
 		?>
@@ -654,7 +724,6 @@ ko.applyBindings(guarantor);
 			st_date = startDate;
 			ed_date = endDate;
 			dTable.ajax.reload();
-			dTable2.ajax.reload();
 		}	
 	//End client transaction details 
 		function getDashboardData(startDate, endDate){

@@ -75,21 +75,21 @@
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="username">Username <span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-						  <input id="username" class="form-control col-md-7 col-xs-12 required_f"  data-validate-minmax="5,15" name="username" placeholder="First Name" required="required" type="text">
+						  <input id="username" class="form-control col-md-7 col-xs-12 required_f"  data-validate-minmax="5,15" name="username" placeholder="Username" required="required" type="text">
 						</div>
 					</div>
 					<div class="item form-group">
 						<label class="control-label col-md-3 col-sm-3 col-xs-12"  for="password">Password<span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-						  <input id="password" class="form-control col-md-7 col-xs-12 required_f" data-validate-minmax="5,15"   name="password" placeholder="Last Name" required="required" type="password">
+						  <input id="password" class="form-control col-md-7 col-xs-12 required_f" data-validate-minmax="5,15"   name="password" placeholder="Password" required="required" type="password">
 						</div>
 					</div>
 					<div class="item form-group">
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="password2">Re-enter Password <span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-						  <input id="password2" class="form-control col-md-7 col-xs-12 required_f" data-validate-minmax="5,15"  name="password2" placeholder="First Name" required="required" type="password">
+						  <input id="password2" class="form-control col-md-7 col-xs-12 required_f" data-validate-minmax="5,15"  name="password2" placeholder="Re-enter password" required="required" type="password">
 						</div>
 					</div>
 					
@@ -223,13 +223,14 @@
 						  
 						</div>
 					</div>
+					<!--
 					<div class="item form-group">
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="physical_address">Physical Address<span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
 						  <textarea id="physical_address" required="required" name="physical_address" class="form-control col-md-7 col-xs-12"></textarea>
 						</div>
-					</div>
+					</div>-->
 					<div class="item form-group">
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="postal_address">Postal Address
 						</label>
@@ -273,4 +274,5 @@
 	<!-- End SmartWizard Content -->
 	</div>
 </div>
+			
 			

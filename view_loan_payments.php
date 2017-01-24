@@ -5,7 +5,6 @@ $page_title = "Loans payments";
 include("includes/header.php");
 
 ?>
-<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
 <!-- page content -->
 <div class="right_col" role="main">
   <div class="">
@@ -47,10 +46,12 @@ include("includes/header.php");
 				</tbody>
 				<tfoot>
 					<tr>
-						<th class="right_remove"><b>Total (UGX)</th>
-						<th colspan="4"></th>
-						<th class="right_remove left_remove"></th>
-						<th class="right_remove left_remove"></th>
+						<?php 
+						foreach($header_keys as $key){ ?>
+							<th><?php echo $key; ?></th>
+							<?php
+						}
+						?>
 					</tr>
 				</tfoot>
 			</table>
@@ -62,9 +63,9 @@ include("includes/header.php");
 </div>
 <div class="clearfix"></div>
 <!-- /page content -->
-<?php } else {include("includes/error_400.php"); }?> 
-<?php include("includes/footer.php"); ?>
-<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
+<?php 
+include("includes/footer.php"); 
+?>
 <!-- Datatables -->
 <script>
   $(document).ready(function() {
@@ -83,11 +84,6 @@ include("includes/header.php");
 				d.start_date = getStartDate();
 				d.end_date = getEndDate();
 				}
-		  },
-		  "footerCallback": function (tfoot, data, start, end, display ) {
-            var api = this.api(), total = api.column(4).data().sum();
-			// UPDATE FOOTER //
-            $(api.column(4).footer()).html( format1(total) );
 		  },
 		  columns:[ { data: 'transaction_id', render: function ( data, type, full, meta ) {return '<a href="#" title="View details">'+data+'</a>';}},
 				{ data: 'loan_number', render: function ( data, type, full, meta ) {return '<a href="#" title="View details">'+data+'</a>';}},
@@ -134,4 +130,3 @@ include("includes/header.php");
 	TableManageButtons.init();
   });
 </script>
-<?php }?> 

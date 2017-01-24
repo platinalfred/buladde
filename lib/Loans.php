@@ -6,11 +6,11 @@ class Loans extends Db {
 	protected static $db_fields = array("id", "person_number", "loan_number","branch_number", "loan_type", "loan_date","loan_amount", "loan_amount_word", "interest_rate", "daily_default_amount", "expected_payback", "approved_by", "loan_duration", "comments"," loan_agreement_path");
 	
 	public function findById($id){
-		$result = $this->getRecord(self::$table_name, "id=".$id, "");
+		$result = $this->getrec(self::$table_name, "id=".$id, "", "");
 		return !empty($result) ? $result:false;
 	}
 	public function findMemberLoans($pno){
-		 $results  = $this->getarray(self::$table_name, "person_number=".$pno, "", "");
+		 $results  = $this->getarray(self::$table_name, "person_number=".$pno, "loan_date DESC", "");
 		 return !empty($results) ? $results : false;
 	}
 	public function findAll($where = 1, $order_by = "loan_date DESC", $limit = ""){
@@ -18,7 +18,7 @@ class Loans extends Db {
 		return !empty($result_array) ? $result_array : false;
 	}
 	public function findLoanType($type){
-		 $results  = $this->getfrec("loantype", "name", "id=".$type, "", "");
+		 $results  = $this->getfrec("loan_type", "name", "id=".$type, "", "");
 		 return !empty($results) ? $results['name'] : false;
 	}
 	public function isLoanAboutToExpire($id, $duratn){
@@ -65,6 +65,19 @@ class Loans extends Db {
 			return date("Y-m-d H:i:s", strtotime("+".$results['payback_days']." day"));
 		 }
 		 return false;
+	}
+	public function findLoanDocuments($lid){
+		 $results  = $this->getarray("loan_doccuments", "loan_id=".$lid, "", "");
+		 return !empty($results) ? $results : false;
+	}
+	public function addLoanDocument($data){
+		
+		$result = $this->add("loan_doccuments", array("loan_id", "name", "doc_path","description"), array("loan_id"=>$data['loan_id'], "name"=>$data['name'], "doc_path"=>$data['doc_path'], "description"=>$data['description']));
+		if($result){
+			return $result;
+		}else{
+			return false;
+		}
 	}
 	public function addLoan($data){
 		
