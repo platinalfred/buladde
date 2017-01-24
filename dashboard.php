@@ -2,6 +2,8 @@
 $show_table_js = false;
 include("includes/header.php");
 ?>
+
+<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
 <!-- page content -->
 <div class="right_col" role="main">
 	 <!-- top tiles -->
@@ -215,6 +217,7 @@ include("includes/header.php");
 
 </div>
 <!-- /page content -->
+<?php } else {include("includes/error_400.php"); }?> 
 <?php 
 include("includes/footer.php"); 
 ?>

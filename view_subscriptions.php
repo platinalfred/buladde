@@ -7,6 +7,7 @@ require_once("lib/Libraries.php");
 $income = new Income();
 
 ?>
+<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
 <!-- page content -->
 <div class="right_col" role="main">
   <div class="">
@@ -16,14 +17,11 @@ $income = new Income();
 	  <div class="col-md-6">
 		<h3>Member Subscriptions <small></small></h3>
 	  </div>
-	  <div class="col-md-4">
+	  <div class="col-md-6">
 		<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
 		  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
 		  <span>November 20, 2016 - December 19, 2016</span> <b class="caret"></b>
 		</div>
-	  </div>
-	  <div class="col-md-2">
-		<a href="http://localhost/buladde/view_subscriptions.php" class="btn btn-primary"> All Subscriptions</a>
 	  </div>
 	</div>
 	<div class="row">
@@ -45,12 +43,9 @@ $income = new Income();
 				</tbody>
 				<tfoot>
 					<tr>
-						<?php 
-						foreach($header_keys as $key){ ?>
-							<th><?php echo $key; ?></th>
-							<?php
-						}
-						?>
+						<th class="right_remove"><b>Total (UGX)</b></th>
+						<th class="right_remove left_remove"></th>
+						<th colspan="2"></th>
 					</tr>
 				</tfoot>
 			</table>
@@ -62,9 +57,11 @@ $income = new Income();
 </div>
 <div class="clearfix"></div>
 <!-- /page content -->
+<?php }else{  include("includes/error_400.php"); }?> 
 <?php 
 include("includes/footer.php"); 
 ?>
+<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
 <!-- Datatables -->
 <script>
   $(document).ready(function() {
@@ -84,8 +81,13 @@ include("includes/footer.php");
 				d.end_date = getEndDate();
 				}
 		  },
+		  "footerCallback": function (tfoot, data, start, end, display ) {
+            var api = this.api(), total = api.column(1).data().sum();
+			// UPDATE TOTALS //
+            $(api.column(1).footer()).html( format1(total) );
+		  },
 		  columns:[ { data: 'firstname', render: function ( data, type, full, meta ) {return '<a href="member-details.php?member_id='+full.person_number+'" title="Member details">' + full.firstname+' '+full.lastname+' '+full.othername + '</a>';}},
-				{ data: 'amount' },
+				{ data: 'amount' , render: function ( data, type, full, meta ) {return format1(parseFloat(data));}},
 				{ data: 'subscription_year'},
 				{ data: 'date_paid'}
 				] ,
@@ -127,3 +129,4 @@ include("includes/footer.php");
 	TableManageButtons.init();
   });
 </script>
+<?php }?> 

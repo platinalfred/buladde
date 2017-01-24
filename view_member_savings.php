@@ -6,6 +6,7 @@ $page_title = "Members savings";
 include("includes/header.php"); 
 require_once("lib/Libraries.php");
 ?>
+<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
 <!-- page content -->
 <div class="right_col" role="main">
   <div class="">
@@ -38,16 +39,12 @@ require_once("lib/Libraries.php");
 					</tr>
 				</thead>
 				<tbody>
-					
 				</tbody>
 				<tfoot>
 					<tr>
-						<?php 
-						foreach($header_keys as $key){ ?>
-							<th><?php echo $key; ?></th>
-							<?php
-						}
-						?>
+						<th class="right_remove"><b>Total (UGX)</b></th>
+						<th class="right_remove left_remove"></th>
+						<th colspan="2"></th>
 					</tr>
 				</tfoot>
 			</table>
@@ -59,9 +56,9 @@ require_once("lib/Libraries.php");
 </div>
 <div class="clearfix"></div>
 <!-- /page content -->
-<?php 
-include("includes/footer.php"); 
-?>
+<?php } else {include("includes/error_400.php"); }?>
+<?php include("includes/footer.php"); ?>
+<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
 <!-- Datatables -->
 <script>
   $(document).ready(function() {
@@ -78,8 +75,13 @@ include("includes/footer.php");
 			  "type": "POST",
 			  "data":  {'page':'member_savings'<?php echo (isset($_GET['s_dt'])&&isset($_GET['e_dt']))?",'start_date':'{$_GET['s_dt']}', 'end_date':'{$_GET['e_dt']}'":""; ?>}
 		  },
+		  "footerCallback": function (tfoot, data, start, end, display ) {
+            var api = this.api(), total = api.column(1).data().sum();
+			// UPDATE FOOTER //
+            $(api.column(1).footer()).html( format1(total) );
+		  },
 		  columns:[ { data: 'firstname', render: function ( data, type, full, meta ) {return full.firstname+' '+full.lastname+' '+full.othername;}},
-				{ data: 'amount', render: function ( data, type, full, meta ) {return data+' ('+full.amount_description+')';}},
+				{ data: 'amount', render: function ( data, type, full, meta ) {return format1(data)+' ('+full.amount_description+')';}},
 				{ data: 'transaction_date', render: function ( data, type, full, meta ) {return moment(data).format('D MMMM, YYYY');}},
 				{ data: 'transacted_by'}
 				] ,
@@ -122,3 +124,4 @@ include("includes/footer.php");
 	TableManageButtons.init();
   });
 </script>
+<?php }?> 
