@@ -40,16 +40,13 @@ $income = new Income();
 					</tr>
 				</thead>
 				<tbody>
-					
 				</tbody>
 				<tfoot>
 					<tr>
-						<?php 
-						foreach($header_keys as $key){ ?>
-							<th><?php echo $key; ?></th>
-							<?php
-						}
-						?>
+						<th class="right_remove">Total (UGX)</th>
+						<th class="right_remove left_remove"></th>
+						<th class="right_remove left_remove"></th>
+						<th class="right_remove left_remove" colspan="3"></th>
 					</tr>
 				</tfoot>
 			</table>
@@ -100,6 +97,11 @@ $income = new Income();
 				d.start_date = getStartDate();
 				d.end_date = getEndDate();
 				}
+		  },
+		  "footerCallback": function (tfoot, data, start, end, display ) {
+            var api = this.api(), total = api.column(2).data().sum();
+			// UPDATE TOTALS //
+            $(api.column(2).footer()).html( "<strong>" + format1(total) + "<strong>" );
 		  },"columnDefs": [ {
 			  "targets": [5],
 			  "orderable": false,

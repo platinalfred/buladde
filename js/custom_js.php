@@ -1,12 +1,19 @@
 <script>
-var dTable, dTable2;//Global datatables variable
+
 var start_date = <?php echo isset($_GET['s_dt'])?"moment('{$_GET['s_dt']}','YYYY-MM-DD')":"moment().subtract(29, 'days')"; ?>,
 end_date = <?php echo isset($_GET['e_dt'])?"moment('{$_GET['e_dt']}','YYYY-MM-DD')":"moment()"; ?>;
 
 var st_date = start_date.format('YYYY-MM-DD'), //start date for the datatable
 	ed_date = end_date.format('YYYY-MM-DD'), //end date for the datatable
 	loan_type = <?php echo isset($_GET['type'])?"'{$_GET['type']}'":0; ?>; //loan_type for the datatable
-	
+//format numbers to currency format
+function format1(n) {
+	return n.toString().replace(/./g, function(c, i, a) {
+		return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+	});
+}
+<?php if($show_table_js):?>
+var dTable, dTable2;//Global datatables variable	
   function getStartDate(){
 	  return st_date;
   }
@@ -16,12 +23,19 @@ var st_date = start_date.format('YYYY-MM-DD'), //start date for the datatable
   function getLoanType(){
 	  return loan_type;
   }
-//format numbers to currency format
-function format1(n) {
-	return n.toString().replace(/./g, function(c, i, a) {
-		return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
-	});
-}
+jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
+    return this.flatten().reduce( function ( a, b ) {
+        if ( typeof a === 'string' ) {
+            a = a.replace(/[^\d.-]/g, '') * 1;
+        }
+        if ( typeof b === 'string' ) {
+            b = b.replace(/[^\d.-]/g, '') * 1;
+        }
+ 
+        return a + b;
+    }, 0 );
+} );
+<?php endif;?>
  $(document).ready(function() {
 	saveData();
 	

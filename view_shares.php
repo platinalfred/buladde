@@ -44,12 +44,8 @@ require_once("lib/Libraries.php");
 				</tbody>
 				<tfoot>
 					<tr>
-						<?php 
-						foreach($header_keys as $key){ ?>
-							<th><?php echo $key; ?></th>
-							<?php
-						}
-						?>
+						<th class="right_remove">Total</th>
+						<th class="right_remove left_remove"></th>
 					</tr>
 				</tfoot>
 			</table>
@@ -84,8 +80,13 @@ require_once("lib/Libraries.php");
 				d.end_date = getEndDate();
 				}
 		  },
+		  "footerCallback": function (tfoot, data, start, end, display ) {
+            var api = this.api(), total = api.column(1).data().sum();
+			// UPDATE FOOTER //
+            $(api.column(1).footer()).html( format1(total) );
+		  },
 		  columns:[ { data: 'firstname', render: function ( data, type, full, meta ) {return full.firstname+' '+full.lastname+' '+full.othername;}},
-				{ data: 'share' }
+				{ data: 'share' , render: function ( data, type, full, meta ) {return format1(parseFloat(data));}}
 				] ,
 		  buttons: [
 			{

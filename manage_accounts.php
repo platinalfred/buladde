@@ -1,6 +1,7 @@
 <?php 
 //This will prevent data tables js from showing on every page for speed increase
 $show_table_js = true;
+$page_title = "Accounts";
 include("includes/header.php"); 
 ?>
 <!-- page content -->
@@ -48,7 +49,7 @@ include("includes/header.php");
 				<thead>
 					<tr>
 						<?php 
-						$header_keys = array("Person Number", "Names", "Date", "Amount");
+						$header_keys = array("Person Number", "Account Number", "Names", "Date", "Amount");
 						foreach($header_keys as $key){ ?>
 							<th><?php echo $key; ?></th>
 							<?php
@@ -60,10 +61,9 @@ include("includes/header.php");
 				</tbody>
 				<tfoot>
 					<tr>
-						<td class="right_remove"><b>Total (UGX)</b></td>
-						<td class="right_remove left_remove"><?php  ?></td>
-						<td class="right_remove left_remove"><?php  ?></td>
-						<td class="right_remove left_remove"><?php  ?></td>
+						<th class="right_remove"><b>Total (UGX)</th>
+						<th colspan="3"></th>
+						<th class="right_remove left_remove"><?php  ?></th>
 					</tr>
 				</tfoot>
 			</table>
@@ -108,9 +108,8 @@ include("includes/header.php");
 				<tfoot>
 					<tr>
 						<td class="right_remove"><b>Total (UGX)</b></td>
-						<td class="right_remove left_remove"><?php  ?></td>
-						<td class="right_remove left_remove"><?php  ?></td>
-						<td class="right_remove left_remove"><?php  ?></td>
+						<td colspan="3"></td>
+						<td class="right_remove left_remove"></td>
 					</tr>
 				</tfoot>
 			</table>
@@ -127,31 +126,7 @@ include("includes/footer.php");
 <!-- Datatables -->
 <script>
   $(document).ready(function() {
-	var handleDataTableButtons = function() {
-	  if ($("#datatable-buttons").length) {
-		dTable = $("#datatable-buttons").DataTable({
-		  dom: "Bfrtip",
-		  "processing": true,
-		  "serverSide": true,
-		  "deferRender": true,
-		  "ajax": {
-			  "url":"server_processing.php",
-			  "type": "POST",
-			  "data": function(d){
-				d.page = 'deposits';
-				d.start_date = getStartDate();
-				d.end_date = getEndDate();
-				}
-		  },"columnDefs": [ {
-			  "targets": [0],
-			  "orderable": false
-		  }],
-		  columns:[ { data: 'person_number', render: function ( data, type, full, meta ) {return '<a href="member-details.php?member_id='+full.member_id+'" title="Update details">'+data+'</a>';}},
-				{ data: 'firstname', render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname;}},
-				{ data: 'transaction_date', render: function ( data, type, full, meta ) {return moment(data).format('LL');}},
-				{ data: 'amount' }
-				] ,
-		  buttons: [
+	  var btn_opts = [
 			{
 			  extend: "copy",
 			  className: "btn-sm"
@@ -172,9 +147,39 @@ include("includes/footer.php");
 			  extend: "print",
 			  className: "btn-sm"
 			},
-		  ],
-		  responsive: true,
-		  
+		  ];
+	var handleDataTableButtons = function() {
+	  if ($("#datatable-buttons").length) {
+		dTable = $("#datatable-buttons").DataTable({
+		  dom: "Bfrtip",
+		  "processing": true,
+		  "serverSide": true,
+		  "deferRender": true,
+		  "ajax": {
+			  "url":"server_processing.php",
+			  "type": "POST",
+			  "data": function(d){
+				d.page = 'deposits';
+				d.start_date = getStartDate();
+				d.end_date = getEndDate();
+				}
+		  },"columnDefs": [ {
+			  "targets": [0],
+			  "orderable": false
+		  }],
+		  "footerCallback": function (tfoot, data, start, end, display ) {
+            var api = this.api(), total = api.column(4).data().sum();
+			// UPDATE FOOTER //
+            $(api.column(4).footer()).html( "<strong>" + format1(total) + "<strong>" );
+		  },
+		  columns:[ { data: 'person_number', render: function ( data, type, full, meta ) {return '<a href="member-details.php?member_id='+full.member_id+'" title="Update details">'+data+'</a>';}},
+				{ data: 'account_number' },
+				{ data: 'firstname', render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname;}},
+				{ data: 'transaction_date', render: function ( data, type, full, meta ) {return moment(data).format('LL');}},
+				{ data: 'amount' }
+				] ,
+		  buttons: btn_opts,
+		  responsive: true		  
 		});
 	  }
 	};
@@ -189,6 +194,7 @@ include("includes/footer.php");
 	}();
 
 	dTable2 = $('#datatable-buttons2').DataTable({
+		  dom: "Bfrtip",
 		  "processing": true,
 		  "serverSide": true,
 		  "deferRender": true,
@@ -200,20 +206,23 @@ include("includes/footer.php");
 				d.start_date = getStartDate();
 				d.end_date = getEndDate();
 				}
+		  },
+		  "footerCallback": function (tfoot, data, start, end, display ) {
+            var api = this.api(), total = api.column(4).data().sum();
+			// UPDATE FOOTER //
+            $(api.column(4).footer()).html( total );
 		  },"columnDefs": [ {
 			  "targets": [0],
 			  "orderable": false
 		  }],
 		  columns:[ { data: 'person_number', render: function ( data, type, full, meta ) {return '<a href="member-details.php?member_id='+full.member_id+'" title="Update details">'+data+'</a>';}},
+				{ data: 'account_number' },
 				{ data: 'firstname', render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname;}},
 				{ data: 'transaction_date', render: function ( data, type, full, meta ) {return moment(data).format('LL');}},
 				{ data: 'amount' }
 				] ,
-	});
-	dTable2.on('draw.dt', function() {
-	  $('input').iCheck({
-		checkboxClass: 'icheckbox_flat-green'
-	  });
+		  buttons: btn_opts,
+		  responsive: true
 	});
 
 	TableManageButtons.init();
