@@ -59,6 +59,10 @@ Class Forms{
 			case 'expensetype.add';
 				$this->addExpenseType();
 			break;
+			case 'income_sources.add';
+				$this->addIncomeSource();
+			break;
+			
 			default:
 				$this->defaultDisplay();
 			break;
@@ -1117,7 +1121,7 @@ Class Forms{
 		  <div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="x_panel">
 			  <div class="x_title">
-				<h2>Add Access Level <small> </small></h2>
+				<h2>Add Expense Type<small> </small></h2>
 				<ul class="nav navbar-right panel_toolbox">
 				  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
 				</ul>
@@ -1125,7 +1129,51 @@ Class Forms{
 			  </div>
 			  <div class="x_content">
 				<form class="form-horizontal form-label-left" novalidate>
-					<input type="hidden" name="add_access_level" value="access_level">
+					<input type="hidden" name="add_expense_type" value="access_level">
+				  <div class="item form-group">
+					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Name<span class="required">*</span>
+					</label>
+					<div class="col-md-6 col-sm-6 col-xs-12">
+					  <input type="text"  name="name"  required="required"   class="form-control col-md-7 col-xs-12 required_f">
+					</div>
+				  </div>
+				  <div class="item form-group">
+					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="description">Description </label>
+					<div class="col-md-6 col-sm-6 col-xs-12">
+					  <textarea id="textarea" name="description" class="form-control col-md-7 col-xs-12"></textarea>
+					</div>
+				  </div>
+				  <div class="ln_solid"></div>
+				  <div class="form-group">
+					<div class="col-md-6 col-md-offset-3">
+					  <button type="button" class="btn btn-primary cancel">Cancel</button>
+					  <button id="send" type="button" class="btn btn-success loginbtn save_data">Submit</button>
+					</div>
+				  </div>
+				</form>
+			  </div>
+			</div>
+		  </div>
+		</div>
+			
+		 <div class="clearfix"></div>
+	<?php 
+	}
+	function addIncomeSource(){
+		?>
+		<div class="row">
+		  <div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="x_panel">
+			  <div class="x_title">
+				<h2>Add Income Source<small> </small></h2>
+				<ul class="nav navbar-right panel_toolbox">
+				  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+				</ul>
+				<div class="clearfix"></div>
+			  </div>
+			  <div class="x_content">
+				<form class="form-horizontal form-label-left" novalidate>
+					<input type="hidden" name="add_income_source" value="access_level">
 				  <div class="item form-group">
 					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Name<span class="required">*</span>
 					</label>

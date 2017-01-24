@@ -231,6 +231,22 @@ elseif(isset($_POST['add_access_level'])){
 	}else{
 		echo "failed";
 	}
+}elseif(isset($_POST['add_expense_type'])){
+	$expense_type = new ExpenseTypes();
+	if($expense_type->addExpenseType($_POST)){
+		echo "success";
+		return;
+	}else{
+		echo "failed";
+	}
+}elseif(isset($_POST['add_income_source'])){
+	$income_source = new IncomeSource();
+	if($income_source->addIncomeSource($_POST)){
+		echo "success";
+		return;
+	}else{
+		echo "failed";
+	}
 }
 
 ?>

@@ -30,12 +30,31 @@ Class Reports{
 			case 'client_loan';
 				$this->ClientLoan();
 			break;
-			case '';
-				$this->defaultDisplay();
+			case 'expensetypes';
+				$this->expenseTypes();
+			break;
+			case 'securitytypes';
+				$this->securityTypes();
+			break;
+			case 'membertypes';
+				$this->memberTypes();
+			break;
+			case 'incomesources';
+				$this->incomeSource();
 			break;
 			case '';
-				$this->defaultDisplay();
+				$this->memberTypes();
 			break;
+			case 'branches';
+				$this->branches();
+			break;
+			case 'loantypes';
+				$this->loanTypes();
+			break;
+			case '';
+				$this->branches();
+			break;
+			
 			default:
 				$this->defaultDisplay();
 			break;
@@ -280,6 +299,384 @@ Class Reports{
 						<?php 
 						}else{
 							echo "<p>There currently no loans subscribed by this member.</p>";
+						}
+						?>
+                  </div>
+                </div>
+              </div>
+           
+		<?php
+	}
+	public function memberTypes(){
+		$member_type = new MemberType();
+		$all_member_types = $member_type->findAll();
+		?>
+		 <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Member Types </h2>
+                    <div class="clearfix"></div>
+                  </div>
+
+                  <div class="x_content">
+						<?php 
+						if($all_member_types){  ?>
+							<div class="table-responsive">
+							  <table id="datatable-buttons" class="table table-striped jambo_table bulk_action">
+								<thead>
+								  <tr class="headings">
+									<th>
+									  <input type="checkbox" id="check-all" class="flat">
+									</th>
+									<?php 
+									$header_keys = array("Name", "Description");
+									foreach($header_keys as $key){ ?>
+										<th><?php echo $key; ?></th>
+										<?php
+									}
+									?>
+									
+									</th>
+									<th class="bulk-actions" colspan="7">
+									  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+									</th>
+								  </tr>
+								</thead>
+
+								<tbody>
+									<?php 
+									foreach($all_member_types as $single){ 
+										?>
+										<tr class="even pointer" >
+											
+											<td class=""><a href="?member_id=<?php echo $_GET['member_id'];?>&view=client_loan&lid=<?php echo $single['id'];?>"><?php echo $single['name']; ?></a></td>
+											<td class=""><?php echo $single['description']; ?> </td>
+											<td class="a-right a-right"><a class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a><a class="btn btn-danger"><i class="fa fa-delete"> Delete</a></td>
+										</tr>
+										<?php
+									}
+									?>
+								</tbody>
+							  </table>
+							</div>
+						<?php 
+						}else{
+							echo "<p>There currently no Security Types.</p>";
+						}
+						?>
+                  </div>
+                </div>
+              </div>
+           
+		<?php
+	}
+	public function branches(){
+		$branch = new Branch();
+		$branches = $branch->findAll();
+		?>
+		 <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Branches </h2>
+                    <div class="clearfix"></div>
+                  </div>
+
+                  <div class="x_content">
+						<?php 
+						if($branches){  ?>
+							<div class="table-responsive">
+							  <table id="datatable-buttons" class="table table-striped jambo_table bulk_action">
+								<thead>
+								  <tr class="headings">
+									
+									<?php 
+									$header_keys = array("Branch Number", "Name", "Phone", "Email", "Address");
+									foreach($header_keys as $key){ ?>
+										<th><?php echo $key; ?></th>
+										<?php
+									}
+									?>
+									
+									</th>
+									<th >
+									  <a class="antoo" style="color:#fff; font-weight:500;">Actions <i class="fa fa-chevron-down"></i></a>
+									</th>
+								  </tr>
+								</thead>
+
+								<tbody>
+									<?php 
+									foreach($branches as $single){ 
+										?>
+										<tr class="even pointer" >
+											<td class=""><?php echo $single['branch_number']; ?></td>
+											<td class=""><?php echo $single['branch_name']; ?> </td>
+											<td class=""><?php echo $single['office_phone']; ?> </td>
+											<td class=""><?php echo $single['email_address']; ?> </td>
+											<td class=""><?php echo $single['postal_address']; ?> </td>
+											<td class="a-right a-right"><a class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a><a class="btn btn-danger"><i class="fa fa-delete"> Delete</a></td>
+										</tr>
+										<?php
+									}
+									?>
+								</tbody>
+							  </table>
+							</div>
+						<?php 
+						}else{
+							echo "<p>There currently no Security Types.</p>";
+						}
+						?>
+                  </div>
+                </div>
+              </div>
+           
+		<?php
+	}
+	public function securityTypes(){
+		$security_type = new SecurityType();
+		$all_security_types = $security_type->findAll();
+		?>
+		 <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Security Types </h2>
+                    <div class="clearfix"></div>
+                  </div>
+
+                  <div class="x_content">
+						<?php 
+						if($all_security_types){  ?>
+							<div class="table-responsive">
+							  <table id="datatable-buttons" class="table table-striped jambo_table bulk_action">
+								<thead>
+								  <tr class="headings">
+									<th>
+									  <input type="checkbox" id="check-all" class="flat">
+									</th>
+									<?php 
+									$header_keys = array("Name", "Description");
+									foreach($header_keys as $key){ ?>
+										<th><?php echo $key; ?></th>
+										<?php
+									}
+									?>
+									
+									</th>
+									<th class="bulk-actions" colspan="7">
+									  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+									</th>
+								  </tr>
+								</thead>
+
+								<tbody>
+									<?php 
+									foreach($all_security_types as $single){ 
+										?>
+										<tr class="even pointer" >
+											
+											<td class=""><a href="?member_id=<?php echo $_GET['member_id'];?>&view=client_loan&lid=<?php echo $single['id'];?>"><?php echo $single['name']; ?></a></td>
+											<td class=""><?php echo $single['description']; ?> </td>
+											<td class="a-right a-right"><a class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a><a class="btn btn-danger"><i class="fa fa-delete"> Delete</a></td>
+										</tr>
+										<?php
+									}
+									?>
+								</tbody>
+							  </table>
+							</div>
+						<?php 
+						}else{
+							echo "<p>There currently no Security Types.</p>";
+						}
+						?>
+                  </div>
+                </div>
+              </div>
+           
+		<?php
+	}
+	public function loanTypes(){
+		$loan_type = new LoanType();
+		$all_loan_types = $loan_type->findAll();
+		?>
+		 <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Loan Types </h2>
+                    <div class="clearfix"></div>
+                  </div>
+
+                  <div class="x_content">
+						<?php 
+						if($all_loan_types){  ?>
+							<div class="table-responsive">
+							  <table id="datatable-buttons" class="table table-striped jambo_table bulk_action">
+								<thead>
+								  <tr class="headings">
+									<th>
+									  <input type="checkbox" id="check-all" class="flat">
+									</th>
+									<?php 
+									$header_keys = array("Name", "Description");
+									foreach($header_keys as $key){ ?>
+										<th><?php echo $key; ?></th>
+										<?php
+									}
+									?>
+									
+									</th>
+									<th class="bulk-actions" colspan="7">
+									  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+									</th>
+								  </tr>
+								</thead>
+
+								<tbody>
+									<?php 
+									foreach($all_loan_types as $single){ 
+										?>
+										<tr class="even pointer" >
+											
+											<td class=""><?php echo $single['name']; ?></td>
+											<td class=""><?php echo $single['description']; ?> </td>
+											<td class="a-right a-right"><a class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a><a class="btn btn-danger"><i class="fa fa-delete"> Delete</a></td>
+										</tr>
+										<?php
+									}
+									?>
+								</tbody>
+							  </table>
+							</div>
+						<?php 
+						}else{
+							echo "<p>There currently no Security Types.</p>";
+						}
+						?>
+                  </div>
+                </div>
+              </div>
+           
+		<?php
+	}
+	public function incomeSource(){
+		$income_source = new IncomeSource();
+		$all_income_sources = $income_source->findAll();
+		?>
+		 <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Income Sources  </h2>
+                    <div class="clearfix"></div>
+                  </div>
+
+                  <div class="x_content">
+						<?php 
+						if($all_income_sources){  ?>
+							<div class="table-responsive">
+							  <table id="datatable-buttons" class="table table-striped jambo_table bulk_action">
+								<thead>
+								  <tr class="headings">
+									<th>
+									  <input type="checkbox" id="check-all" class="flat">
+									</th>
+									<?php 
+									$header_keys = array("Name", "Description");
+									foreach($header_keys as $key){ ?>
+										<th><?php echo $key; ?></th>
+										<?php
+									}
+									?>
+									
+									</th>
+									<th class="bulk-actions" colspan="7">
+									  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+									</th>
+								  </tr>
+								</thead>
+
+								<tbody>
+									<?php 
+									foreach($all_income_sources as $single){ 
+										?>
+										<tr class="even pointer" >
+											
+											<td class=""><a href="?member_id=<?php echo $_GET['member_id'];?>&view=client_loan&lid=<?php echo $single['id'];?>"><?php echo $single['name']; ?></a></td>
+											<td class=""><?php echo $single['description']; ?> </td>
+											<td class="a-right a-right"><a class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a><a class="btn btn-danger"><i class="fa fa-delete"> Delete</a></td>
+										</tr>
+										<?php
+									}
+									?>
+								</tbody>
+							  </table>
+							</div>
+						<?php 
+						}else{
+							echo "<p>There currently no Income Sources.</p>";
+						}
+						?>
+                  </div>
+                </div>
+              </div>
+           
+		<?php
+	}
+	public function expenseTypes(){
+		$expensetypes = new ExpenseTypes();
+		$all_expenses = $expensetypes->findAll();
+		?>
+		 <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Expense Types </h2>
+                    <div class="clearfix"></div>
+                  </div>
+
+                  <div class="x_content">
+						<?php 
+						if($all_expenses){  ?>
+							<div class="table-responsive">
+							  <table id="datatable-buttons" class="table table-striped jambo_table bulk_action">
+								<thead>
+								  <tr class="headings">
+									<th>
+									  <input type="checkbox" id="check-all" class="flat">
+									</th>
+									<?php 
+									$header_keys = array("Name", "Description");
+									foreach($header_keys as $key){ ?>
+										<th><?php echo $key; ?></th>
+										<?php
+									}
+									?>
+									
+									</th>
+									<th class="bulk-actions" colspan="7">
+									  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+									</th>
+								  </tr>
+								</thead>
+
+								<tbody>
+									<?php 
+									foreach($all_expenses as $single){ 
+										?>
+										<tr class="even pointer" >
+											
+											<td class=""><a href="?member_id=<?php echo $_GET['member_id'];?>&view=client_loan&lid=<?php echo $single['id'];?>"><?php echo $single['name']; ?></a></td>
+											<td class=""><?php echo $single['description']; ?> </td>
+											<td class="a-right a-right"><a class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a><a class="btn btn-danger"><i class="fa fa-delete"> Delete</a></td>
+										</tr>
+										<?php
+									}
+									?>
+								</tbody>
+							  </table>
+							</div>
+						<?php 
+						}else{
+							echo "<p>There currently no Expense Types.</p>";
 						}
 						?>
                   </div>

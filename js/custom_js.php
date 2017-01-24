@@ -240,6 +240,7 @@ function format1(n) {
 					data: formData,
 					cache: false,
 					success: function(response){
+						alert(response);
 						if(response.trim() == "success"){
 							<?php 
 							if(isset($_GET['task']) && ($_GET['task'] == "withdraw.add")){ ?>
@@ -247,7 +248,6 @@ function format1(n) {
 								<?php
 							}
 							?>
-							showStatusMessage("<strong>Successful!</strong> Your data was successfully added!", "success");
 							showStatusMessage("<strong>Successful!</strong> Your data was successfully added!", "success");
 							setTimeout(function(){
 								form[0].reset();
