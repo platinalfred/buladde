@@ -47,12 +47,10 @@ include("includes/header.php");
 				</tbody>
 				<tfoot>
 					<tr>
-						<?php 
-						foreach($header_keys as $key){ ?>
-							<th><?php echo $key; ?></th>
-							<?php
-						}
-						?>
+						<th class="right_remove"><b>Total (UGX)</th>
+						<th colspan="4"></th>
+						<th class="right_remove left_remove"></th>
+						<th class="right_remove left_remove"></th>
 					</tr>
 				</tfoot>
 			</table>
@@ -85,6 +83,11 @@ include("includes/header.php");
 				d.start_date = getStartDate();
 				d.end_date = getEndDate();
 				}
+		  },
+		  "footerCallback": function (tfoot, data, start, end, display ) {
+            var api = this.api(), total = api.column(4).data().sum();
+			// UPDATE FOOTER //
+            $(api.column(4).footer()).html( format1(total) );
 		  },
 		  columns:[ { data: 'transaction_id', render: function ( data, type, full, meta ) {return '<a href="#" title="View details">'+data+'</a>';}},
 				{ data: 'loan_number', render: function ( data, type, full, meta ) {return '<a href="#" title="View details">'+data+'</a>';}},
