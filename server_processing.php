@@ -158,6 +158,32 @@ if ( isset($_POST['page']) && $_POST['page'] == "member_savings" ) {
 
 	$columns = array( "`firstname`", "`lastname`", "`othername`", "`amount`", "`amount_description`", "`transacted_by`", "`transaction_date`", "`transaction`.`id`");
 }
+//list of the deposits
+if ( isset($_POST['page']) && $_POST['page'] == "deposits" ) {
+		$where = "transaction_type=2";
+	
+	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
+		$where .= " AND (`transaction_date` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
+	}	
+	$table = "`transaction` JOIN (SELECT `person`.`person_number`, `person`.`id` `person_id`, `firstname`, `lastname`, `othername`, `member`.`id` `member_id` FROM `member` JOIN `person` ON `member`.`person_number` = `person`.`id`)`person` ON `transaction`.`person_number` = `person`.`person_id`";
+	
+	$primary_key = "`transaction`.`id`";
+
+	$columns = array( "`firstname`", "`lastname`", "`othername`", "`amount`", "`person`.`person_number`", "`transacted_by`", "`transaction_date`", "`transaction`.`id`", "`member_id`");
+}
+//list of the withdraws
+if ( isset($_POST['page']) && $_POST['page'] == "withdraws" ) {
+		$where = "transaction_type=1";
+	
+	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
+		$where .= " AND (`transaction_date` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
+	}	
+	$table = "`transaction` JOIN (SELECT `person`.`person_number`, `person`.`id` `person_id`, `firstname`, `lastname`, `othername`, `member`.`id` `member_id` FROM `member` JOIN `person` ON `member`.`person_number` = `person`.`id`)`person` ON `transaction`.`person_number` = `person`.`person_id`";
+	
+	$primary_key = "`transaction`.`id`";
+
+	$columns = array( "`firstname`", "`lastname`", "`othername`", "`amount`", "`person`.`person_number`", "`transacted_by`", "`transaction_date`", "`transaction`.`id`", "`member_id`");
+}
 if ( isset($_POST['page']) && strlen($_POST['page'])>0) {
 	// Get the data
 	$data_table->get($table, $primary_key, $columns, $where, $group_by);

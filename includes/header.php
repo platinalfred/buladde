@@ -2,12 +2,12 @@
 session_start();
 require_once("lib/Libraries.php");
 $staff = new Staff();
-$logged_in_user = $staff->findNamesById($_SESSION['id']);
 $logged = $_SESSION["Logged"];
 
 if(!$logged){
 	header("Location:index.php");
-} 
+}
+$logged_in_user = $staff->findNamesById($_SESSION['id']);
 $foto = $staff->findPersonsPhoto($_SESSION['person_number']);
 ?>
 <!DOCTYPE html>

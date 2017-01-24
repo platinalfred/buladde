@@ -74,8 +74,7 @@ include("includes/footer.php");
 ?>
 <!-- Datatables -->
 <script>
-	var dTable;
-  $(document).ready(function() {
+	$(document).ready(function() {
 	var handleDataTableButtons = function() {
 	  if ($("#datatable-buttons").length) {
 		dTable = $('#datatable-buttons').DataTable({

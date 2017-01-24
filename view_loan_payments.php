@@ -64,7 +64,7 @@ include("includes/header.php");
 </div>
 <div class="clearfix"></div>
 <!-- /page content -->
-<?php }?> 
+<?php } else {include("includes/error_400.php"); }?> 
 <?php include("includes/footer.php"); ?>
 <?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
 <!-- Datatables -->

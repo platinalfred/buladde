@@ -1,5 +1,5 @@
 <script>
-var dTable;//Global datatables variable
+var dTable, dTable2;//Global datatables variable
 var start_date = <?php echo isset($_GET['s_dt'])?"moment('{$_GET['s_dt']}','YYYY-MM-DD')":"moment().subtract(29, 'days')"; ?>,
 end_date = <?php echo isset($_GET['e_dt'])?"moment('{$_GET['e_dt']}','YYYY-MM-DD')":"moment()"; ?>;
 
@@ -640,6 +640,7 @@ ko.applyBindings(guarantor);
 			st_date = startDate;
 			ed_date = endDate;
 			dTable.ajax.reload();
+			dTable2.ajax.reload();
 		}	
 	//End client transaction details 
 		function getDashboardData(startDate, endDate){

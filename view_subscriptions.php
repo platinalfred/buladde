@@ -60,7 +60,7 @@ $income = new Income();
 </div>
 <div class="clearfix"></div>
 <!-- /page content -->
-<?php }?> 
+<?php }else{  include("includes/error_400.php"); }?> 
 <?php 
 include("includes/footer.php"); 
 ?>

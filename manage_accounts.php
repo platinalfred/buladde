@@ -2,18 +2,6 @@
 //This will prevent data tables js from showing on every page for speed increase
 $show_table_js = true;
 include("includes/header.php"); 
-require_once("lib/Libraries.php");
-$member = new Member();
-$person = new Person();
-$all_members = array();
-$found_member = array();
-if(isset($_POST['person_number']) && $_POST['person_number'] != ""){
-	$perons = $person->findByPersonNumber($_POST['person_number']);
-	$found_member = $member->findByPersonIdNo($perons['id']);
-}else{
-	$all_members = $member->findAll();
-}
-
 ?>
 <!-- page content -->
 <div class="right_col" role="main">
@@ -24,18 +12,10 @@ if(isset($_POST['person_number']) && $_POST['person_number'] != ""){
 	  </div>
 
 	  <div class="title_right">
-		<div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-		<form method="post" action="" >
-			<div class="input-group">
-			
-				<input type="text" name="person_number" class="form-control" placeholder="Search by Account no...">
-				<span class="input-group-btn">
-				  <button class="btn btn-default" type="submit">Go!</button>
-				</span>
-			
+			<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+			  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+			  <span>November 20, 2016 - December 19, 2016</span> <b class="caret"></b>
 			</div>
-		  </form>
-		</div>
 	  </div>
 	</div>
 
@@ -64,11 +44,11 @@ if(isset($_POST['person_number']) && $_POST['person_number'] != ""){
 			<div class="clearfix"></div>
 		  </div>
 		  <div class="x_content">
-			<table id="datatable-buttons" class="table table-striped table-bordered">
+			<table id="datatable-buttons2" class="table table-striped table-bordered">
 				<thead>
 					<tr>
 						<?php 
-						$header_keys = array("Person Number", "Name", "Phone", "Date of Birth", "Subscription", "Shares Paid", "Total Savings", "Loans");
+						$header_keys = array("Person Number", "Names", "Date", "Amount");
 						foreach($header_keys as $key){ ?>
 							<th><?php echo $key; ?></th>
 							<?php
@@ -77,53 +57,15 @@ if(isset($_POST['person_number']) && $_POST['person_number'] != ""){
 					</tr>
 				</thead>
 				<tbody>
-					<?php 
-					if($all_members){
-						foreach($all_members as $single){ 
-							$person_data = $person->findById($single['person_number']);
-							?>
-							<tr>
-							  <td><a href="member-details.php?member_id=<?php echo $single['id']; ?>"><?php echo $person_data['person_number']; ?></A></td>
-							  <td><?php echo $person->Username($person_data['firstname'], $person_data['lastname'], $person_data['othername']); ?></td>
-							  <td><?php echo $person_data['phone'] ?></td>
-							  <td><?php echo date("j F, Y", strtotime($person_data['dateofbirth'])); ?></td>
-							  <td><?php   ?></td>
-							  <td><?php  ?></td>
-								<td><?php  ?></td>
-								<td><?php  ?></td>
-							</tr>
-							<?php
-						}
-					}
-					if($found_member){
-						$person_data = $person->findById($found_member['person_number']);
-						?>
-						<tr>
-						  <td><a href="member-details.php?member_id=<?php echo $found_member['id']; ?>"><?php echo $person_data['person_number']; ?></a></td>
-						  <td><?php echo $person->Username($person_data['firstname'], $person_data['lastname'], $person_data['othername']); ?></td>
-						  <td><?php echo $person_data['phone'] ?></td>
-						  <td><?php echo date("j F, Y", strtotime($person_data['dateofbirth'])); ?></td>
-						  <td><?php  if($found_member['member_type']== 1){ echo 'Member and Share Holder'; }else{ echo "Member"; } ?></td>
-						  <td><?php echo date("j F, Y", strtotime($found_member['date_added'])) ?></td>
-						  <td><?php  ?></td>
-						  <td><button type="submit" class="btn btn-success">Edit</button><button type="submit" class="btn btn-danger">Delete</button></td>
-						  
-						</tr>
-						<?php
-					}
-					?>
-					
+				</tbody>
+				<tfoot>
 					<tr>
 						<td class="right_remove"><b>Total (UGX)</b></td>
 						<td class="right_remove left_remove"><?php  ?></td>
 						<td class="right_remove left_remove"><?php  ?></td>
 						<td class="right_remove left_remove"><?php  ?></td>
-						<td class="right_remove left_remove"><?php  ?></td>
-						<td class="right_remove left_remove"><?php  ?></td>
-						<td class="right_remove left_remove"><?php  ?></td>
-						<td ><?php  ?></td>
 					</tr>
-				</tbody>
+				</tfoot>
 			</table>
 		  </div>
 		</div>
@@ -154,7 +96,6 @@ if(isset($_POST['person_number']) && $_POST['person_number'] != ""){
 				<thead>
 					<tr>
 						<?php 
-						$header_keys = array("Person Number", "Name", "Phone", "Date of Birth", "Subscription", "Shares Paid", "Total Savings", "Loans");
 						foreach($header_keys as $key){ ?>
 							<th><?php echo $key; ?></th>
 							<?php
@@ -163,53 +104,15 @@ if(isset($_POST['person_number']) && $_POST['person_number'] != ""){
 					</tr>
 				</thead>
 				<tbody>
-					<?php 
-					if($all_members){
-						foreach($all_members as $single){ 
-							$person_data = $person->findById($single['person_number']);
-							?>
-							<tr>
-							  <td><a href="member-details.php?member_id=<?php echo $single['id']; ?>"><?php echo $person_data['person_number']; ?></A></td>
-							  <td><?php echo $person->Username($person_data['firstname'], $person_data['lastname'], $person_data['othername']); ?></td>
-							  <td><?php echo $person_data['phone'] ?></td>
-							  <td><?php echo date("j F, Y", strtotime($person_data['dateofbirth'])); ?></td>
-							  <td><?php   ?></td>
-							  <td><?php  ?></td>
-								<td><?php  ?></td>
-								<td><?php  ?></td>
-							</tr>
-							<?php
-						}
-					}
-					if($found_member){
-						$person_data = $person->findById($found_member['person_number']);
-						?>
-						<tr>
-						  <td><a href="member-details.php?member_id=<?php echo $found_member['id']; ?>"><?php echo $person_data['person_number']; ?></a></td>
-						  <td><?php echo $person->Username($person_data['firstname'], $person_data['lastname'], $person_data['othername']); ?></td>
-						  <td><?php echo $person_data['phone'] ?></td>
-						  <td><?php echo date("j F, Y", strtotime($person_data['dateofbirth'])); ?></td>
-						  <td><?php  if($found_member['member_type']== 1){ echo 'Member and Share Holder'; }else{ echo "Member"; } ?></td>
-						  <td><?php echo date("j F, Y", strtotime($found_member['date_added'])) ?></td>
-						  <td><?php  ?></td>
-						  <td><button type="submit" class="btn btn-success">Edit</button><button type="submit" class="btn btn-danger">Delete</button></td>
-						  
-						</tr>
-						<?php
-					}
-					?>
-					
+				</tbody>
+				<tfoot>
 					<tr>
 						<td class="right_remove"><b>Total (UGX)</b></td>
 						<td class="right_remove left_remove"><?php  ?></td>
 						<td class="right_remove left_remove"><?php  ?></td>
 						<td class="right_remove left_remove"><?php  ?></td>
-						<td class="right_remove left_remove"><?php  ?></td>
-						<td class="right_remove left_remove"><?php  ?></td>
-						<td class="right_remove left_remove"><?php  ?></td>
-						<td ><?php  ?></td>
 					</tr>
-				</tbody>
+				</tfoot>
 			</table>
 		  </div>
 		</div>
@@ -226,8 +129,28 @@ include("includes/footer.php");
   $(document).ready(function() {
 	var handleDataTableButtons = function() {
 	  if ($("#datatable-buttons").length) {
-		$("#datatable-buttons").DataTable({
+		dTable = $("#datatable-buttons").DataTable({
 		  dom: "Bfrtip",
+		  "processing": true,
+		  "serverSide": true,
+		  "deferRender": true,
+		  "ajax": {
+			  "url":"server_processing.php",
+			  "type": "POST",
+			  "data": function(d){
+				d.page = 'deposits';
+				d.start_date = getStartDate();
+				d.end_date = getEndDate();
+				}
+		  },"columnDefs": [ {
+			  "targets": [0],
+			  "orderable": false
+		  }],
+		  columns:[ { data: 'person_number', render: function ( data, type, full, meta ) {return '<a href="member-details.php?member_id='+full.member_id+'" title="Update details">'+data+'</a>';}},
+				{ data: 'firstname', render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname;}},
+				{ data: 'transaction_date', render: function ( data, type, full, meta ) {return moment(data).format('LL');}},
+				{ data: 'amount' }
+				] ,
 		  buttons: [
 			{
 			  extend: "copy",
@@ -265,17 +188,29 @@ include("includes/footer.php");
 	  };
 	}();
 
-	
-
-	var $datatable = $('#datatable-checkbox');
-
-	$datatable.dataTable({
-	  'order': [[ 1, 'asc' ]],
-	  'columnDefs': [
-		{ orderable: false, targets: [0] }
-	  ]
+	dTable2 = $('#datatable-buttons2').DataTable({
+		  "processing": true,
+		  "serverSide": true,
+		  "deferRender": true,
+		  "ajax": {
+			  "url":"server_processing.php",
+			  "type": "POST",
+			  "data": function(d){
+				d.page = 'withdraws';
+				d.start_date = getStartDate();
+				d.end_date = getEndDate();
+				}
+		  },"columnDefs": [ {
+			  "targets": [0],
+			  "orderable": false
+		  }],
+		  columns:[ { data: 'person_number', render: function ( data, type, full, meta ) {return '<a href="member-details.php?member_id='+full.member_id+'" title="Update details">'+data+'</a>';}},
+				{ data: 'firstname', render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname;}},
+				{ data: 'transaction_date', render: function ( data, type, full, meta ) {return moment(data).format('LL');}},
+				{ data: 'amount' }
+				] ,
 	});
-	$datatable.on('draw.dt', function() {
+	dTable2.on('draw.dt', function() {
 	  $('input').iCheck({
 		checkboxClass: 'icheckbox_flat-green'
 	  });
