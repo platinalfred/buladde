@@ -7,7 +7,6 @@ require_once("lib/Libraries.php");
 $income = new Income();
 
 ?>
-<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
 <!-- page content -->
 <div class="right_col" role="main">
   <div class="">
@@ -17,11 +16,14 @@ $income = new Income();
 	  <div class="col-md-6">
 		<h3>Income <small></small></h3>
 	  </div>
-	  <div class="col-md-6">
+	  <div class="col-md-4">
 		<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
 		  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
 		  <span>November 20, 2016 - December 19, 2016</span> <b class="caret"></b>
 		</div>
+	  </div>
+	  <div class="col-md-2">
+		<a href="http://localhost/buladde/view_income.php" class="btn btn-primary"><i class="fa fa-money"></i> View all</a>
 	  </div>
 	</div>
 
@@ -40,13 +42,16 @@ $income = new Income();
 					</tr>
 				</thead>
 				<tbody>
+					
 				</tbody>
 				<tfoot>
 					<tr>
-						<th class="right_remove">Total (UGX)</th>
-						<th class="right_remove left_remove"></th>
-						<th class="right_remove left_remove"></th>
-						<th class="right_remove left_remove" colspan="3"></th>
+						<?php 
+						foreach($header_keys as $key){ ?>
+							<th><?php echo $key; ?></th>
+							<?php
+						}
+						?>
 					</tr>
 				</tfoot>
 			</table>
@@ -75,15 +80,15 @@ $income = new Income();
 	  </div>      
 	</div>
 <!-- /page content -->
-<?php } else {include("includes/error_400.php"); }?> 
-<?php include("includes/footer.php"); ?>
-<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
+<?php 
+include("includes/footer.php"); 
+?>
 <!-- Datatables -->
 <script>
   $(document).ready(function() {
 	var handleDataTableButtons = function() {
 	  if ($("#datatable-buttons").length) {
-		dTable = $('#datatable-buttons').DataTable({
+$('#datatable-buttons').DataTable({
 		  dom: "Bfrtip",
 		  "processing": true,
 		  "serverSide": true,
@@ -97,11 +102,6 @@ $income = new Income();
 				d.start_date = getStartDate();
 				d.end_date = getEndDate();
 				}
-		  },
-		  "footerCallback": function (tfoot, data, start, end, display ) {
-            var api = this.api(), total = api.column(2).data().sum();
-			// UPDATE TOTALS //
-            $(api.column(2).footer()).html( "<strong>" + format1(total) + "<strong>" );
 		  },"columnDefs": [ {
 			  "targets": [5],
 			  "orderable": false,
@@ -168,4 +168,3 @@ $income = new Income();
 	TableManageButtons.init();
   });
 </script>
-<?php }?> 

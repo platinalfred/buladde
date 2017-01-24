@@ -43,14 +43,6 @@ $all_expenses = array();
 				</thead>
 				<tbody>
 				</tbody>
-				<tfoot>
-					<tr>
-						<th class="right_remove">Total (UGX)</th>
-						<th colspan="2" class="right_remove left_remove"></th>
-						<th class="right_remove left_remove"></th>
-						<th colspan="2" class="right_remove left_remove"></th>
-					</tr>
-				</tfoot>
 			</table>
 		</div>
 	</div>
@@ -140,11 +132,6 @@ include("includes/footer.php");
 				d.start_date = getStartDate();
 				d.end_date = getEndDate();
 				}
-		  },
-		  "footerCallback": function (tfoot, data, start, end, display ) {
-            var api = this.api(), total = api.column(3).data().sum();
-			// UPDATE FOOTER //
-            $(api.column(3).footer()).html( format1(total) );
 		  },"columnDefs": [ {
 			  "targets": [0],
 			  "orderable": false
@@ -153,7 +140,7 @@ include("includes/footer.php");
 				{ data: 'name'},
 				{ data: 'firstname', render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname;}},
 				{ data: 'date_of_expense', render: function ( data, type, full, meta ) {return moment(data).format('LL');}},
-				{ data: 'amount_used' , render: function ( data, type, full, meta ) {return format1(parseFloat(data));}},
+				{ data: 'amount_used' },
 				{ data: 'amount_description'}
 				] ,
 		  buttons: [

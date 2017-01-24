@@ -1,1 +1,3 @@
-When you upload a  photo there is an alert,  we need to give our formal alert pop up.
+Please remove the links to edit and delete i have put them on the member page
+//Adjusted the loan interest execution in the custom.js file
+//Added id="datatable-buttons" to the loans table in the Reports class function MemberLoans();

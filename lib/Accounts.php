@@ -54,6 +54,7 @@ class Accounts extends Db {
 		$result = $this->getrec(self::$table_name, "person_number=".$pno, "");
 		return !empty($result) ? $result:false;
 	}
+	
 	public function findTransactionByPersonNumber($pno){
 		$results = $this->getarray("transaction", "person_number=".$pno, "", "");
 		return !empty($results) ? $results : false;

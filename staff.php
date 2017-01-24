@@ -11,7 +11,7 @@ $all_staff = array();
 $found_member = array();
 $names  = "";
 
-$all_staff =  $staff->findAll();
+$all_staff =  $staff->findAllActive();
 
 ?>
 <!-- page content -->
@@ -23,15 +23,8 @@ $all_staff =  $staff->findAll();
 			<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
 		  </li>
 		  <li>
-			<a href="#" class="btn btn-primary btn-xs" data-toggle="modal" data-target=".staff_modal"><i class="fa fa-plus"></i> Add </a>
+			<a href="#" class="btn btn-primary btn-xs" data-toggle="modal" data-target=".staff_modal"><i class="fa fa-plus"></i> Add New Staff</a>
 		  </li>
-		  <li>
-			<a href="#" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-		  </li>
-		   <li>
-			<a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
-		  </li>
-		   
 		</ul>
 		<div class="clearfix"></div>
 	  </div>
@@ -59,14 +52,16 @@ $all_staff =  $staff->findAll();
 							?>
 							<tr>
 								<td><input type="checkbox" class="flat" name="table_records"></td>
-							  <td><a href="" ><?php echo $person_data['person_number']; ?></A></td>
-							  <td><?php echo $person->combineNames($person_data); ?></td>
-							  <td><?php echo $person_data['phone'] ?></td>
-							  <td><?php echo date("j F, Y", strtotime($person_data['dateofbirth'])); ?></td>
-							  <td><?php  echo $person->findBranchByBranchNo($single['branch_number']);  ?></td>
-							  <td>
-									<a href="#" class="btn btn-success"><i class="fa fa-edit"> Edit</i></a> 
-							  </td>
+								<td><a href="" ><?php echo $person_data['person_number']; ?></A></td>
+								<td><?php echo $person->combineNames($person_data); ?></td>
+								<td><?php echo $person_data['phone'] ?></td>
+								<td><?php echo date("j F, Y", strtotime($person_data['dateofbirth'])); ?></td>
+								<td><?php  echo $person->findBranchByBranchNo($single['branch_number']);  ?></td>
+						  <td>
+								<a href="update_staff.php?id=<?php echo $person_data['id']; ?>" class="btn btn-success" id="<?php echo $person_data['id']; ?>" ><i class="fa fa-edit" > Edit</i></a>
+								<a href="#" class="btn btn-danger delete" id="<?php echo $person_data['id']; ?>_staff" ><i class="fa fa-trash-o"></i> Delete </a>
+						  </td>
+							 
 							  
 							</tr>
 							<?php
@@ -76,9 +71,11 @@ $all_staff =  $staff->findAll();
 					?>
 				</tbody>
 			</table>
+			
 		</div>
 	</div>
-	<div class="clearfix"></div>
+</div>
+<div class="clearfix"></div>
 	 <div class="modal fade staff_modal" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 		  <div class="modal-content">
@@ -95,7 +92,7 @@ $all_staff =  $staff->findAll();
 			</div>
 		</div>
 	  </div>      
-	</div>
+	</div>	
 <!-- /page content -->
 <?php 
 include("includes/footer.php"); 
@@ -103,6 +100,19 @@ include("includes/footer.php");
 <!-- Datatables -->
 <script>
   $(document).ready(function() {
+	$('#edit-modal').on('show.bs.modal', function(e) {
+        var $modal = $(this);
+        id_ = e.relatedTarget.id;
+        $.ajax({
+            cache: false,
+            type: 'POST',
+            url: 'update_staff.php',
+            data: 'id='+id_,
+            success: function(data) {
+                $modal.find('.edit-content').html(data);
+            }
+        });
+    })
 	var handleDataTableButtons = function() {
 	  if ($("#datatable-buttons").length) {
 		$("#datatable-buttons").DataTable({

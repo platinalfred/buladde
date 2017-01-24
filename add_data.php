@@ -23,7 +23,7 @@ if(isset($_POST['add_loan'])){
 		return;
 	}
 	else{
-		echo "Please fill in all fields including guarantors";
+		echo "Please fill in all fields including guarantors. ";
 		return;
 	}
 }elseif(isset($_POST['repayment_duration'])){
@@ -49,7 +49,8 @@ if(isset($_POST['add_loan'])){
 	$shares = new Shares();
 	$income = new Income();
 	$data['date_paid'] = date("Y-m-d");
-	 if($shares->addShares($data)){
+	if($shares->addShares($data)){
+		
 		$data['income_type'] = 2;
 		$data['date_added'] = date("Y-m-d");
 		$data['added_by'] = $data['received_by'];
@@ -121,6 +122,25 @@ if(isset($_POST['add_loan'])){
 		}
 	} 
 	return "failed"; 
+}elseif(isset($_POST['update_member'])){
+	$data = $_POST;
+	$staff_d = array();
+	$member = new Member();
+	$person = new Person();
+	$accounts = new Accounts();
+	$member_d = $data;
+	$p['person_number'] = $member->findPersonNumber($data['id']);
+	$member_d['person_number'] = $p['person_number']; 
+	if($member->updateMember($member_d)){
+		$data['id'] = $p['person_number']; 
+		$data['dateofbirth'] = $member->formatSlashedDate($data['dateofbirth']);
+		$person->updatePerson($data);
+		echo "success";
+		return;
+	
+	}
+
+	return; 
 }elseif(isset($_POST['add_staff'])){
 	$data = $_POST;
 	$staff = new Staff();
@@ -146,6 +166,28 @@ if(isset($_POST['add_loan'])){
 			}
 		}
 	}
+	return; 
+}elseif(isset($_POST['update_staff'])){
+	$data = $_POST;
+	$staff_d = array();
+	$staff = new Staff();
+	$person = new Person();
+	$accounts = new Accounts();
+	if(!$accounts->isValidMd5($data['password'])){
+		$data['password'] = md5($data['password']);
+	}
+	$staff_d = $data;
+	$p['person_number'] = $staff->findPersonNumber($data['id']);
+	$staff_d['person_number'] = $p['person_number']; 
+	if($staff->updateStaff($staff_d)){
+		$data['id'] = $p['person_number']; 
+		$data['dateofbirth'] = $staff->formatSlashedDate($data['dateofbirth']);
+		$person->updatePerson($data);
+		echo "success";
+		return;
+	
+	}
+
 	return; 
 }elseif(isset($_POST['add_security_type'])){
 	$security_type = new SecurityType();

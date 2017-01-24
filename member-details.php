@@ -8,6 +8,7 @@ require_once("lib/Reports.php");
 $member = new Member();
 $person = new Person();
 $locations = new Locations();
+$accounts = new Accounts();
 $all_members = array();
 $found_member = array();
 $names  = "";
@@ -31,10 +32,9 @@ include("includes/header.php");
 	  <div class="x_title">
 		<h2><?php echo $names; ?> <small> - <?php echo $person_data['person_number'];?> </small></h2>
 		<ul class="nav navbar-right panel_toolbox">
-		  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+		  <li> <a href="update-member-details.php?member_id=<?php echo $_GET['member_id']; ?>"  class="btn btn-primary" title="Edit Member"><i class="fa fa-edit"></i > Edit</a>
 		  </li>
-		  
-		  <li><a class="close-link"><i class="fa fa-close"></i></a>
+		  <li><a class="btn btn-danger delete" id="<?php echo $_GET['member_id']; ?>_member" title="Delete <?php echo $names; ?> "><i class="fa fa-close"></i>Delete member</a>
 		  </li>
 		</ul>
 		<div class="clearfix"></div>
@@ -129,6 +129,24 @@ include("includes/header.php");
 						<p class="lead" >Village</p>
 						<p class="p"><?php echo @$locations->findVillage(@$person_data["village"]); ?></p>
 					</div>
+				</div>
+				<?php 
+				$balance =  $accounts->findByAccountBalance($person_data['id']); 
+				if($balance > 0){
+					$minimum_amount = $accounts->findMinimumBalance();
+					$available = $balance - $minimum_amount;
+				}else{
+					$available = 0;
+				} ?>
+				
+				<div class="col-md-12 col-sm-12 col-xs-12 details">
+					<div class="col-md-5 col-sm-12 col-xs-12 form-group">
+						<p class="p"><h2 class="x_title"><b>Actual balance: </b><?php  echo number_format($balance,2,",",".");  ?> UGX<h2></p>
+					</div>
+					<div class="col-md-5 col-sm-12 col-xs-12 form-group ">
+						<p class="p"><h2 class="x_title"><b>Available Balance: </b><?php   echo number_format($available,2,",","."); ?>UGX<h2></p>
+					</div>
+					
 				</div>
 			</div>
 			<div class="col-md-12 col-sm-12 col-xs-12 form-group" style="border-top:1px solid #09A; padding-top:10px;">

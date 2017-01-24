@@ -40,6 +40,9 @@ class Db{
 			return $cnt;
 		}
 	}
+	function isValidMd5($md5 =''){
+		return preg_match('/^[a-f0-9]{32}$/i', $md5);
+	}
 	function count($table, $where) {
 		if ($where != "") 	$sel = "SELECT COUNT(*) AS cnt FROM ".$table." WHERE ".$where;
 		else $sel = "SELECT COUNT(*) AS cnt FROM ".$table;
@@ -99,7 +102,7 @@ class Db{
 		}
 		$to_add = array("id","username","access_level", "branch_number", "person_number");
 		$password = md5($password);
-		$results = $this->getfrec("staff", implode(",",$to_add), "username='$username' AND password='$password'", "", "");
+		$results = $this->getfrec("staff", "id, username, access_level, branch_number, person_number", "username='$username' AND password='$password'", "", "");
 		if(count($results) > 0){
 		   $_SESSION['Logged'] = true;
 		   foreach($results as $key => $value){
@@ -110,11 +113,9 @@ class Db{
 			  }
 		   }
 		  $this->setSessions("user_id", $results['id']);
+		  return $_SESSION;
 		}
-
-
-
-		return $_SESSION;
+		return false;
 	}
 	function generateAddFields($fields = array(), $data = array()){
         $array = array();
@@ -179,7 +180,7 @@ class Db{
         }
         return md5($token);
     }
-	function loadList($query, $name, $value_field,$display_field,$field_id="", $add_link = "", $roles = array(1, 2, 3, 4), $select = "single"){
+	function loadList($query, $name, $value_field,$display_field,$field_id="",$selected="", $add_link = "", $roles = array(1, 2, 3, 4), $select = "single", $selected=""){
        //  $result = mysql_query($query) or die(mysql_error());
 		$results = $this->queryData($query);
 		
@@ -191,7 +192,7 @@ class Db{
 					<?php
 					foreach($results as $result){ 
 						?>
-                        <option <?php if($result[$display_field] == "Uganda"){ ?> selected="selected" <?php } ?> value="<?php echo $result[$value_field]; ?>"><?php echo $result[$display_field]; ?></option>
+                        <option <?php if($result[$display_field] == "Uganda"){ ?> selected="selected" <?php }elseif($result[$value_field] == $selected){?> selected="selected" <?php } ?> value="<?php echo $result[$value_field]; ?>"><?php echo $result[$display_field]; ?></option>
 						<?php
 					}
 					?>
@@ -475,7 +476,7 @@ class Db{
 			if ($i < (count($fields) - 1)) $va = $va.",";
 		}
 		$upd = "UPDATE ".$table. " SET ".$va." WHERE ".$where;
-		
+		//echo $upd;
 		if($this->conn->query($upd)){
 			return true;
 		}else {
