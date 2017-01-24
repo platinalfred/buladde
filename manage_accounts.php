@@ -107,9 +107,9 @@ include("includes/header.php");
 				</tbody>
 				<tfoot>
 					<tr>
-						<td class="right_remove"><b>Total (UGX)</b></td>
-						<td colspan="3"></td>
-						<td class="right_remove left_remove"></td>
+						<th class="right_remove">Total (UGX)</th>
+						<th colspan="3"></th>
+						<th class="right_remove left_remove"></th>
 					</tr>
 				</tfoot>
 			</table>
@@ -170,13 +170,13 @@ include("includes/footer.php");
 		  "footerCallback": function (tfoot, data, start, end, display ) {
             var api = this.api(), total = api.column(4).data().sum();
 			// UPDATE FOOTER //
-            $(api.column(4).footer()).html( "<strong>" + format1(total) + "<strong>" );
+            $(api.column(4).footer()).html( format1(total) );
 		  },
 		  columns:[ { data: 'person_number', render: function ( data, type, full, meta ) {return '<a href="member-details.php?member_id='+full.member_id+'" title="Update details">'+data+'</a>';}},
 				{ data: 'account_number' },
 				{ data: 'firstname', render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname;}},
 				{ data: 'transaction_date', render: function ( data, type, full, meta ) {return moment(data).format('LL');}},
-				{ data: 'amount' }
+				{ data: 'amount', render: function ( data, type, full, meta ) {return format1(parseFloat(data));}}
 				] ,
 		  buttons: btn_opts,
 		  responsive: true		  
@@ -219,7 +219,7 @@ include("includes/footer.php");
 				{ data: 'account_number' },
 				{ data: 'firstname', render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname;}},
 				{ data: 'transaction_date', render: function ( data, type, full, meta ) {return moment(data).format('LL');}},
-				{ data: 'amount' }
+				{ data: 'amount', render: function ( data, type, full, meta ) {return format1(parseFloat(data));}}
 				] ,
 		  buttons: btn_opts,
 		  responsive: true

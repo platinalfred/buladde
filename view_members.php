@@ -119,8 +119,8 @@ include("includes/footer.php");
 				{ data: 'phone' },
 				{ data: 'date_added', render: function ( data, type, full, meta ) {return moment(data).format('LL');}},
 				{ data: 'member_type', render: function ( data, type, full, meta ) {return '<a href="member-details.php?member_id='+full.member_id+'&view=subscritions" title="View subscriptions">'+((data == 1)?"Member and Share Holder": "Member")+'</a>'; }},
-				{ data: 'shares', render: function ( data, type, full, meta ) {return data>0?'<a href="member-details.php?member_id='+full.member_id+'&view=myshares" title="View shares">'+data+'</a>':0;} },
-				{ data: 'savings', render: function ( data, type, full, meta ) {return data>0?'<a href="member-details.php?member_id='+full.member_id+'&view=savings" title="View savings">'+data+'</a>':0;} },
+				{ data: 'shares', render: function ( data, type, full, meta ) {return data>0?'<a href="member-details.php?member_id='+full.member_id+'&view=myshares" title="View shares">'+format1(data)+'</a>':0;} },
+				{ data: 'savings', render: function ( data, type, full, meta ) {return data>0?'<a href="member-details.php?member_id='+full.member_id+'&view=savings" title="View savings">'+format1(data)+'</a>':0;} },
 				{ data: 'loans', render: function ( data, type, full, meta ) {return data>0?'<a href="member-details.php?member_id='+full.member_id+'&view=client_loans" title="View loans">'+data+'</a>':0;}}
 				] ,
 		  buttons: [
