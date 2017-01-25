@@ -11,7 +11,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
 	}
 	if(isset($_SESSION['access_level']) &&!in_array($_SESSION['access_level'],array(1,2))){
 		if(strlen($where)>0){
-			$where .= " AND AND active=1 AND added_by = ".$_SESSION['user_id'];
+			$where .= " AND active=1 AND added_by = ".$_SESSION['user_id'];
 		}else{
 			$where = " added_by = ".$_SESSION['user_id']." AND active=1";
 		}
@@ -173,6 +173,22 @@ if ( isset($_POST['page']) && $_POST['page'] == "withdraws" ) {
 	$primary_key = "`transaction`.`id`";
 
 	$columns = array( "`firstname`", "`lastname`", "`othername`", "`amount`", "`account_number`", "`person`.`person_number`", "`transacted_by`", "`transaction_date`", "`transaction`.`id`", "`member_id`");
+}
+//list of all client transactions
+if ( isset($_POST['page']) && $_POST['page'] == "client_transactions" ) {
+	
+	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
+		$where = " (`transaction_date` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
+	}
+	$inner_where = "";
+	if((isset($_POST['member_id'])&& strlen($_POST['member_id'])>1)){
+		$inner_where = "WHERE (`member`.`id` = ".$_POST['member_id'].")";
+	}	
+	$table = "`transaction` JOIN (SELECT `person`.`person_number`, `person`.`id` `person_id` FROM `member` JOIN `person` ON `member`.`person_number` = `person`.`id` $inner_where)`person` ON `transaction`.`person_number` = `person`.`person_id` JOIN accounts ON `transaction`.`person_number` = `accounts`.`person_number`";
+	
+	$primary_key = "`transaction`.`id`";
+
+	$columns = array( "`amount`", "`account_number`", "`person`.`person_number`", "`transacted_by`", "`transaction_date`", "`transaction_type`", "`transaction`.`id`");
 }
 if ( isset($_POST['page']) && strlen($_POST['page'])>0) {
 	// Get the data

@@ -327,6 +327,8 @@ Class Reports{
 	}
 	public function clientTransactionHistory(){ 
 		$accounts  = new Accounts();
+		//This will prevent data tables js from showing on every page for speed increase
+		$show_table_js = true;
 		?>
 		<div class="page-title" >
 		  <div class="title_left" style="width:35%;">
@@ -347,56 +349,42 @@ Class Reports{
 		  <div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="x_panel">
 			  <div class="x_content">
-				<div id="report_data" class="col-md-12 co">
+				<div class="table-responsive">
+				  <table id="datatable-buttons" class="table table-striped jambo_table bulk_action">
+					<thead>
+					  <tr class="headings">
+						<th>
+						  <input type="checkbox" id="check-all" class="flat">
+						</th>
+						<?php 
+						$header_keys = array("Account Number", "Transaction Type", "Amount", "Transaction Date", "Transacted By");
+						foreach($header_keys as $key){ ?>
+							<th><?php echo $key; ?></th>
+							<?php
+						}
+						?>
+					  </tr>
+					  <tr>
+						<th class="bulk-actions" colspan="6">
+						  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+						</th>
+					  </tr>
+					</thead>
+					<tbody>
+					</tbody>
+					<tfoot>
+							<tr>
+								<th colspan="3">Total (UGX)</th>
+								<th>&nbsp;</th>
+								<th  colspan="2">&nbsp;</th>
+							</tr>
+					</tfoot>
+				  </table>
 				</div>
 			  </div>
 			</div>
 		  </div>
 		</div>
-		<!-- Datatables -->
-		<script>
-			var handleDataTableButtons = function() {
-			  if ($("#datatable-buttons").length) {
-				dTable = $('#datatable-buttons').DataTable({
-				  dom: "Bfrtip",
-				  buttons: [
-					{
-					  extend: "copy",
-					  className: "btn-sm"
-					},
-					{
-					  extend: "csv",
-					  className: "btn-sm"
-					},
-					{
-					  extend: "excel",
-					  className: "btn-sm"
-					},
-					{
-					  extend: "pdfHtml5",
-					  className: "btn-sm"
-					},
-					{
-					  extend: "print",
-					  className: "btn-sm"
-					},
-				  ],
-				  responsive: true/*, */
-				  
-				});
-				//$("#datatable-buttons").DataTable();
-			  }
-			};
-			TableManageButtons = function() {
-			  "use strict";
-			  return {
-				init: function() {
-				  handleDataTableButtons();
-				}
-			  };
-			}();
-			TableManageButtons.init();
-		</script>
 		<?php
 	}
 	public function memberLoans(){

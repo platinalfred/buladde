@@ -668,20 +668,13 @@ ko.applyBindings(guarantor);
 		//console.log("hide event fired");
 		});
 		$('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-			<?php 
-			if(isset($_GET['member_id'])){ ?>
-				findReportRange(<?php echo $_GET['member_id']; ?>, picker.startDate.format('MMMM D, YYYY'), picker.endDate.format('MMMM D, YYYY'));
-			<?php
-			}else{?>
 				var startDate=picker.startDate.format('YYYY-MM-DD'), endDate = picker.endDate.format('YYYY-MM-DD');
-				
 				//when at the dashboard page
 				if(document.getElementById("nploans")){
 					getDashboardData(startDate, endDate);
 					format_hrefs(startDate, endDate);
 				}
 				searchTable(startDate,endDate);
-			<?php } ?>
 		});
 		$('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
 			console.log("cancel event fired");
@@ -704,18 +697,6 @@ ko.applyBindings(guarantor);
 			var loan = $(e.relatedTarget).data('id');
 			$("#loan_id").val(loan);
 		});
-	//Clients transaction details
-		<?php 
-		if(isset($_GET['view']) && $_GET['view'] == "client_trasaction_history"){ ?>
-			//Get the initial range
-			var initial_range = $("#reportrange span").html().split("-");
-			var start_date1 = initial_range[0];
-			var end_date1 = initial_range[1];
-			var member = <?php echo $_GET['member_id']; ?>;
-			findReportRange(member, start_date1, end_date1);
-		<?php 
-		}
-		?>
 		//add params to the urls at the dashboard page
 		function format_hrefs(start_date, end_date){
 			$(".dash_link").each(function(){
@@ -956,10 +937,101 @@ ko.applyBindings(guarantor);
 		if(document.getElementById("nploans")){
 			getDashboardData(moment().subtract(29, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
 		}
+		<?php if($show_table_js){?>
+			searchTable(start_date.subtract(29, 'days').format('YYYY-MM-DD'),end_date.format('YYYY-MM-DD'));
+		<?php }?>
   });
   $(document).on("click", ".open-AddBookDialog", function () {
 	  alert($(this).data('id'));
 		 var myBookId = $(this).data('id');
 		 $(".modal-body #bookId").val( myBookId );
 	});
+	
+	//Clients transaction details
+		<?php 
+		if(isset($_GET['view']) && $_GET['view'] == "client_trasaction_history"){ ?>
+			var handleDataTableButtons = function() {
+			  if ($("#datatable-buttons").length) {
+				dTable = $('#datatable-buttons').DataTable({
+				  dom: "Bfrtip",
+				  "processing": true,
+				  "serverSide": true,
+				  "deferRender": true,
+				  "ajax": {
+					  "url":"server_processing.php",
+					  "type": "POST",
+					  "data":  function(d){
+						d.page = 'client_transactions';
+						d.member_id = <?php echo $_GET['member_id']?>;
+						d.start_date = getStartDate();
+						d.end_date = getEndDate();
+						}
+				  },
+				  "footerCallback": function (tfoot, data, start, end, display ) {
+					var api = this.api(),
+					total = api.column(3).data().sum();
+					$(api.column(3).footer()).html( format1(total) );
+				  },columns:[ { data: 'id', render: function ( data, type, full, meta ) {return '<input type="checkbox" value="'+data+'" class="flat" name="table_records">';}},
+						{ data: 'account_number'},
+						{ data: 'transaction_type' , render: function ( data, type, full, meta ) {
+							var trans_type = "";
+							switch(data){
+								case "1":
+								trans_type = "Deposit";
+								break;
+								case "2":
+								trans_type = "Withdraw";
+								break;
+								case "3":
+								trans_type = "Shares";
+								break;
+								case "4":
+								trans_type = "Membership";
+								break;
+								default:
+								break;
+							}
+							return trans_type;}},
+						{ data: 'amount', render: function ( data, type, full, meta ) {return (parseFloat(data) < 0)?"("+format1(parseFloat(data) * -1)+")":format1(parseFloat(data));}},
+						{ data: 'transaction_date', render: function ( data, type, full, meta ) {return moment(data, 'YYYY-MM-DD').format('LL');}},
+						{ data: 'transacted_by'}
+						] ,
+				  buttons: [
+					{
+					  extend: "copy",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "csv",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "excel",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "pdfHtml5",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "print",
+					  className: "btn-sm"
+					},
+				  ],
+				  responsive: true/*, */
+				  
+				});
+				//$("#datatable-buttons").DataTable();
+			  }
+			};
+			TableManageButtons = function() {
+			  "use strict";
+			  return {
+				init: function() {
+				  handleDataTableButtons();
+				}
+			  };
+			}();
+			TableManageButtons.init();
+		<?php } ?>
 </script>
