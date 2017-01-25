@@ -353,6 +353,50 @@ Class Reports{
 			</div>
 		  </div>
 		</div>
+		<!-- Datatables -->
+		<script>
+			var handleDataTableButtons = function() {
+			  if ($("#datatable-buttons").length) {
+				dTable = $('#datatable-buttons').DataTable({
+				  dom: "Bfrtip",
+				  buttons: [
+					{
+					  extend: "copy",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "csv",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "excel",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "pdfHtml5",
+					  className: "btn-sm"
+					},
+					{
+					  extend: "print",
+					  className: "btn-sm"
+					},
+				  ],
+				  responsive: true/*, */
+				  
+				});
+				//$("#datatable-buttons").DataTable();
+			  }
+			};
+			TableManageButtons = function() {
+			  "use strict";
+			  return {
+				init: function() {
+				  handleDataTableButtons();
+				}
+			  };
+			}();
+			TableManageButtons.init();
+		</script>
 		<?php
 	}
 	public function memberLoans(){
