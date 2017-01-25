@@ -9,11 +9,11 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
 	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 		$where = "(`member`.`date_added` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
 	}
-	if(isset($_SESSION['access_level'])&&!in_array($_SESSION['access_level'],array(1,2))){
+	if(isset($_SESSION['access_level']) &&!in_array($_SESSION['access_level'],array(1,2))){
 		if(strlen($where)>0){
-			$where .= " AND added_by = ".$_SESSION['user_id'];
+			$where .= " AND AND active=1 AND added_by = ".$_SESSION['user_id'];
 		}else{
-			$where = " added_by = ".$_SESSION['user_id'];
+			$where = " added_by = ".$_SESSION['user_id']." AND active=1";
 		}
 	}
 	$table = "`member` JOIN `person` ON `member`.`person_number` = `person`.`id` LEFT JOIN (SELECT SUM(`balance`) savings, `person_number` FROM `accounts` GROUP BY `person_number`) `client_savings` ON `member`.`person_number` = `client_savings`.`person_number` LEFT JOIN (SELECT SUM(`amount`) `shares`, `person_number` FROM `shares` GROUP BY `person_number`) `client_shares` ON `member`.`person_number` = `client_shares`.`person_number` LEFT JOIN (SELECT COUNT(`id`) `loans`, `person_number` FROM `loan` GROUP BY `person_number`) `client_loans` ON `member`.`person_number` = `client_loans`.`person_number`";
@@ -75,7 +75,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_loans" ) {
 	
 	$primary_key = "`loan`.`id`";
 
-	$columns = array( "`loan`.`id`", "`loan`.`loan_number`", "`firstname`", "`loan_type`.`name`", "`lastname`", "`othername`", "`loan_amount`","`interest_rate`","`expected_payback`", "`loan_date`", "`loan_end_date`", "TIMESTAMPDIFF(day, `loan_date`,`loan_end_date`) `duration`" );
+	$columns = array( "`loan`.`id`", "`loan`.`loan_number`", "`firstname`", "`loan`.`person_number`", "`loan_type`.`name`", "`lastname`", "`othername`", "`loan_amount`","`interest_rate`","`expected_payback`", "`loan_date`", "`loan_end_date`", "TIMESTAMPDIFF(day, `loan_date`,`loan_end_date`) `duration`" );
 }
 //list of the income transactions
 if ( isset($_POST['page']) && $_POST['page'] == "view_income" ) {

@@ -12,15 +12,21 @@ $accounts = new Accounts();
 $all_members = array();
 $found_member = array();
 $names  = "";
-if(isset($_POST['photo_upload'])){
-	print_r($_FILES);
-}
-if($_GET['member_id']){
+
+if(isset($_GET['p_id'])){
+	$id = $member->findMemberIdByPersonIdNo($_GET['p_id']);
+	$_GET['member_id'] = $id;
 	$member_data  = $member->findById($_GET['member_id']);
 	$person_data = $person->findByid($member_data['person_number']);
 	$names =  $person_data['firstname']." ". $person_data['lastname']." ".$person_data['othername']; 
 }else{
-	header("Location:view_members.php");
+	if($_GET['member_id']){
+		$member_data  = $member->findById($_GET['member_id']);
+		$person_data = $person->findByid($member_data['person_number']);
+		$names =  $person_data['firstname']." ". $person_data['lastname']." ".$person_data['othername']; 
+	}else{
+		header("Location:view_members.php");
+	}
 }
 $page_title = $names;
 include("includes/header.php"); 
@@ -34,7 +40,7 @@ include("includes/header.php");
 		<ul class="nav navbar-right panel_toolbox">
 		  <li> <a href="update-member-details.php?member_id=<?php echo $_GET['member_id']; ?>"  class="btn btn-primary" title="Edit Member"><i class="fa fa-edit"></i > Edit</a>
 		  </li>
-		  <li><a class="btn btn-danger delete" id="<?php echo $_GET['member_id']; ?>_member" title="Delete <?php echo $names; ?> "><i class="fa fa-close"></i>Delete member</a>
+		  <li><a class="btn btn-danger member delete" id="<?php echo $_GET['member_id']; ?>_member" title="Delete <?php echo $names; ?> "><i class="fa fa-close"></i>Delete member</a>
 		  </li>
 		</ul>
 		<div class="clearfix"></div>
@@ -73,7 +79,7 @@ include("includes/header.php");
 							
 					  </div>
 					</div>
-				  </div>
+				</div>
 		  </div>
 		  <div class="col-md-10 col-sm-12 col-xs-12 form-group">
 				<div class="col-md-12 col-sm-12 col-xs-12 details">
@@ -131,8 +137,9 @@ include("includes/header.php");
 					</div>
 				</div>
 				<?php 
+				
 				$balance =  $accounts->findByAccountBalance($person_data['id']); 
-				if($balance > 0){
+				if($balance > 1){
 					$minimum_amount = $accounts->findMinimumBalance();
 					$available = $balance - $minimum_amount;
 				}else{
@@ -141,7 +148,7 @@ include("includes/header.php");
 				
 				<div class="col-md-12 col-sm-12 col-xs-12 details">
 					<div class="col-md-5 col-sm-12 col-xs-12 form-group">
-						<p class="p"><h2 class="x_title"><b>Actual balance: </b><?php  echo number_format($balance,2,",",".");  ?> UGX<h2></p>
+						<p class="p"><h2 class="x_title"><b>Actual balance: </b><?php echo number_format($balance,2,",",".");  ?> UGX<h2></p>
 					</div>
 					<div class="col-md-5 col-sm-12 col-xs-12 form-group ">
 						<p class="p"><h2 class="x_title"><b>Available Balance: </b><?php   echo number_format($available,2,",","."); ?>UGX<h2></p>

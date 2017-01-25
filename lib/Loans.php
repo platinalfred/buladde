@@ -17,9 +17,17 @@ class Loans extends Db {
 		$result_array = $this->getarray(self::$table_name, $where, $order_by, $limit);
 		return !empty($result_array) ? $result_array : false;
 	}
-	public function findLoanType($type){
-		 $results  = $this->getfrec("loan_type", "name", "id=".$type, "", "");
+	public function findLoanType($id){
+		 $results  = $this->getfrec("loan_type", "name", "id=".$id, "", "");
 		 return !empty($results) ? $results['name'] : false;
+	}
+	public function findPayments($lid){
+		 $results  = $this->getarray("loan_repayment", "loan_id=".$lid, "transaction_date DESC", "");
+		 return !empty($results) ? $results : false;
+	}
+	public function findLoanNumber($id){
+		 $results  = $this->getfrec(self::$table_name, "loan_number", "id=".$id, "", "");
+		 return !empty($results) ? $results['loan_number'] : false;
 	}
 	public function isLoanAboutToExpire($id, $duratn){
 		$days = $this->findLoanPayBackDays($duratn);
@@ -87,6 +95,22 @@ class Loans extends Db {
 		}else{
 			return false;
 		}
+	}
+	public function addLoanRepayment($data){
+		$data['transaction_type'] = 3;
+		$data['transaction_date'] = date("Y-m-d");
+		$data['approved_by'] = $data['receiving_staff'];
+ 		$trans_fields = array("transaction_type", "branch_number", "person_number", "amount", "amount_description", "transacted_by", "transaction_date", "approved_by", "comments");
+		$trans =  $this->add("transaction", $trans_fields, $this->generateAddFields($trans_fields, $data));
+		if($trans){
+			$result = $this->add("loan_repayment", array("transaction_id", "branch_number", "loan_id","amount", "transaction_date", "comments", "receiving_staff","transacted_by"), array("person_number"=>$data['person_number'], "transaction_id"=>$trans, "branch_number"=>$data['branch_number'], "loan_id"=>$data['loan_id'],"amount"=>$data['amount'],"transaction_date"=>$data['transaction_date'], "comments"=>$data['comments'], "receiving_staff"=>$data['receiving_staff'],"transacted_by"=>$data['transacted_by']));
+			if($result){
+				return $result;
+			}else{
+				return false;
+			}
+		}
+		return false;
 	}
 	public function deleteLoan($id){
 		$this->delete(self::$table_name, "id=".$id);

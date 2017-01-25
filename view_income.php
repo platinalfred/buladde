@@ -112,7 +112,7 @@ $income = new Income();
 				{ data: 'amount' },
 				{ data: 'description'},
 				{ data: 'date_added'},
-				{ data: 'income_id', render: function ( data, type, full, meta ) {return '<button type="submit" class="btn btn-success">Edit</button><button type="submit" class="btn btn-danger">Delete</button>';}}
+				{ data: 'income_id', render: function ( data, type, full, meta ) {return '';}}
 				] ,
 		  buttons: [
 			{

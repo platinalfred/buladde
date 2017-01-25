@@ -34,6 +34,15 @@ if(isset($_POST['add_loan'])){
 		return;
 	}  
 	return false;
+}elseif(isset($_POST['add_expense'])){
+	$data = $_POST;
+	$data['date_of_expense'] = date("Y-m-d");
+	$expenses = new Expenses();
+	 if($expenses->addExpense($data)){
+		echo "success";
+		return;
+	}  
+	return false;
 }elseif(isset($_POST['addnok'])){
 	$data = $_POST;
 	$nok = new Nok();
@@ -242,6 +251,14 @@ elseif(isset($_POST['add_access_level'])){
 }elseif(isset($_POST['add_income_source'])){
 	$income_source = new IncomeSource();
 	if($income_source->addIncomeSource($_POST)){
+		echo "success";
+		return;
+	}else{
+		echo "failed";
+	}
+}elseif(isset($_POST['loan_repayment'])){
+	$loans = new Loans();
+	if($loans->addLoanRepayment($_POST)){
 		echo "success";
 		return;
 	}else{

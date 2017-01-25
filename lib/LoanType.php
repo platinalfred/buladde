@@ -34,5 +34,8 @@ class LoanType extends Db {
 		}
 		return false;
 	}
+	public function deleteLoanType(){
+		$this->del(self::$table_name, "");
+	}
 }
 ?>

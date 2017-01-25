@@ -71,14 +71,14 @@ $all_expenses = array();
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="expense_type">Expense Type<span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-							<?php $person->loadList("SELECT * FROM expensetypes", "expense_type", "name", "id"); ?>
+							<?php $person->loadList("SELECT * FROM expensetypes", "expense_type", "id", "name"); ?>
 						</div>
 					  </div>
 					  <div class="item form-group">
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="staff">Staff <span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-							<select class="form-control" name="title">
+							<select class="form-control" name="staff">
 								<?php 
 								$all_staff = $person->queryData("SELECT p.firstname, p.lastname, p.id FROM staff s ,person p WHERE p.id = s.person_number");
 								if($all_staff){
@@ -95,7 +95,8 @@ $all_expenses = array();
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="office_phone">Amount Used<span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-						  <input type="number"  name="amount_used"  required="required"   class="form-control col-md-7 col-xs-12">
+						  <input type="number"  name="amount_used" id="loan_repayment" required="required"   class="form-control col-md-7 col-xs-12">
+						  <p id="number_words"></p>
 						</div>
 					  </div>
 					  <div class="item form-group">
@@ -109,8 +110,8 @@ $all_expenses = array();
 					  <div class="ln_solid"></div>
 					  <div class="form-group">
 						<div class="col-md-6 col-md-offset-3">
-						  <button type="submit" class="btn btn-primary">Cancel</button>
-						  <button id="send" type="button" class="btn btn-success save_data">Submit</button>
+						 
+						  <button id="send" type="button" class="btn btn-success save_data">Save Expense</button>
 						</div>
 					  </div>
 				</form>

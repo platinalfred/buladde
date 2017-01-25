@@ -191,8 +191,135 @@ Class Reports{
 								<p class="p"><?php  echo $loan_data["comments"]; ?></p>
 							</div>
 						</div>
-						
 					</div>
+					
+					<div class="modal fade add_repayment" tabindex="-1" role="dialog" aria-hidden="true">
+						<div class="modal-dialog ">
+							<div class="modal-content">
+								<div class="modal-header">
+								  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+								  </button>
+								  <h4 class="modal-title" id="myModalLabel2">Add Loan Repayment</h4>
+								</div>
+								<form class="form-horizontal form-label-left"   novalidate>
+									<input type="hidden" name="loan_id" id="loan_id" value=""/>
+									<input type="hidden" name="loan_repayment"  value="loan_repayment"/>
+									<input type="hidden" name="branch_number"  value="<?php echo $_SESSION['branch_number']; ?>"/>
+									<input type="hidden" name="person_number"  value="<?php echo $member_data['person_number']; ?>"/>
+									
+									<div class="item form-group">
+										<label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Loan Being Repaid<span class="required">*</span>
+										</label>
+										<br/>
+										<div class="col-md-6 col-sm-6 col-xs-12">
+											<input type="tel" id="telephone" readonly = "readonly" name="" value="<?php echo $loans->findLoanType($loan_data['loan_type']); ?>" class="form-control col-md-7 col-xs-12">
+											<input type="hidden" value="<?php echo $loan_data['loan_type']; ?>" name="loan_type">
+										</div>
+									</div>		
+									<div class="item form-group">
+										<label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Amount<span class="required">*</span>
+										</label>
+										<div class="col-md-6 col-sm-6 col-xs-12">
+										  <input type="money"  id="loan_repayment" name="amount" required="required"  class="form-control col-md-7 col-xs-12">
+										  <p id="number_words"></p>
+										  <input type="hidden"  class="amount_description" name="amount_description"  class="form-control col-md-7 col-xs-12">
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Deposited By<span class="required">*</span>
+										</label>
+										<div class="col-md-6 col-sm-6 col-xs-12">
+										  <input type="text"  name="transacted_by" required="required"  class="form-control col-md-7 col-xs-12">
+										  <p id="number_words"></p>
+										</div>
+									</div>
+									
+									<div class="item form-group">
+										<label class="control-label col-md-3 col-sm-3 col-xs-12" for="comments">Justification 
+										</label>
+										<div class="col-md-6 col-sm-6 col-xs-12">
+										  <textarea id="comments"  name="comments" class="form-control col-md-7 col-xs-12"></textarea>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label col-md-3 col-sm-3 col-xs-12" for="telephone">Receiving Staff 
+										</label>
+										<div class="col-md-6 col-sm-6 col-xs-12">
+										  <input type="tel" id="telephone" readonly = "readonly" name="" value="<?php echo $member->findMemberNames($_SESSION['person_number']); ?>"  class="form-control col-md-7 col-xs-12">
+										  <input type="hidden" value="<?php echo $_SESSION['person_number']; ?>" name="receiving_staff">
+										</div>
+									</div>
+									<div class="ln_solid"></div>
+									<div class="form-group">
+										<div class="col-md-6 col-md-offset-3">
+										  <button type="button" class="btn btn-primary">Cancel</button>
+										  <button id="send" type="button" class="btn btn-success save_data">Pay Loan</button>
+										</div>
+									</div>
+								</form>						
+							</div>
+						</div>
+					</div>
+				
+					<div class="col-md-12 col-sm-12 col-xs-12 form-group" style="border-top:1px solid #09A; padding-top:10px;">
+						<ul class="nav navbar-left panel_toolbox">
+						  <li>
+							<a data-toggle="modal" data-id="<?php echo $_GET['lid']; ?>" title="Add this item" class="open-AddRepaymentDialog btn btn-primary"data-target=".add_repayment"  href="">Add Repayment</a>
+						</ul>
+					</div>
+					<?php 
+					$loan_repaymens = $loans->findPayments($_GET['lid']);
+					if($loan_repaymens){ ?>
+						<div class="col-md-12 col-sm-12 col-xs-12 form-group" style="border-top:1px solid #09A; padding-top:10px;">
+							<div class="x_panel">
+							  <div class="x_title">
+								<h2>loan Payment History</small></h2>
+								<div class="clearfix"></div>
+							  </div>
+							  <div class="x_content">
+									<div class="table-responsive">
+									  <table id="datatable-buttons" class="table table-striped jambo_table bulk_action">
+										<thead>
+										  <tr class="headings">
+											
+											<?php 
+											$header_keys = array("Branch Number", "Loan Number", "Amount", "Date Paid", "Receiving Staff","Comments");
+											foreach($header_keys as $key){ ?>
+												<th><?php echo $key; ?></th>
+												<?php
+											}
+											?>
+											
+											</th>
+										  </tr>
+										</thead>
+
+										<tbody>
+											<?php 
+											foreach($loan_repaymens as $single){
+												?>
+												
+												<tr class="even pointer ">
+													<td class=""><?php echo $single['branch_number']; ?></td>
+													<td class=""><?php echo $loans->findLoanNumber($single['loan_id']); ?> </td>
+													<td class=""><?php echo $single['amount']; ?> </td>
+													<td class="a-right a-right"><?php echo date("j F, Y", strtotime($single['transaction_date'])); ?></td>
+													<td class="a-right a-right"><?php echo $member->findMemberNames($single['receiving_staff']); ?></td>
+													<td class="a-right a-right"><?php echo $single['comments']; ?></td>
+												</tr>
+												<?php
+											}
+											?>
+										</tbody>
+									  </table>
+									</div>
+							  </div>
+							</div>
+						</div>
+					<?php 
+					}
+					
+					?>
 				</div>
 			</div>
 		</div>
@@ -475,9 +602,9 @@ Class Reports{
 										?>
 										<tr class="even pointer" >
 											
-											<td class=""><a href="?member_id=<?php echo $_GET['member_id'];?>&view=client_loan&lid=<?php echo $single['id'];?>"><?php echo $single['name']; ?></a></td>
+											<td class=""><?php echo $single['name']; ?></td>
 											<td class=""><?php echo $single['description']; ?> </td>
-											<td class="a-right a-right"><a class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a><a class="btn btn-danger"><i class="fa fa-delete"> Delete</a></td>
+											<td class="a-right a-right"><a class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a><a class="btn btn-danger delete" id="<?php echo $single['id']; ?>_securitytypes"><i class="fa fa-delete"> Delete</a></td>
 										</tr>
 										<?php
 									}
@@ -514,9 +641,7 @@ Class Reports{
 							  <table id="datatable-buttons" class="table table-striped jambo_table bulk_action">
 								<thead>
 								  <tr class="headings">
-									<th>
-									  <input type="checkbox" id="check-all" class="flat">
-									</th>
+									
 									<?php 
 									$header_keys = array("Name", "Description");
 									foreach($header_keys as $key){ ?>
@@ -524,11 +649,9 @@ Class Reports{
 										<?php
 									}
 									?>
+									<th>Actions
+									</th>
 									
-									</th>
-									<th class="bulk-actions" colspan="7">
-									  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-									</th>
 								  </tr>
 								</thead>
 
@@ -540,7 +663,7 @@ Class Reports{
 											
 											<td class=""><?php echo $single['name']; ?></td>
 											<td class=""><?php echo $single['description']; ?> </td>
-											<td class="a-right a-right"><a class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a><a class="btn btn-danger"><i class="fa fa-delete"> Delete</a></td>
+											<td class="a-right a-right"><a class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a><a class="btn btn-danger delete" id="<?php echo $single['id']; ?>_loantypes"><i class="fa fa-delete"> Delete</a></td>
 										</tr>
 										<?php
 									}
@@ -601,9 +724,9 @@ Class Reports{
 										?>
 										<tr class="even pointer" >
 											
-											<td class=""><a href="?member_id=<?php echo $_GET['member_id'];?>&view=client_loan&lid=<?php echo $single['id'];?>"><?php echo $single['name']; ?></a></td>
+											<td class=""><?php echo $single['name']; ?></td>
 											<td class=""><?php echo $single['description']; ?> </td>
-											<td class="a-right a-right"><a class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a><a class="btn btn-danger"><i class="fa fa-delete"> Delete</a></td>
+											<td class="a-right a-right"><a class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a><a class="btn btn-danger delete" id="<?php echo $single['id']; ?>_incomesources" ><i class="fa fa-delete"> Delete</a></td>
 										</tr>
 										<?php
 									}
@@ -640,9 +763,7 @@ Class Reports{
 							  <table id="datatable-buttons" class="table table-striped jambo_table bulk_action">
 								<thead>
 								  <tr class="headings">
-									<th>
-									  <input type="checkbox" id="check-all" class="flat">
-									</th>
+									
 									<?php 
 									$header_keys = array("Name", "Description");
 									foreach($header_keys as $key){ ?>
@@ -652,8 +773,7 @@ Class Reports{
 									?>
 									
 									</th>
-									<th class="bulk-actions" colspan="7">
-									  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+									<th>Actions
 									</th>
 								  </tr>
 								</thead>
@@ -664,9 +784,9 @@ Class Reports{
 										?>
 										<tr class="even pointer" >
 											
-											<td class=""><a href="?member_id=<?php echo $_GET['member_id'];?>&view=client_loan&lid=<?php echo $single['id'];?>"><?php echo $single['name']; ?></a></td>
+											<td class=""><?php echo $single['name']; ?></td>
 											<td class=""><?php echo $single['description']; ?> </td>
-											<td class="a-right a-right"><a class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a><a class="btn btn-danger"><i class="fa fa-delete"> Delete</a></td>
+											<td class="a-right a-right"><a class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a><a class="btn btn-danger delete" id="<?php echo $single['id']; ?>_expensetypes"><i class="fa fa-delete"> Delete</a></td>
 										</tr>
 										<?php
 									}
@@ -704,7 +824,7 @@ Class Reports{
 						<?php 
 						if($all_client_subscriptions){  ?>
 							<div class="table-responsive">
-							  <table class="table table-striped jambo_table bulk_action">
+							  <table id="datatable-buttons" class="table table-striped jambo_table bulk_action">
 								<thead>
 								  <tr class="headings">
 									
@@ -887,6 +1007,7 @@ Class Reports{
 		$member = new Member();
 		$accounts = new Accounts();
 		$member_data = $member->findById($_GET['member_id']);
+		
 		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_number']);
 		$all_member_deposits = $accounts->findMemberDeposits($member_data['person_number']); 
 		?>
@@ -901,7 +1022,7 @@ Class Reports{
 						<?php 
 						if($all_member_deposits){  ?>
 							<div class="table-responsive">
-							  <table class="table table-striped jambo_table bulk_action">
+							  <table id="datatable-buttons" class="table table-striped jambo_table bulk_action">
 								<thead>
 								  <tr class="headings">
 									
