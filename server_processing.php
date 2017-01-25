@@ -133,7 +133,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_loan_payments" ) {
 	
 	$primary_key = "`loan_repayment`.`id`";
 
-	$columns = array( "`firstname`", "`lastname`", "`othername`", "`amount`", "`comments`", "`transaction_date`", "`loan_number`", "`loan_id`");
+	$columns = array( "`firstname`", "`lastname`", "`othername`", "`amount`", "`comments`", "`transaction_date`", "`transaction_id`", "`loan_number`", "`loan_id`");
 }
 //list of all the member savings
 if ( isset($_POST['page']) && $_POST['page'] == "member_savings" ) {
