@@ -48,7 +48,7 @@ include("includes/header.php");
 				<tfoot>
 					<tr>
 						<th class="right_remove"><b>Total (UGX)</th>
-						<th colspan="4"></th>
+						<th colspan="3"></th>
 						<th class="right_remove left_remove"></th>
 						<th class="right_remove left_remove"></th>
 					</tr>

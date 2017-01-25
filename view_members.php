@@ -15,7 +15,7 @@ $person = new Person();
 	  <div class="col-md-12 col-sm-12 col-xs-12">
 		<div class="x_panel">
 		  <div class="x_title">
-			<h2>Members <small></small></h2>
+			<h2>Active Members <small></small></h2>
 			<ul class="nav navbar-right panel_toolbox">
 				<li>
 					<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">

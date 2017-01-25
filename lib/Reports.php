@@ -139,15 +139,15 @@ Class Reports{
 							</div>
 							<div class="col-md-3 col-sm-12 col-xs-12 form-group " >
 								<p class="lead">Loan Amount</p>
-								<p class="p"><?php echo number_format($loan_data["loan_amount"],2,",","."); ?></p>
+								<p class="p"><?php echo number_format($loan_data["loan_amount"],2,".",","); ?></p>
 							</div>
 							<div class="col-md-3 col-sm-12 col-xs-12 form-group ">
 								<p class="lead" >Interest</p>
-								<p class="p"><?php echo number_format($interest,2,",","."); ?></p>
+								<p class="p"><?php echo number_format($interest,2,".",","); ?></p>
 							</div>
 							<div class="col-md-3 col-sm-12 col-xs-12 form-group">
 								<p class="lead" >Total PayBack</p>
-								<p class="p"><?php echo number_format(($loan_data['loan_amount'] + $interest),2,",","."); ?></p>
+								<p class="p"><?php echo number_format(($loan_data['loan_amount'] + $interest),2,".",","); ?></p>
 							</div>
 						</div>
 						<div class="col-md-12 col-sm-12 col-xs-12 details">
@@ -161,7 +161,7 @@ Class Reports{
 							</div>
 							<div class="col-md-3 col-sm-12 col-xs-12 form-group ">
 								<p class="lead">Daily Default</p>
-								<p class="p"><?php echo number_format($loan_data["daily_default_amount"]); ?>%</p>
+								<p class="p"><?php echo number_format($loan_data["daily_default_amount"],3,".",","); ?></p>
 							</div>
 							<div class="col-md-3 col-sm-12 col-xs-12 form-group">
 								<p class="lead" >Loan Type</p>
@@ -241,16 +241,18 @@ Class Reports{
 										<?php
 									}
 									?>
-									
 									</th>
-									<th class="bulk-actions" colspan="7">
+								  </tr>
+								  <tr>
+									<th class="bulk-actions" colspan="9">
 									  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
 									</th>
 								  </tr>
 								</thead>
 
 								<tbody>
-									<?php 
+									<?php
+									$loan_sum = $expected_payback_sum = $interest_sum = 0;
 									foreach($member_loans as $single){ 
 										
 										$interest = 0;
@@ -264,9 +266,9 @@ Class Reports{
 											</td>
 											<td class=""><a href="?member_id=<?php echo $_GET['member_id'];?>&view=client_loan&lid=<?php echo $single['id'];?>"><?php echo $single['loan_number']; ?></a></td>
 											<td class=""><?php echo $loans->findLoanType($single['loan_type']); ?> </td>
-											<td class=""><?php echo $single['loan_amount']; ?> </td>
-											<td class=""><?php  echo $interest; ?></td>
-											<td class=" "><?php echo $single['loan_amount'] + $interest; ?></td>
+											<td class=""><?php $loan_sum += $single['loan_amount']; echo number_format($single['loan_amount'],2,".",","); ?> </td>
+											<td class=""><?php $interest_sum += $interest; echo number_format($interest,2,".",","); ?></td>
+											<td class=" "><?php $expected_payback_sum += $single['loan_amount'] + $interest; echo number_format($single['loan_amount'] + $interest,2,".",","); ?></td>
 											<td class="a-right a-right"><?php echo date("j F, Y", strtotime($single['loan_date'])); ?></td>
 											<td class="a-right a-right"><?php $months = round((($single['loan_duration']>0)?($single['loan_duration']/30):0),1); echo $months; ?> month<?php echo $months==1?"":"s"; ?></td>
 											<td class="a-right a-right"><?php echo date("F j, Y", strtotime($single['loan_end_date'])); ?></td>
@@ -275,6 +277,15 @@ Class Reports{
 									}
 									?>
 								</tbody>
+								<tfoot>
+										<tr>
+											<th colspan="3">Total (UGX)</th>
+											<th><?php echo number_format($loan_sum,2,".",","); ?> </th>
+											<th><?php echo number_format($interest_sum,2,".",","); ?></th>
+											<th><?php echo number_format($expected_payback_sum,2,".",","); ?></th>
+											<th  colspan="3">&nbsp;</th>
+										</tr>
+								</tfoot>
 							  </table>
 							</div>
 						<?php 
@@ -310,39 +321,52 @@ Class Reports{
 							  <table class="table table-striped jambo_table bulk_action">
 								<thead>
 								  <tr class="headings">
-									
+									<th>
+									  <input type="checkbox" id="check-all" class="flat">
+									</th>
 									<?php 
-									$header_keys = array("Amount", "Year", "Date Subscribed");
+									$header_keys = array("Date Subscribed", "Year", "Amount");
 									foreach($header_keys as $key){ ?>
 										<th><?php echo $key; ?></th>
 										<?php
 									}
 									?>
-									
-									<th class="bulk-actions" colspan="7">
+								  </tr>
+								  <tr>
+									<th class="bulk-actions" colspan="4">
 									  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
 									</th>
 								  </tr>
 								</thead>
 
 								<tbody>
-									<?php 
+									<?php
+									$subscription_sum = 0;
 									foreach($all_client_subscriptions as $single){ 
 										?>
 										<tr class="even pointer " >
-											<td class=" "><?php echo $single['amount']; ?></td>
-											<td class=" "><?php echo $single['subscription_year']; ?> </td>
+											<td class="a-center ">
+												<input type="checkbox" value="<?php echo $single['id']; ?>" class="flat" name="table_records">
+											</td>
 											<td class="a-right a-right "><?php echo date("j F, Y", strtotime($single['date_paid'])); ?></td>
+											<td class=" "><?php echo $single['subscription_year']; ?> </td>
+											<td class=" "><?php $subscription_sum += $single['amount']; echo number_format($single['amount'],2,".",","); ?></td>
 										</tr>
 										<?php
 									}
 									?>
 								</tbody>
+								<tfoot>
+									<tr class="headings">
+										<th colspan="3">Total</th>
+										<th class=" "><?php echo number_format($subscription_sum,2,".",","); ?></th>
+									</tr>
+								</tfoot>
 							  </table>
 							</div>
 						<?php 
 						}else{
-							echo "This member has not yet subscribed, pleasee add subscription.";
+							echo "This member has not yet subscribed, please add subscription.";
 						}
 						?>
                   </div>
@@ -373,38 +397,53 @@ Class Reports{
 							  <table class="table table-striped jambo_table bulk_action">
 								<thead>
 								  <tr class="headings">
-									
+									<th>
+									  <input type="checkbox" id="check-all" class="flat">
+									</th>									
 									<?php 
-									$header_keys = array("Amount", "Date Paid");
+									$header_keys = array("Purchase Date", "Amount");
 									foreach($header_keys as $key){ ?>
 										<th><?php echo $key; ?></th>
 										<?php
 									}
 									?>
-									
-									<th class="bulk-actions" colspan="7">
+									<th class="bulk-actions">
+									  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+									</th>
+								  </tr>
+								  <tr>
+									<th class="bulk-actions" colspan="3">
 									  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
 									</th>
 								  </tr>
 								</thead>
-
 								<tbody>
-									<?php 
+									<?php
+									$shares_sum = 0;
 									foreach($all_client_shares as $single){ 
 										?>
 										<tr class="even pointer " >
-											<td class=" "><?php echo $single['amount']; ?></td>
-											<td class="a-right a-right "><?php echo date("j F, Y", strtotime($single['date_paid'])); ?></td>
+											<td class="a-center ">
+												<input type="checkbox" value="<?php echo $single['id']; ?>" class="flat" name="table_records"/>
+											</td>
+											<td class="a-right a-right"><?php echo date("j F, Y", strtotime($single['date_paid'])); ?></td>
+											<td colspan="2"><?php $shares_sum += $single['amount']; echo number_format($single['amount'],0,".",","); ?></td>
 										</tr>
 										<?php
 									}
 									?>
 								</tbody>
+								</tfoot>
+									<tr>
+										<th colspan="2">Total</th>
+										<th class="a-right a-right " colspan="2"><?php echo number_format($shares_sum,0,".",","); ?></th>
+									</tr>
+								</tfoot>
 							  </table>
 							</div>
 						<?php 
 						}else{
-							echo "This member has not yet subscribed, pleasee add subscription.";
+							echo "This member has not yet bought shares, please add shares.";
 						}
 						?>
                   </div>
@@ -439,7 +478,7 @@ Class Reports{
 									  <input type="checkbox" id="check-all" class="flat">
 									</th>
 									<?php 
-									$header_keys = array("Name", "Gender", "Relationship", "Status", "Phone","Address");
+									$header_keys = array("Name", "Gender", "Relationship", "Status", "Phone","Address","Edit");
 									foreach($header_keys as $key){ ?>
 										<th><?php echo $key; ?></th>
 										<?php
@@ -447,7 +486,9 @@ Class Reports{
 									?>
 									<th class="column-title no-link last"><span class="nobr">Action</span>
 									</th>
-									<th class="bulk-actions" colspan="7">
+								  </tr>
+								  <tr>
+									<th class="bulk-actions" colspan="8">
 									  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
 									</th>
 								  </tr>
@@ -507,38 +548,55 @@ Class Reports{
 							  <table class="table table-striped jambo_table bulk_action">
 								<thead>
 								  <tr class="headings">
-									
+									<th>
+									  <input type="checkbox" id="check-all" class="flat">
+									</th>
 									<?php 
-									$header_keys = array("Amount", "Amount in Words", "Deposited By","Date Deposited");
+									$header_keys = array("Deposited By","Date Deposited", "Amount", "Amount in Words");
 									foreach($header_keys as $key){ ?>
 										<th><?php echo $key; ?></th>
 										<?php
 									}
 									?>
 								  </tr>
+								  <tr>
+									<th class="bulk-actions" colspan="8">
+									  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+									</th>
+								  </tr>
 								</thead>
 
 								<tbody>
-									<?php 
+									<?php
+									$savings_sum = 0;
 									foreach($all_member_deposits as $single){ 
 										
 										?>
 										<tr class="even pointer " >
-											
-											<td class=" "><?php echo $single['amount']; ?></td>
-											<td class=" "><?php echo $single['amount_description']; ?> </td>
+											<td class="a-center ">
+												<input type="checkbox" value="<?php echo $single['id']; ?>" class="flat" name="table_records">
+											</td>
 											<td class=" "><?php echo $single['transacted_by']; ?></td>
 											<td class="a-right a-right "><?php echo date("j F, Y", strtotime($single['transaction_date'])); ?></td>
+											<td class=" "><?php $savings_sum += $single['amount']; echo $single['amount']; ?></td>
+											<td class=" "><?php echo $single['amount_description']; ?> </td>
 										</tr>
 										<?php
 									}
 									?>
 								</tbody>
+								</tfoot>
+									<tr>
+										<th colspan="3">Total (UGX)</th>
+										<th><?php echo $savings_sum; ?></th>
+										<th>&nbsp;</th>
+									</tr>
+								</tfoot>
 							  </table>
 							</div>
 						<?php 
 						}else{
-							echo "There are current no deposits.";
+							echo "There are currently no deposits.";
 						}
 						?>
                   </div>

@@ -19,10 +19,7 @@ if(!isset($_GET['start_date'])){
 		<div class="x_title">
 			<h2><?php echo  $account_names['firstname']." ".$account_names['lastname']; ?> <small> transactions from <?php echo $_GET['start_date']; ?> to <?php echo $_GET['end_date']; ?></small></h2>
 			<ul class="nav navbar-right panel_toolbox">
-			  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-			  </li>
-			 
-			  </li>
+			  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
 			</ul>
 			<div class="clearfix"></div>
 		</div>
@@ -53,13 +50,12 @@ if(!isset($_GET['start_date'])){
 								<td class=" "><?php echo $accounts->findAccountNoByPersonNumber($single['person_number']); ?> </td>
 								<td class=" "><?php if($single['transaction_type'] == 1){ echo "Deposit"; }elseif($single['transaction_type'] == 2){ echo "Withdraw"; }elseif($single['transaction_type'] == 3){ echo "Shares"; }elseif($single['transaction_type'] == 4){ echo "Membership"; } ?></td>
 								<td class=" "><?php if($single['amount'] < 0){ echo "(".($single['amount'] * -1).")"; }else{ echo  $single['amount']; }; ?></td>
-								<td class=" "><?php echo date("j F, Y", strtotime($single['transaction_date'])); ?> </td>
-								<td class=" "><?php echo $single['transacted_by']; ?></td>
+								<td><?php echo date("j F, Y", strtotime($single['transaction_date'])); ?> </td>
+								<td><?php echo $single['transacted_by']; ?></td>
 							</tr>
 							<?php
 							$c++;
 						}
-						
 						?>
 					</tbody>
 				  </table>

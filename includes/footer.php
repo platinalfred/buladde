@@ -1,7 +1,7 @@
       <!-- footer content -->
         <footer>
           <div class="pull-right">
-            &copy <?php echo date("Y"); ?> Buladde Financial Services - Developed by <a href="https://connectsoftz.com"><img src="img/cs_logo.png"></a>
+            &copy; <?php echo date("Y"); ?> Buladde Financial Services - Developed by <a href="https://connectsoftz.com"><img src="img/cs_logo.png"></a>
           </div>
           <div class="clearfix"></div>
         </footer>

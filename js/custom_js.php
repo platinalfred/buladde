@@ -643,7 +643,8 @@ ko.applyBindings(guarantor);
 		function findReportRange(member, start_date, end_date){
 			$.ajax({
 				type: "get",
-				url: "client_transactions.php?member_id="+member+"&start_date="+start_date+"&end_date="+end_date,
+				url: "client_transactions.php",
+				data: {member_id:member,start_date:start_date, end_date:end_date},
 				success: function(response){
 					$("#report_data").html(response);
 				}

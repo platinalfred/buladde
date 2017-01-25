@@ -141,10 +141,10 @@ include("includes/header.php");
 				
 				<div class="col-md-12 col-sm-12 col-xs-12 details">
 					<div class="col-md-5 col-sm-12 col-xs-12 form-group">
-						<p class="p"><h2 class="x_title"><b>Actual balance: </b><?php  echo number_format($balance,2,",",".");  ?> UGX<h2></p>
+						<p class="p"><b>Actual balance: <?php  echo number_format($balance,2,".",",");  ?> UGX</b></p>
 					</div>
 					<div class="col-md-5 col-sm-12 col-xs-12 form-group ">
-						<p class="p"><h2 class="x_title"><b>Available Balance: </b><?php   echo number_format($available,2,",","."); ?>UGX<h2></p>
+						<p class="p"><b>Available Balance: <?php   echo number_format($available,2,".",","); ?>UGX</b></p>
 					</div>
 					
 				</div>

@@ -16,6 +16,11 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
 			$where = " added_by = ".$_SESSION['user_id'];
 		}
 	}
+	if(strlen($where)>0){
+		$where .= " AND active = 1";
+	}else{
+		$where = " active = 1";
+	}
 	$table = "`member` JOIN `person` ON `member`.`person_number` = `person`.`id` LEFT JOIN (SELECT SUM(`balance`) savings, `person_number` FROM `accounts` GROUP BY `person_number`) `client_savings` ON `member`.`person_number` = `client_savings`.`person_number` LEFT JOIN (SELECT SUM(`amount`) `shares`, `person_number` FROM `shares` GROUP BY `person_number`) `client_shares` ON `member`.`person_number` = `client_shares`.`person_number` LEFT JOIN (SELECT COUNT(`id`) `loans`, `person_number` FROM `loan` GROUP BY `person_number`) `client_loans` ON `member`.`person_number` = `client_loans`.`person_number`";
 
 	$primary_key = "`member`.`id`";
@@ -71,11 +76,11 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_loans" ) {
 		}
 	}
 
-	$table = "`loan` JOIN `person` ON `loan`.`person_number` = `person`.`id` JOIN `loan_type` ON `loan`.`loan_type` = `loan_type`.`id`";
+	$table = "`loan` JOIN (SELECT `person`.`person_number`, `person`.`id` `person_id`, `firstname`, `lastname`, `othername`, `member`.`id` `member_id` FROM `member` JOIN `person` ON `member`.`person_number` = `person`.`id` WHERE active = 1)`person` ON `loan`.`person_number` = `person`.`person_id` JOIN `loan_type` ON `loan`.`loan_type` = `loan_type`.`id`";
 	
 	$primary_key = "`loan`.`id`";
 
-	$columns = array( "`loan`.`id`", "`loan`.`loan_number`", "`firstname`", "`loan_type`.`name`", "`lastname`", "`othername`", "`loan_amount`","`interest_rate`","`expected_payback`", "`loan_date`", "`loan_end_date`", "TIMESTAMPDIFF(day, `loan_date`,`loan_end_date`) `duration`" );
+	$columns = array( "`loan`.`id`", "`loan`.`loan_number`", "`firstname`", "`loan_type`.`name`", "`lastname`", "`othername`", "`loan_amount`","`interest_rate`","`expected_payback`", "`loan_date`", "`member_id`", "`loan_end_date`", "TIMESTAMPDIFF(day, `loan_date`,`loan_end_date`) `duration`" );
 }
 //list of the income transactions
 if ( isset($_POST['page']) && $_POST['page'] == "view_income" ) {
@@ -143,6 +148,32 @@ if ( isset($_POST['page']) && $_POST['page'] == "member_savings" ) {
 	$primary_key = "`transaction`.`id`";
 
 	$columns = array( "`firstname`", "`lastname`", "`othername`", "`amount`", "`amount_description`", "`transacted_by`", "`transaction_date`", "`transaction`.`id`");
+}
+//list of the deposits
+if ( isset($_POST['page']) && $_POST['page'] == "deposits" ) {
+		$where = "transaction_type=2";
+	
+	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
+		$where .= " AND (`transaction_date` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
+	}	
+	$table = "`transaction` JOIN (SELECT `person`.`person_number`, `person`.`id` `person_id`, `firstname`, `lastname`, `othername`, `member`.`id` `member_id` FROM `member` JOIN `person` ON `member`.`person_number` = `person`.`id`)`person` ON `transaction`.`person_number` = `person`.`person_id` JOIN accounts ON `transaction`.`person_number` = `accounts`.`person_number`";
+	
+	$primary_key = "`transaction`.`id`";
+
+	$columns = array( "`firstname`", "`lastname`", "`othername`", "`amount`", "`account_number`", "`person`.`person_number`", "`transacted_by`", "`transaction_date`", "`transaction`.`id`", "`member_id`");
+}
+//list of the withdraws
+if ( isset($_POST['page']) && $_POST['page'] == "withdraws" ) {
+		$where = "transaction_type=1";
+	
+	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
+		$where .= " AND (`transaction_date` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
+	}	
+	$table = "`transaction` JOIN (SELECT `person`.`person_number`, `person`.`id` `person_id`, `firstname`, `lastname`, `othername`, `member`.`id` `member_id` FROM `member` JOIN `person` ON `member`.`person_number` = `person`.`id`)`person` ON `transaction`.`person_number` = `person`.`person_id` JOIN accounts ON `transaction`.`person_number` = `accounts`.`person_number`";
+	
+	$primary_key = "`transaction`.`id`";
+
+	$columns = array( "`firstname`", "`lastname`", "`othername`", "`amount`", "`account_number`", "`person`.`person_number`", "`transacted_by`", "`transaction_date`", "`transaction`.`id`", "`member_id`");
 }
 if ( isset($_POST['page']) && strlen($_POST['page'])>0) {
 	// Get the data
