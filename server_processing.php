@@ -9,11 +9,11 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
 	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 		$where = "(`member`.`date_added` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
 	}
-	if(isset($_SESSION['access_level'])&&!in_array($_SESSION['access_level'],array(1,2))){
+	if(isset($_SESSION['access_level']) &&!in_array($_SESSION['access_level'],array(1,2))){
 		if(strlen($where)>0){
-			$where .= " AND added_by = ".$_SESSION['user_id'];
+			$where .= " AND AND active=1 AND added_by = ".$_SESSION['user_id'];
 		}else{
-			$where = " added_by = ".$_SESSION['user_id'];
+			$where = " added_by = ".$_SESSION['user_id']." AND active=1";
 		}
 	}
 	if(strlen($where)>0){
@@ -79,7 +79,6 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_loans" ) {
 	$table = "`loan` JOIN (SELECT `person`.`person_number`, `person`.`id` `person_id`, `firstname`, `lastname`, `othername`, `member`.`id` `member_id` FROM `member` JOIN `person` ON `member`.`person_number` = `person`.`id` WHERE active = 1)`person` ON `loan`.`person_number` = `person`.`person_id` JOIN `loan_type` ON `loan`.`loan_type` = `loan_type`.`id`";
 	
 	$primary_key = "`loan`.`id`";
-
 	$columns = array( "`loan`.`id`", "`loan`.`loan_number`", "`firstname`", "`loan_type`.`name`", "`lastname`", "`othername`", "`loan_amount`","`interest_rate`","`expected_payback`", "`loan_date`", "`member_id`", "`loan_end_date`", "TIMESTAMPDIFF(day, `loan_date`,`loan_end_date`) `duration`" );
 }
 //list of the income transactions

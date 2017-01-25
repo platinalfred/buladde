@@ -30,7 +30,7 @@ $member_details =  $member->personDetails($_GET['member_id']);
 			<div id="" class="">
 				<form class="form-horizontal form-label-left" novalidate>
 					<div id="step-1">
-						<input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
+						<input type="hidden" name="id" value="<?php echo $_GET['member_id']; ?>">
 						<?php
 						$type = "staff";
 						$person_type = $staff->getfrec("persontype","id","name= '$type'","", "");
@@ -165,14 +165,14 @@ $member_details =  $member->personDetails($_GET['member_id']);
 							  
 							</div>
 						</div>
-						<!--
+						
 						<div class="item form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="physical_address">Physical Address<span class="required">*</span>
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
 							  <textarea id="physical_address" required="required" name="physical_address" class="form-control col-md-7 col-xs-12"><?php echo $member_details['physical_address']; ?></textarea>
 							</div>
-						</div> -->
+						</div>
 						<div class="item form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="postal_address">Postal Address
 							</label>
@@ -207,7 +207,7 @@ $member_details =  $member->personDetails($_GET['member_id']);
 						<div class="form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12"></label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
-								<button type="button" class="btn btn-success center update_staff">Save changes</button>
+								<button type="button" class="btn btn-success center save_data">Save changes</button>
 							</div>
 						</div>
 						

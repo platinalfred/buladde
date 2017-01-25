@@ -4,6 +4,7 @@ $show_table_js = true;
 include("includes/header.php"); 
 require_once("lib/Libraries.php");
 require_once("lib/Forms.php");
+require_once("lib/Reports.php");
 $member = new Member();
 $person = new Person();
 $locations = new Locations();
@@ -28,18 +29,18 @@ $locations = new Locations();
 					<li><a href="?task=security_type.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Security Type</a> </li>
 					<li><a href="?task=member_type.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Member Type</a> </li>
 					<li><a href="?task=branch.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Branch</a></li>
-					<li><a href="?task=access_level.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Access Level</a></li>
-					<li><a href="?task=income_types.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Income Type</a></li>
+					<!--<li><a href="?task=access_level.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Access Level</a></li>-->
+					<li><a href="?task=income_sources.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Income Source</a></li>
 					<li><a href="?task=loan_type.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Loan Type</a></li>
 					<!--li><a href="?task=loan_repayment_durarion.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Loan Repayment Duration</a></li-->
 				</ul>
 				<ul class="nav navbar-right panel_toolbox">
+					<li><a href="?view=membertypes" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Member Types </a></li>
 					<li><a href="?view=expensetypes" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Expense Types </a></li>
 					<li><a href="?view=securitytypes" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Security Types </a></li>
-					<li><a href="?view=accesslevels" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Access Levels</a></li>
-					<li><a href="?view=accesslevels" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Income Types</a></li>
+					<li><a href="?view=branches" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Branches</a></li>
+					<li><a href="?view=incomesources" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Income Sources</a></li>
 					<li><a href="?view=loantypes" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Loan Types</a></li>
-					<li><a href="?view=securitytypes" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Repayment Durations</a></li>
 				</ul>
 			</div>
 		  </div>
@@ -50,6 +51,10 @@ $locations = new Locations();
 	if(isset($_GET['task'])){
 		$task = $_GET['task']; 
 		$forms = new Forms($task);
+	}
+	if(isset($_GET['view'])){
+		$task = $_GET['view']; 
+		$reports = new Reports($task);
 	}
 	?>
 </div>

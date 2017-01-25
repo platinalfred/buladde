@@ -13,6 +13,14 @@ class Member extends Db {
 		$result = $this->getrec(self::$table_name, "person_number=".$pno, "", "");
 		return !empty($result) ? $result:false;
 	}
+	public function findPersonNumber($id){
+		$result = $this->getfrec(self::$table_name, "person_number", "id=".$id, "", "");
+		return !empty($result) ? $result['person_number']: false;
+	}
+	public function findMemberIdByPersonIdNo($pno){
+		$result = $this->getfrec(self::$table_name, "id", "person_number=".$pno, "", "");
+		return !empty($result) ? $result['id']:false;
+	}
 	public function findGenger($g){
 		if($g=="F"){
 			return "Female";
@@ -66,7 +74,7 @@ class Member extends Db {
 		return false;
 	}
 	public function updateMember($data){
-		$fields = array_slice(self::$db_fields, 1);
+		$fields = array("comment");
 		$id = $data['id'];
 		unset($data['id']);
 		if($this->update(self::$table_name, $fields, $this->generateAddFields($fields, $data), "id=".$id)){

@@ -28,8 +28,8 @@ class Expenses extends Db {
 	}
 	
 	
-	public function addWithExpense($data){
-		$fields = array_slice(1, self::$db_fields);
+	public function addExpense($data){
+		$fields = array_slice( self::$db_fields,1);
 		if($this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data))){
 			return true;
 		}

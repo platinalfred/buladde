@@ -38,7 +38,7 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 <?php endif;?>
  $(document).ready(function() {
 	saveData();
-	
+	deleteData();
 	removeRedBorderOnRequiredField();
 	cancelFormFields();
 	
@@ -173,7 +173,7 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 		}
 		return str.replace(/\s+/g, ' ');
 	}
-	$("#loan_amount").keyup(function(){
+	$("#loan_amount, #loan_repayment").keyup(function(){
 		var currentInput  = parseInt($(this).val());
 		if(!isNaN(currentInput)){
 			var words  = getWords(currentInput);
@@ -238,8 +238,14 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 					data: formData,
 					cache: false,
 					success: function(response){
-						
+						alert(response);
 						if(response.trim() == "success"){
+							<?php 
+							if(isset($_GET['task']) && ($_GET['task'] == "withdraw.add")){ ?>
+								window.location.reload(true);
+								<?php
+							}
+							?>
 							showStatusMessage("<strong>Successful!</strong> Your data was successfully added!", "success");
 							setTimeout(function(){
 								form[0].reset();
@@ -274,6 +280,80 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 		  });
 		
 	}
+	function deleteData(){
+		$(".delete").click(function(){
+			//This check will determine if its a delete of a member
+			var member = false;
+			if($(this).hasClass('member')){
+				member = true; 
+			}
+			//End member check
+			var confirmation = confirm("Are sure you would like to delete this item?");
+			if(confirmation){
+			
+				var tbl;
+				var id;
+				var d_id = $(this).attr("id");
+				var arr = d_id.split("_");
+				id = arr[0];
+				tbl = arr[1];
+				$.ajax({ // create an AJAX call...
+					url: "delete.php?id="+id+"&tbl="+tbl, // the file to call
+					success: function(response) { // on success..
+				
+						if(response != "fail"){
+							showStatusMessage("Successfully deleted record", "success");
+							setTimeout(function(){
+								if(member){
+									window.location = "view_members.php"
+								}else{
+									location.reload();
+								}
+							}, 1000);
+						}else{
+							showStatusMessage(response, "warning");
+						}
+					}			
+				});
+			}
+		});
+	}
+	$(".update_staff").click(function(){
+		updateStaff();
+	});
+	function updateStaff(){
+		if(!areAllFilled()){
+			showStatusMessage('Please fill in all the required fiels marked with (*)', "error");
+		}else{
+			if(!doPasswordsMatch()){
+				showStatusMessage('Please make sure all the passwords are the same!', "error");
+			}else{
+				$.ajax({
+					type: "post",
+					url: "add_data.php",
+					data: $('.form-horizontal').serialize(),
+					cache: false,
+					success: function(response){
+						alert(response);
+						if(response.trim() == "success"){
+							showStatusMessage('A staff has been successfully updated!', "success");
+							setTimeout(function(){
+								window.location.reload();
+							}, 4000);
+						}else{  
+							showStatusMessage('Failed to update staff, please try again. If the problem persisits contact the technical team for assistance!', "error");
+							/* setTimeout(function(){
+								$($('.form-horizontal')[0]).each(function(){
+									$(this).reset();
+								})
+							}, 4000); */
+						}
+						
+					}
+				});
+			}
+		}
+	}	
 			
 	function submitStaff(){
 		if(!areAllFilled()){
@@ -355,95 +435,97 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 	}
 	
 	/* Geographical location load functions */
+	if($("#country_select").length > 0){
 		var country = $("#country_select").val();
 		getDistricts(country);
-		function getChangeValues(){
-			$("#country_select").on('change',function(){
-				var id = $(this).val();
-				getDistricts(id);
-			});
-			$("#district_select").on('change',function(){
-				var id = $(this).val();
-				getCounties(id);
-			});
-			$("#county_select").on('change',function(){
-				var id = $(this).val();
-				getSubCounties(id);
-			});
-			$("#subcounty_select").on('change',function(){
-				var id = $(this).val();
-				getParishes(id);
-			});
-			$("#parish_select").on('change',function(){
-				var id = $(this).val();
-				getVillage(id);
-			});
-		}
-		function getDistricts(country_id){
-			$.ajax({
-				type: "post",
-				url: "find_location.php?country="+country_id,
-				data: $('.form-horizontal').serialize(),
-				cache: false,
-				success: function(response){
-					$("#district").html(response);
-					setTimeout(function(){
-						var district = $("#district_select").val();
-						getCounties(district);
-					}, 200);
-				}
-			});
-		}
-		
-		function getCounties(district_id){
-			$.ajax({
-				type: "post",
-				url: "find_location.php?district="+district_id,
-				success: function(response){
-					$("#county").html(response);
-					setTimeout(function(){
-						var county = $("#county_select").val();
-						getSubCounties(county);
-					}, 200);
-				}
-			});
-		}
-		function getSubCounties(county_id){
-			$.ajax({
-				type: "post",
-				url: "find_location.php?county="+county_id,
-				success: function(response){
-					$("#subcounty").html(response);
-					setTimeout(function(){
-						var subcounty = $("#subcounty_select").val();
-						getParishes(subcounty);
-					}, 200);
-				}
-			});
-		}
-		function getParishes(subcounty_id){
-			$.ajax({
-				type: "post",
-				url: "find_location.php?subcounty="+subcounty_id,
-				success: function(response){
-					$("#parish").html(response);
-					setTimeout(function(){
-						var parish = $("#parish_select").val();
-						getVillage(parish);
-					}, 200);
-				}
-			});
-		}
-		function getVillage(parish_id){
-			$.ajax({
-				type: "post",
-				url: "find_location.php?parish="+parish_id,
-				success: function(response){
-					$("#village").html(response);
-					getChangeValues();
-				}
-			});
-		}
+	}
+	function getChangeValues(){
+		$("#country_select").on('change',function(){
+			var id = $(this).val();
+			getDistricts(id);
+		});
+		$("#district_select").on('change',function(){
+			var id = $(this).val();
+			getCounties(id);
+		});
+		$("#county_select").on('change',function(){
+			var id = $(this).val();
+			getSubCounties(id);
+		});
+		$("#subcounty_select").on('change',function(){
+			var id = $(this).val();
+			getParishes(id);
+		});
+		$("#parish_select").on('change',function(){
+			var id = $(this).val();
+			getVillage(id);
+		});
+	}
+	function getDistricts(country_id){
+		$.ajax({
+			type: "post",
+			url: "find_location.php?country="+country_id,
+			data: $('.form-horizontal').serialize(),
+			cache: false,
+			success: function(response){
+				$("#district").html(response);
+				setTimeout(function(){
+					var district = $("#district_select").val();
+					getCounties(district);
+				}, 200);
+			}
+		});
+	}
+	
+	function getCounties(district_id){
+		$.ajax({
+			type: "post",
+			url: "find_location.php?district="+district_id,
+			success: function(response){
+				$("#county").html(response);
+				setTimeout(function(){
+					var county = $("#county_select").val();
+					getSubCounties(county);
+				}, 200);
+			}
+		});
+	}
+	function getSubCounties(county_id){
+		$.ajax({
+			type: "post",
+			url: "find_location.php?county="+county_id,
+			success: function(response){
+				$("#subcounty").html(response);
+				setTimeout(function(){
+					var subcounty = $("#subcounty_select").val();
+					getParishes(subcounty);
+				}, 200);
+			}
+		});
+	}
+	function getParishes(subcounty_id){
+		$.ajax({
+			type: "post",
+			url: "find_location.php?subcounty="+subcounty_id,
+			success: function(response){
+				$("#parish").html(response);
+				setTimeout(function(){
+					var parish = $("#parish_select").val();
+					getVillage(parish);
+				}, 200);
+			}
+		});
+	}
+	function getVillage(parish_id){
+		$.ajax({
+			type: "post",
+			url: "find_location.php?parish="+parish_id,
+			success: function(response){
+				$("#village").html(response);
+				getChangeValues();
+			}
+		});
+	}
 	/* Geographical location load functions */
 /*END ADD MEMBER */
 		$('#single_cal1').daterangepicker({
@@ -616,6 +698,11 @@ ko.applyBindings(guarantor);
 		$('#loan_types').on('change', function() {
 			loan_type = $(this).val();
 			dTable.ajax.reload();
+		});
+		//This is to add loan id to the loan repayment order to allow passing of the loand add when saving a repayment
+		$('.add_repayment').on('show.bs.modal', function(e) {
+			var loan = $(e.relatedTarget).data('id');
+			$("#loan_id").val(loan);
 		});
 	//Clients transaction details
 		<?php 
@@ -870,5 +957,9 @@ ko.applyBindings(guarantor);
 			getDashboardData(moment().subtract(29, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
 		}
   });
-  
+  $(document).on("click", ".open-AddBookDialog", function () {
+	  alert($(this).data('id'));
+		 var myBookId = $(this).data('id');
+		 $(".modal-body #bookId").val( myBookId );
+	});
 </script>

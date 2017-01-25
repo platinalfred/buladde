@@ -1,8 +1,8 @@
 <?php
 $curdir = dirname(__FILE__);
 require_once($curdir.'/Db.php');
-class LoanType extends Db {
-	protected static $table_name  = "loan_type";
+class IncomeSource extends Db {
+	protected static $table_name  = "income_sources";
 	protected static $db_fields = array("id", "name", "description");
 	
 	public function findById($id){
@@ -14,28 +14,25 @@ class LoanType extends Db {
 		$result_array = $this->getarray(self::$table_name, "", "", "");
 		return !empty($result_array) ? $result_array : false;
 	}
-	public function findLoanType($id){
+	public function findSecurityType($id){
 		$result = $this->getfrec(self::$table_name, "name", "id=".$id, "", "");
 		return !empty($result) ? $result['name'] : false;
 	}
-	public function addLoanType($data){
-		$fields = array_slice(self::$db_fields, 1);
+	public function addIncomeSource($data){
+		$fields = self::$db_fields;
 		if($this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data))){
 			return true;
 		}
 		return false;
 	}
-	public function updateLoanStatus($data){
-		$fields = array_slice(self::$db_fields, 1);
+	public function updateIncomeSource($data){
+		$fields = array_slice(1, self::$db_fields);
 		$id = $data['id'];
 		unset($data['id']);
 		if($this->update(self::$table_name, $fields, $this->generateAddFields($fields, $data), "id=".$id)){
 			return true;
 		}
 		return false;
-	}
-	public function deleteLoanType(){
-		$this->del(self::$table_name, "");
 	}
 }
 ?>

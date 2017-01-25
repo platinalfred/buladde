@@ -43,7 +43,7 @@ class Accounts extends Db {
         }
     }   
 	public function findByAccountBalance($pno){
-		$result = $this->getrec(self::$table_name,"balance", "person_number=".$pno, "", "");
+		$result = $this->getfrec(self::$table_name,"balance", "person_number=".$pno, "", "");
 		return !empty($result) ? $result['balance']:false;
 	}
 	public function findByAccountNumber($accno){
