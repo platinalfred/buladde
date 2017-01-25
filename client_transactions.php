@@ -72,7 +72,7 @@ if(!isset($_GET['start_date'])){
 					</tbody>
 					<tfoot>
 							<tr>
-								<th colspan="2">Total (UGX)</th>
+								<th colspan="3">Total (UGX)</th>
 								<th><?php echo number_format($cur_balance,2,".",","); ?></th>
 								<th  colspan="3">&nbsp;</th>
 							</tr>
