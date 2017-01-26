@@ -938,21 +938,15 @@ ko.applyBindings(guarantor);
 			getDashboardData(moment().subtract(29, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
 		}
 		<?php if($show_table_js){?>
-			searchTable(start_date.subtract(29, 'days').format('YYYY-MM-DD'),end_date.format('YYYY-MM-DD'));
+			//searchTable(start_date.subtract(29, 'days').format('YYYY-MM-DD'),end_date.format('YYYY-MM-DD'));
 		<?php }?>
-  });
-  $(document).on("click", ".open-AddBookDialog", function () {
-	  alert($(this).data('id'));
-		 var myBookId = $(this).data('id');
-		 $(".modal-body #bookId").val( myBookId );
-	});
-	
+		
 	//Clients transaction details
 		<?php 
 		if(isset($_GET['view']) && $_GET['view'] == "client_trasaction_history"){ ?>
 			var handleDataTableButtons = function() {
-			  if ($("#datatable-buttons").length) {
-				dTable = $('#datatable-buttons').DataTable({
+			  if ($("#transactions_table").length) {
+				dTable = $('#transactions_table').DataTable({
 				  dom: "Bfrtip",
 				  "processing": true,
 				  "serverSide": true,
@@ -1034,4 +1028,11 @@ ko.applyBindings(guarantor);
 			}();
 			TableManageButtons.init();
 		<?php } ?>
+  });
+  $(document).on("click", ".open-AddBookDialog", function () {
+	  alert($(this).data('id'));
+		 var myBookId = $(this).data('id');
+		 $(".modal-body #bookId").val( myBookId );
+	});
+	
 </script>
