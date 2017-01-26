@@ -417,6 +417,7 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 				data: $('.form-horizontal').serialize(),
 				cache: false,
 				success: function(response){
+					alert(response);
 					if($.isNumeric(response)){
 						showStatusMessage('A member has been successfully added!', "success");
 						setTimeout(function(){
@@ -982,12 +983,12 @@ ko.applyBindings(guarantor);
 						d.start_date = getStartDate();
 						d.end_date = getEndDate();
 						}
-				  },
+				  }/* ,
 				  "footerCallback": function (tfoot, data, start, end, display ) {
 					var api = this.api(),
 					total = api.column(2).data().sum();
 					$(api.column(2).footer()).html( format1(total) );
-				  },columns:[ { data: 'account_number'},
+				  } */,columns:[ { data: 'account_number'},
 						{ data: 'transaction_type' , render: function ( data, type, full, meta ) {
 							var trans_type = "";
 							switch(data){

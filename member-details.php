@@ -1,7 +1,6 @@
 <?php 
 //This will prevent data tables js from showing on every page for speed increase
 $show_table_js = true;
-
 require_once("lib/Libraries.php");
 require_once("lib/Forms.php");
 require_once("lib/Reports.php");
@@ -36,7 +35,7 @@ include("includes/header.php");
 <div class="right_col" role="main">
 	<div class="x_panel">
 	  <div class="x_title">
-		<h2><?php echo $names; ?> <small> - <?php echo $person_data['person_number'];?> </small></h2>
+		<h2><?php echo $names; ?> <small> - <?php echo $person_data['person_number'];?> </small>   </h2> 	
 		<ul class="nav navbar-right panel_toolbox">
 		  <li> <a href="update-member-details.php?member_id=<?php echo $_GET['member_id']; ?>"  class="btn btn-primary" title="Edit Member"><i class="fa fa-edit"></i > Edit</a>
 		  </li>
@@ -49,7 +48,7 @@ include("includes/header.php");
 	  <div class="x_content" id="member-details">
 		<div class="row" >
 		  <div class="col-md-2 col-sm-12 col-xs-12 form-group">
-			
+				<h2> A/C - <?php echo $accounts->findAccountNumberByPersonNumber($person_data['id']);?></h2>
 				<?php  
 				if($person_data['photograph'] !="" && file_exists($person_data['photograph'])){?> 
 					<img style="width:100%; height:100%;" height="100%" src="<?php echo $person_data['photograph']; ?>" > <a  href="" type="button"  data-toggle="modal" data-target=".add_photo"><i class="fa fa-edit"></i> Change photo</a>

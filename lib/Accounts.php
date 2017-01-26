@@ -54,7 +54,10 @@ class Accounts extends Db {
 		$result = $this->getrec(self::$table_name, "person_number=".$pno, "");
 		return !empty($result) ? $result:false;
 	}
-	
+	public function findAccountNumberByPersonNumber($pno){
+		$result = $this->getfrec(self::$table_name, "account_number", "person_number=".$pno, "", "");
+		return !empty($result) ? $result['account_number']:false;
+	}
 	public function findTransactionByPersonNumber($pno){
 		$results = $this->getarray("transaction", "person_number=".$pno, "", "");
 		return !empty($results) ? $results : false;

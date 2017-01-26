@@ -364,13 +364,14 @@ Class Reports{
 					</thead>
 					<tbody>
 					</tbody>
+					<!--
 					<tfoot>
 							<tr>
 								<th colspan="2">Total (UGX)</th>
 								<th>&nbsp;</th>
 								<th  colspan="2">&nbsp;</th>
 							</tr>
-					</tfoot>
+					</tfoot>-->
 				  </table>
 				</div>
 			  </div>

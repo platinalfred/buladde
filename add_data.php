@@ -138,7 +138,7 @@ if(isset($_POST['add_loan'])){
 		$data['person_number'] = $person_id;
 		$member_id = $member->addMember($data);
 		if($member_id){
-			$data['account_number'] = substr(number_format(time() * rand(),0,'',''),0,10);
+			$data['account_number'] =  sprintf('%10d', $person_id);
 			$data['balance'] = 0.00;
 			$data['status'] = 1;
 			$data['date_created'] = date("Y-m-d");
