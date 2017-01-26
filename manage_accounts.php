@@ -170,13 +170,13 @@ include("includes/footer.php");
 		  "footerCallback": function (tfoot, data, start, end, display ) {
             var api = this.api(), total = api.column(4).data().sum();
 			// UPDATE FOOTER //
-            $(api.column(4).footer()).html( format1(total) );
+            $(api.column(4).footer()).html( format1(total * -1) );
 		  },
 		  columns:[ { data: 'person_number', render: function ( data, type, full, meta ) {return '<a href="member-details.php?member_id='+full.member_id+'" title="Update details">'+data+'</a>';}},
 				{ data: 'account_number' },
 				{ data: 'firstname', render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname;}},
 				{ data: 'transaction_date', render: function ( data, type, full, meta ) {return moment(data).format('LL');}},
-				{ data: 'amount', render: function ( data, type, full, meta ) {return format1(parseFloat(data));}}
+				{ data: 'amount', render: function ( data, type, full, meta ) {return format1(parseFloat(data) * -1);}}
 				] ,
 		  buttons: btn_opts,
 		  responsive: true		  
@@ -192,7 +192,7 @@ include("includes/footer.php");
 		}
 	  };
 	}();
-
+//Deposits table
 	dTable2 = $('#datatable-buttons2').DataTable({
 		  dom: "Bfrtip",
 		  "processing": true,

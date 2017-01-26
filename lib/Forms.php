@@ -11,6 +11,9 @@ Class Forms{
 			case 'default.add';
 				$this->defaultDisplay();
 			break;
+			case 'share_rate.edit';
+				$this->editShareRate();
+			break;
 			case 'loan.add';
 				$this->addLoan();
 			break;
@@ -460,16 +463,16 @@ Class Forms{
 		 <div class="clearfix"></div>
 		<?php
 	}
-	function addShares(){
+	function editShareRate(){
 		$member = new Member();
 		$shares = new Shares();
-		$pno = $member->findMemberPersonNumber($_GET['member_id']);
+		$share_rate = $shares->findShareRate();
 		?>
 		<div class="row">
 		  <div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="x_panel">
 			  <div class="x_title">
-				<h2>Manage Shares <small></small></h2>
+				<h2>Manage Share Rate<small></small></h2>
 				<ul class="nav navbar-right panel_toolbox">
 				  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
 				</ul>
@@ -477,17 +480,82 @@ Class Forms{
 			  </div>
 			  <div class="x_content">
 				<form class="form-horizontal form-label-left" novalidate>
-					<input type="hidden" name="add_share" value="add_share">
-					<input type="hidden" name="person_number" value="<?php echo $pno; ?>">
+					<input type="hidden" name="add_share_rate" value="add_share_rate">
+					<input type="hidden" name="id" value="<?php echo $share_rate['id']; ?>">
 					  <div class="item form-group">
-						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="amount">Amount<span class="required">*</span>
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Share Amount<span class="required">*</span>
 						</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
-							<input type="number"  name="amount"  required="required" class="form-control col-md-7 col-xs-12">
+							<input type="number"  name="amount"  value="<?php echo $share_rate['amount']; ?>" required="required" class="form-control col-md-7 col-xs-12">
 						  </div>
 					  </div>
+					 
 					  <div class="item form-group">
-						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="paid_by">Paid By <span class="required">*</span>
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="telephone">Changed By
+						</label>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+						  <input type="text" disabled="disabled" name="received_by"  value="<?php echo $member->findMemberNames($_SESSION['person_number']); ?>" class="form-control col-md-7 col-xs-12">
+						  <input type="hidden" name="added_by"  value="<?php echo $_SESSION['person_number'] ; ?>" class="form-control col-md-7 col-xs-12">
+						</div>
+					  </div>
+					  <div class="ln_solid"></div>
+					  <div class="form-group">
+						<div class="col-md-6 col-md-offset-3">
+						  <button id="send" type="button" class="btn btn-success loginbtn save_data">Save</button>
+						</div>
+					  </div>
+				</form>
+			  </div>
+			</div>
+		  </div>
+		</div>
+			
+		 <div class="clearfix"></div>
+		<?php
+	}
+	function addShares(){
+		$member = new Member();
+		$shares = new Shares();
+		$income_sources = new IncomeSource();
+		$pno = $member->findMemberPersonNumber($_GET['member_id']);
+		?>
+		<div class="row">
+		  <div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="x_panel">
+			  <div class="x_title">
+				<h2>Add Member Shares <small></small></h2>
+				<ul class="nav navbar-right panel_toolbox">
+				  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+				</ul>
+				<div class="clearfix"></div>
+			  </div>
+			  <div class="x_content">
+				<?php 
+				$rate = $shares->findShareRate();
+				$src = $income_sources->findIncomeSourceByName("Shares");
+				?>
+				<input type="hidden" id="rate_amount" name="" value="<?php echo $rate['amount']; ?>">
+				<form class="form-horizontal form-label-left" novalidate>
+					<input type="hidden" name="add_share" value="add_share">
+					<input type="hidden" name="person_number" value="<?php echo $pno; ?>">
+					<input type="hidden" name="income_type" value="<?php echo $src['id']; ?>">
+					<div class="item form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="amount">Number of Share<span class="required">*</span>
+						</label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+							<input type="number"  name="no_of_shares" id="no_of_shares"  required="required" class="form-control col-md-7 col-xs-12">
+						  </div>
+					</div>
+					<div class="item form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="paid_by">Share Amount
+						</label>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<input type="text"  id="share_amount" name="amount"  readonly="readonly" class="form-control col-md-7 col-xs-12">
+							<p id="share_rate_amount"></p>
+						</div>
+					  </div>
+					  <div class="item form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="paid_by">Paid By<span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
 							<input type="text"  name="paid_by"  class="form-control col-md-7 col-xs-12">

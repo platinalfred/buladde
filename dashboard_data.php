@@ -44,9 +44,9 @@ $percents['members_percent'] = $members_b4>0?round((($members_b4 - $figures['no_
 
 //Total amount of paid subscriptions
 //1 in this period
-$figures['total_scptions'] = $dashboard->getSumOfSubscriptions("(`date_paid` BETWEEN '".$start_date."' AND '".$end_date."')");
+$figures['total_scptions'] = $dashboard->getCountOfSubscriptions("(`date_paid` BETWEEN '".$start_date."' AND '".$end_date."')");
 //before this period
-$total_scptions_b4 = $dashboard->getSumOfSubscriptions("(`date_paid` < '".$start_date."')");
+$total_scptions_b4 = $dashboard->getCountOfSubscriptions("(`date_paid` < '".$start_date."')");
 //percentage increase/decrease
 $percents['scptions_percent'] = $total_scptions_b4>0?round((($total_scptions_b4 - $figures['total_scptions'])/$total_scptions_b4)*100,2):0;
 

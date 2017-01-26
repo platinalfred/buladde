@@ -9,7 +9,10 @@ class IncomeSource extends Db {
 		$result = $this->getrec(self::$table_name, "id=".$id, "");
 		return !empty($result) ? $result:false;
 	}
-	
+	public function findIncomeSourceByName($name){
+		$result = $this->getfrec(self::$table_name, "id", "name LIKE '%".$name."%'", "", "");
+		return !empty($result) ? $result['id'] : false;
+	}
 	public function findAll(){
 		$result_array = $this->getarray(self::$table_name, "", "", "");
 		return !empty($result_array) ? $result_array : false;

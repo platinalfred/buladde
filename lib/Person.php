@@ -43,7 +43,13 @@ class Person extends Db {
 	public function addPerson($data){
 		$fields = array("person_number","person_type","title","firstname", "lastname", "othername","gender", "dateofbirth", "phone", "email","country","district","county","subcounty","parish","village","id_type", "id_number","physical_address","postal_address", "occupation", "photograph", "comment", "date_registered", "registered_by");
 		$data['dateofbirth'] = $this->formatSlashedDate($data['dateofbirth']);
-		return $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
+		$id =  $this->add(self::$table_name, $fields, $this->generateAddFields($fields, $data));
+		if($id){
+			$ld = sprintf('%08d', $id);
+			$no = "BFS".$ld;
+			$this->update(self::$table_name, array("person_number"), array("person_number"=>$no), "id=".$id);
+			return $id;
+		}
 			
 	}
 	public function updatePerson($data){

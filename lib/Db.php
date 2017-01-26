@@ -61,6 +61,7 @@ class Db{
 		}
 		return $statement;
 	}
+	
 	function bindParam($preparedStatement, $a_params){
 		/* $preparedStatement->bind_param($data_type, $a_params);
 		

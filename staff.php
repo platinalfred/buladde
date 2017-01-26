@@ -35,7 +35,7 @@ $all_staff =  $staff->findAllActive();
 						<th></th>
 						<?php 
 						
-						$header_keys = array("Person Number", "Name", "Position","Date of Birth", "Branch", "Action");
+						$header_keys = array("Person Number", "Name", "Position","Phone", "Date of Birth", "Branch", "Action");
 						foreach($header_keys as $key){ ?>
 							
 							<th><?php echo $key; ?></th>
@@ -54,6 +54,7 @@ $all_staff =  $staff->findAllActive();
 								<td><input type="checkbox" class="flat" name="table_records"></td>
 								<td><a href="" ><?php echo $person_data['person_number']; ?></A></td>
 								<td><?php echo $person->combineNames($person_data); ?></td>
+								<td><?php $p = $person->getfrec("position", "name", "id=".$single['position_id'], "", ""); echo $p['name']; ?></td>
 								<td><?php echo $person_data['phone'] ?></td>
 								<td><?php echo date("j F, Y", strtotime($person_data['dateofbirth'])); ?></td>
 								<td><?php  echo $person->findBranchByBranchNo($single['branch_number']);  ?></td>

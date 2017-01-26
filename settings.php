@@ -32,6 +32,7 @@ $locations = new Locations();
 					<!--<li><a href="?task=access_level.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Access Level</a></li>-->
 					<li><a href="?task=income_sources.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Income Source</a></li>
 					<li><a href="?task=loan_type.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Loan Type</a></li>
+					<li><a href="?task=share_rate.edit" class="btn btn-primary"><i class="fa fa-plus"></i>Manage Share Rate</a></li>
 					<!--li><a href="?task=loan_repayment_durarion.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Loan Repayment Duration</a></li-->
 				</ul>
 				<ul class="nav navbar-right panel_toolbox">
@@ -41,6 +42,7 @@ $locations = new Locations();
 					<li><a href="?view=branches" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Branches</a></li>
 					<li><a href="?view=incomesources" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Income Sources</a></li>
 					<li><a href="?view=loantypes" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Loan Types</a></li>
+					<!--<li><a href="?view=viewshareratehistory" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Share Rate Change History</a></li>-->
 				</ul>
 			</div>
 		  </div>

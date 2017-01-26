@@ -14,7 +14,7 @@ $income = new Income();
 	<div class="clearfix"></div>
 	
 	<div class="row x_title">
-	  <div class="col-md-6">
+	  <div class="col-md-4">
 		<h3>Income <small></small></h3>
 	  </div>
 	  <div class="col-md-6">
@@ -23,6 +23,23 @@ $income = new Income();
 		  <span>November 20, 2016 - December 19, 2016</span> <b class="caret"></b>
 		</div>
 	  </div>
+		<div class="col-md-2"><li><a class="btn btn-primary" data-toggle="modal" data-target=".member_modal"> <i class="fa fa-plus"></i> Receive Income</a></li></div>
+		<div class="modal fade member_modal" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog modal-md">
+				<div class="modal-content">
+					<div class="modal-header">
+					  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+					  </button>
+					  <h4 class="modal-title" id="myModalLabel">Record Received Income</h4>
+					</div>
+					<div class="modal-body">
+						<?php 
+						include("add_imcome.php");
+						?>
+					</div>
+				</div>
+			</div>      
+		</div>
 	</div>
 
 	<div class="row">
@@ -33,10 +50,11 @@ $income = new Income();
 				<thead>
 					<tr>
 						<?php 
-						$header_keys = array("#", "Income Type", "Amount", "Description", "Date", "Edit");
+						$header_keys = array("#", "Income Type", "Amount", "Description", "Date");
 						foreach($header_keys as $key){ ?>
 							<th><?php echo $key; ?></th>
-						<?php } ?>
+							<?php 
+						} ?>
 					</tr>
 				</thead>
 				<tbody>
@@ -46,7 +64,7 @@ $income = new Income();
 						<th class="right_remove">Total (UGX)</th>
 						<th class="right_remove left_remove"></th>
 						<th class="right_remove left_remove"></th>
-						<th class="right_remove left_remove" colspan="3"></th>
+						<th class="right_remove left_remove" colspan="2"></th>
 					</tr>
 				</tfoot>
 			</table>
@@ -102,17 +120,16 @@ $income = new Income();
             var api = this.api(), total = api.column(2).data().sum();
 			// UPDATE TOTALS //
             $(api.column(2).footer()).html( "<strong>" + format1(total) + "<strong>" );
-		  },"columnDefs": [ {
-			  "targets": [5],
+		  },/* "columnDefs": [ {
+			  "targets": [4],
 			  "orderable": false,
 			  "searchable": false
-		  }],
+		  }], */
 		  columns:[ { data: 'id'},
 				{ data: 'name'},
 				{ data: 'amount' },
 				{ data: 'description'},
-				{ data: 'date_added'},
-				{ data: 'income_id', render: function ( data, type, full, meta ) {return '';}}
+				{ data: 'date_added'}
 				] ,
 		  buttons: [
 			{

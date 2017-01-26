@@ -1,5 +1,7 @@
 <?php 
+session_start();
 require_once("lib/Libraries.php");
+//Transaction Types 1-Deposits, 2-Withdraws, 3-Loan Repayment, 4-Shares, 5-Membership subscription
 if(isset($_POST['add_loan'])){
 	$data = $_POST;
 	$loan = new Loans();
@@ -52,6 +54,16 @@ if(isset($_POST['add_loan'])){
 		return;
 	}  
 	return false;
+}elseif(isset($_POST['add_share_rate'])){
+	$data = $_POST;
+	$shares = new Shares();
+	$data['date_added'] = date("Y-m-d");
+	if($shares->addShareRate($data)){
+		echo "success";
+		return;
+		
+	}  
+	return false;
 }elseif(isset($_POST['add_share'])){
 	$data = $_POST;
 	$member = new Member();
@@ -59,12 +71,19 @@ if(isset($_POST['add_loan'])){
 	$income = new Income();
 	$data['date_paid'] = date("Y-m-d");
 	if($shares->addShares($data)){
-		
-		$data['income_type'] = 2;
 		$data['date_added'] = date("Y-m-d");
 		$data['added_by'] = $data['received_by'];
 		$data['description'] = "Shares bought by ".$member->findMemberNames($data['person_number'])." on ".$data['date_added'];
 		if($income->addIncome($data)){
+			//Record into the transaction table
+			$data['transaction_type']  = 4;
+			$data['transaction_type']  = $_SESSION['branch_number'];
+			$data['transacted_by']  = $data['paid_by'];
+			$data['transaction_date'] = $data['date_added'];
+			$data['approved_by']= $data['received_by'];
+			$data['comments'] = $data['description'] ;
+			$trans_fields = array("transaction_type", "branch_number", "person_number", "amount", "amount_description", "transacted_by", "transaction_date", "approved_by", "comments");
+			$shares->add("transaction", $trans_fields, $shares->generateAddFields($trans_fields, $data));
 			echo "success";
 			return;
 		}
@@ -80,6 +99,7 @@ if(isset($_POST['add_loan'])){
 		$data['income_type'] = 1;
 		$data['date_added'] = date("Y-m-d");
 		$data['added_by'] = $data['received_by'];
+		
 		$data['description'] = "Annual subscription paid by ".$member->findMemberNames($data['person_number'])." for year ".$data['subscription_year'];
 		if($income->addIncome($data)){
 			echo "success";
@@ -118,7 +138,7 @@ if(isset($_POST['add_loan'])){
 		$data['person_number'] = $person_id;
 		$member_id = $member->addMember($data);
 		if($member_id){
-			$data['account_number'] = substr(number_format(time() * rand(),0,'',''),0,10);
+			$data['account_number'] =  sprintf('%10d', $person_id);
 			$data['balance'] = 0.00;
 			$data['status'] = 1;
 			$data['date_created'] = date("Y-m-d");

@@ -364,13 +364,14 @@ Class Reports{
 					</thead>
 					<tbody>
 					</tbody>
+					<!--
 					<tfoot>
 							<tr>
 								<th colspan="2">Total (UGX)</th>
 								<th>&nbsp;</th>
 								<th  colspan="2">&nbsp;</th>
 							</tr>
-					</tfoot>
+					</tfoot>-->
 				  </table>
 				</div>
 			  </div>
@@ -935,28 +936,20 @@ Class Reports{
 						<?php 
 						if($all_client_shares){  ?>
 							<div class="table-responsive">
-							  <table class="table table-striped jambo_table bulk_action">
+							  <table class="table table-striped jambo_table ">
 								<thead>
 								  <tr class="headings">
-									<th>
-									  <input type="checkbox" id="check-all" class="flat">
-									</th>									
+																		
 									<?php 
-									$header_keys = array("Purchase Date", "Amount");
+									$header_keys = array("Purchase Date","Number of Shares",  "Amount Paid");
 									foreach($header_keys as $key){ ?>
 										<th><?php echo $key; ?></th>
 										<?php
 									}
 									?>
-									<th class="bulk-actions">
-									  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-									</th>
+									
 								  </tr>
-								  <tr>
-									<th class="bulk-actions" colspan="3">
-									  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-									</th>
-								  </tr>
+								  
 								</thead>
 								<tbody>
 									<?php
@@ -964,11 +957,9 @@ Class Reports{
 									foreach($all_client_shares as $single){ 
 										?>
 										<tr class="even pointer " >
-											<td class="a-center ">
-												<input type="checkbox" value="<?php echo $single['id']; ?>" class="flat" name="table_records"/>
-											</td>
 											<td class="a-right a-right"><?php echo date("j F, Y", strtotime($single['date_paid'])); ?></td>
-											<td colspan="2"><?php $shares_sum += $single['amount']; echo number_format($single['amount'],0,".",","); ?></td>
+											<td ><?php $shares_sum += $single['no_of_shares']; echo number_format($single['no_of_shares'],0,".",","); ?></td>
+											<td ><?php  echo number_format($single['amount'],0,".",","); ?></td>
 										</tr>
 										<?php
 									}
@@ -976,8 +967,8 @@ Class Reports{
 								</tbody>
 								</tfoot>
 									<tr>
-										<th colspan="2">Total</th>
-										<th class="a-right a-right " colspan="2"><?php echo number_format($shares_sum,0,".",","); ?></th>
+										<th colspan="2">Total Shares</th>
+										<th class="a-right " colspan="2"><?php echo number_format($shares_sum,0,".",","); ?></th>
 									</tr>
 								</tfoot>
 							  </table>

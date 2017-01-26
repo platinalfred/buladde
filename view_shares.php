@@ -31,7 +31,7 @@ require_once("lib/Libraries.php");
 				<thead>
 					<tr>
 						<?php 
-						$header_keys = array("Client", "Amount");
+						$header_keys = array("Client", "Number of Shares");
 						foreach($header_keys as $key){ ?>
 							<th><?php echo $key; ?></th>
 							<?php

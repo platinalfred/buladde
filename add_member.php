@@ -36,15 +36,7 @@
 								$type = "member";
 								$person_type = $member->getfrec("persontype","id","name= '$type'","", "");
 								$p_type = $person_type['id'];
-								//$person_number = (strtoupper(substr($type, 0, (1-strlen($type)))))."".(date('dmyHis'));
-								$person_number = "BFS".(date('dmyHis'));
 								?>
-								<div class="form-group">
-									<label class="control-label col-md-3 col-sm-3 col-xs-12">Person Number</label>
-									<div class="col-md-6 col-sm-6 col-xs-12">
-									  <input type="text" class="form-control" name="person_number" value="<?php echo $person_number; ?>" readonly="readonly" placeholder="Read-Only Input">
-									</div>
-								</div>
 								<div class="form-group">
 									<label class="control-label col-md-3 col-sm-3 col-xs-12">Title</label>
 									<div class="col-md-6 col-sm-6 col-xs-12">

@@ -18,7 +18,8 @@ $foto = $staff->findPersonsPhoto($_SESSION['person_number']);
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+	<link rel="apple-touch-icon" sizes="57x57" href="img/fav.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="img/fav.png">
     <title>Buladde Financial Services - <?php echo isset($page_title)?$page_title:"";?></title>
 	<link rel="icon" href="img/fav.png" type="image/x-icon">
     <!-- Bootstrap -->
@@ -87,23 +88,27 @@ $foto = $staff->findPersonsPhoto($_SESSION['person_number']);
                     <ul class="nav child_menu">
 					  <li><a href="view_loans.php">Loans</a></li>
                       <li><a href="view_shares.php">Shares</a></li>
-                       <li><a href="view_income.php">Income</a></li>
+                      
                       <li><a href="view_subscriptions.php">Subscriptions</a></li>
                       <li><a href="view_member_savings.php">Member's Savings</a></li>
                     </ul>
                   </li>
-				  <?php }else{?>
-                  <li><a href="view_loans.php"><i class="fa fa-money"></i> Loans</a> </li>
-				  <?php }?>
+				   <li><a href="view_income.php"> <i class="fa fa-money"></i>Income</a></li>
+				  <?php 
+				  }else{?>
+					<li><a href="view_loans.php"><i class="fa fa-money"></i> Loans</a> </li>
+					<?php 
+				  }?>
 				  
                   <li><a href="view_members.php"><i class="fa fa-users"></i> Members</a> </li>
 				  
-				  <?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
+				  <?php
+				  if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
                   <li><a href="staff.php"><i class="fa fa-users"></i>Staff</a></li>
 				  <?php }?>
 				  
                   <li><a href="view_expenses.php"><i class="fa fa-table"></i>Expenses</a></li>
-                  <li><a href="manage_accounts.php"><i class="fa fa-money"></i>Manage Accounts</a> </li>
+                  <li><a href="manage_accounts.php"><i class="fa fa-user"></i>Manage Accounts</a> </li>
                 </ul>
               </div>
 			<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
