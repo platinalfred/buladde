@@ -742,7 +742,10 @@ ko.applyBindings(guarantor);
 			st_date = startDate;
 			ed_date = endDate;
 			dTable.ajax.reload();
-			dTable2.ajax.reload();
+			if( typeof dTable2 !== 'undefined' ) {
+				dTable2.ajax.reload();
+			}
+			
 		}	
 	//End client transaction details 
 		function getDashboardData(startDate, endDate){
@@ -982,10 +985,9 @@ ko.applyBindings(guarantor);
 				  },
 				  "footerCallback": function (tfoot, data, start, end, display ) {
 					var api = this.api(),
-					total = api.column(3).data().sum();
-					$(api.column(3).footer()).html( format1(total) );
-				  },columns:[ { data: 'id', render: function ( data, type, full, meta ) {return '<input type="checkbox" value="'+data+'" class="flat" name="table_records">';}},
-						{ data: 'account_number'},
+					total = api.column(2).data().sum();
+					$(api.column(2).footer()).html( format1(total) );
+				  },columns:[ { data: 'account_number'},
 						{ data: 'transaction_type' , render: function ( data, type, full, meta ) {
 							var trans_type = "";
 							switch(data){

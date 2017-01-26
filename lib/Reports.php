@@ -350,12 +350,9 @@ Class Reports{
 			<div class="x_panel">
 			  <div class="x_content">
 				<div class="table-responsive">
-				  <table id="datatable-buttons" class="table table-striped jambo_table bulk_action">
+				  <table id="transactions_table" class="table table-striped">
 					<thead>
 					  <tr class="headings">
-						<th>
-						  <input type="checkbox" id="check-all" class="flat">
-						</th>
 						<?php 
 						$header_keys = array("Account Number", "Transaction Type", "Amount", "Transaction Date", "Transacted By");
 						foreach($header_keys as $key){ ?>
@@ -364,17 +361,12 @@ Class Reports{
 						}
 						?>
 					  </tr>
-					  <tr>
-						<th class="bulk-actions" colspan="6">
-						  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-						</th>
-					  </tr>
 					</thead>
 					<tbody>
 					</tbody>
 					<tfoot>
 							<tr>
-								<th colspan="3">Total (UGX)</th>
+								<th colspan="2">Total (UGX)</th>
 								<th>&nbsp;</th>
 								<th  colspan="2">&nbsp;</th>
 							</tr>
