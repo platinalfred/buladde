@@ -1,5 +1,4 @@
 <script>
-
 var start_date = <?php echo isset($_GET['s_dt'])?"moment('{$_GET['s_dt']}','YYYY-MM-DD')":"moment().subtract(29, 'days')"; ?>,
 end_date = <?php echo isset($_GET['e_dt'])?"moment('{$_GET['e_dt']}','YYYY-MM-DD')":"moment()"; ?>;
 
@@ -184,6 +183,26 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 		{
 			$("#number_words").html("");
 			$("#loan_amount_word").val("");
+		}
+		
+	});
+	$("#no_of_shares").keyup(function(){
+		var currentInput  = parseInt($(this).val());
+		var one_share_amount  = parseInt($("#rate_amount").val());
+		var total_share_amount  = currentInput * one_share_amount;
+		if(!isNaN(currentInput)){
+			var words  = getWords(total_share_amount);
+			if(currentInput != 1){
+				s = "shares";
+			}else{
+				s = "share";
+			}
+			$("#share_amount").val(total_share_amount);
+			$("#share_rate_amount").html(" You are buying "+currentInput+" "+ s+ " which is equivalent to "+ words +" Ugandan Shillings Only");
+			
+		}else{
+			$("#share_rate_amount").html("");
+			$("#share_amount").val("");
 		}
 		
 	});

@@ -105,7 +105,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_shares" ) {
 
 	$primary_key = "`shares`.`id`";
 
-	$columns = array( "`firstname`", "`lastname`", "`othername`", "`shares`.`person_number`", "SUM(`amount`) `share`");
+	$columns = array( "`firstname`", "`lastname`", "`othername`", "`shares`.`person_number`", "SUM(`no_of_shares`) `share`");
 }
 //list of all the client subscriptions
 if ( isset($_POST['page']) && $_POST['page'] == "view_subcriptns" ) {
