@@ -159,6 +159,24 @@ include("includes/header.php");
 			</div>
 			<div class="col-md-12 col-sm-12 col-xs-12 form-group" style="border-top:1px solid #09A; padding-top:10px;">
 				<ul class="nav navbar-left panel_toolbox">
+					<!--<li><a class="btn btn-primary" data-toggle="modal" data-target=".loan_application"> <i class="fa fa-plus"></i> Apply for Loan</a></li>
+					<div class="modal fade loan_application" tabindex="-1" role="dialog" aria-hidden="true">
+						<div class="modal-dialog modal-md">
+							<div class="modal-content">
+								<div class="modal-header">
+								  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+								  </button>
+								  <h4 class="modal-title" id="myModalLabel">Record Received Income</h4>
+								</div>
+								<div class="modal-body">
+									<?php 
+									//include("loan_application.php");
+									?>
+								</div>
+							</div>
+						</div>      
+					</div> -->
+		
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=loan.add" class="btn btn-primary"><i class="fa fa-plus"></i> Record a Loan</a> </li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=subscription.add" class="btn btn-primary"><i class="fa fa-plus"></i> Subscribe</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=shares.add" class="btn btn-primary"><i class="fa fa-plus"></i> Buy Shares</a></li>
