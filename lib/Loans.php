@@ -30,7 +30,7 @@ class Loans extends Db {
 		 return !empty($results) ? $results['loan_number'] : false;
 	}
 	public function findExpectedPayBackAmount($where = 1){
-		 $results  = $this->getfrec(self::$table_name, "expected_payback", "id=".$id, "", "");
+		 $results  = $this->getfrec(self::$table_name, "expected_payback", $where, "", "");
 		 return !empty($results) ? $results['expected_payback'] : false;
 	}
 	public function findAmountPaid($where = 1){

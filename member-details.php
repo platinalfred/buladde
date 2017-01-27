@@ -69,7 +69,7 @@ include("includes/header.php");
 								</div>
 								<div class="modal-body">
 									<input type="hidden" name="photo_upload" >
-								  <input type="hidden" name="person_number" value="<?php echo $member_data['person_number']; ?>">
+								  <input type="hidden" id="p_no" name="person_number" value="<?php echo $member_data['person_number']; ?>">
 								  <input id="myFileInput" type="file" name="photograph" accept="image/*;capture=camera">
 								</div>
 								<div class="modal-footer">

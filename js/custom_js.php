@@ -795,7 +795,7 @@ ko.applyBindings(guarantor);
 			$.ajax({
 				type: "post",
 				dataType: "json",
-				data:{person_number:<?php if(isset($person_number))echo $person_number; ?>, start_date:startDate, end_date:endDate},
+				data:{person_number:$("#p_no").val(), start_date:startDate, end_date:endDate},
 				url: "ledger_data.php",
 				success: function(response){
 					$.each(response, function(key, value){
