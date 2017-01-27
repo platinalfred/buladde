@@ -31,11 +31,11 @@ class Loans extends Db {
 	}
 	public function findExpectedPayBackAmount($where = 1){
 		 $results  = $this->getfrec(self::$table_name, "sum(expected_payback) amount", $where, "", "");
-		 return !empty($results) ? $results['amount'] : 0;
+		 return !empty($results) ? ($results['amount']!=null?$results['amount'] : 0) : 0;
 	}
 	public function findAmountPaid($where = 1){
 		 $results  = $this->getfrec("loan_repayment", "sum(amount) amount_paid", $where, "", "");
-		 return !empty($results) ? $results['amount_paid'] : 0;
+		 return !empty($results) ? ($results['amount_paid']!=null?$results['amount_paid'] : 0) : 0;
 	}
 	public function isLoanAboutToExpire($id, $duratn){
 		$days = $this->findLoanPayBackDays($duratn);

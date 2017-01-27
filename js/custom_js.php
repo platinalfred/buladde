@@ -802,7 +802,7 @@ ko.applyBindings(guarantor);
 						$("."+key).html(format1(parseFloat(value)));
 					});
 					if(document.getElementById("income")){
-						$("#income").html(format1(parseFloat(response.subscriptions)+parseFloat(response.shares)/* +(parseFloat(response.expected_payback)-parseFloat(response.amount_paid)) */));;
+						$("#income").html( format1( parseFloat(response.subscriptions)+parseFloat(response.shares) +(parseFloat(response.expected_payback)-parseFloat(response.amount_paid )) ));;
 						$("#expenses").html(format1(parseFloat(response.expenses)));;
 					}
 				}
