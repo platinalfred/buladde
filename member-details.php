@@ -159,9 +159,9 @@ include("includes/header.php");
 			</div>
 			<div class="col-md-12 col-sm-12 col-xs-12 form-group" style="border-top:1px solid #09A; padding-top:10px;">
 				<ul class="nav navbar-left panel_toolbox">
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=loan.add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Loan</a> </li>
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=subscription.add" class="btn btn-primary"><i class="fa fa-plus"></i>Add Subscription</a></li>
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=shares.add" class="btn btn-primary"><i class="fa fa-plus"></i>Add Shares</a></li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=loan.add" class="btn btn-primary"><i class="fa fa-plus"></i> Record a Loan</a> </li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=subscription.add" class="btn btn-primary"><i class="fa fa-plus"></i> Subscribe</a></li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=shares.add" class="btn btn-primary"><i class="fa fa-plus"></i> Buy Shares</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=nok.add" class="btn btn-primary"><i class="fa fa-plus"></i></i> Add Next of Kin</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=deposit.add" class="btn btn-primary"><i class="fa fa-plus"></i> Deposit Saving</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=withdraw.add" class="btn btn-primary"><i class="fa fa-plus"></i> Withdraw</a></li>

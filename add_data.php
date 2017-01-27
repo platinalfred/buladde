@@ -36,6 +36,15 @@ if(isset($_POST['add_loan'])){
 		return;
 	}  
 	return false;
+}elseif(isset($_POST['add_income'])){
+	$data = $_POST;
+	$data['date_added'] = date("Y-m-d");
+	$income = new Income();
+	 if($income->addIncome($data)){
+		echo "success";
+		return;
+	}  
+	return false;
 }elseif(isset($_POST['add_expense'])){
 	$data = $_POST;
 	$data['date_of_expense'] = date("Y-m-d");
@@ -76,8 +85,8 @@ if(isset($_POST['add_loan'])){
 		$data['description'] = "Shares bought by ".$member->findMemberNames($data['person_number'])." on ".$data['date_added'];
 		if($income->addIncome($data)){
 			//Record into the transaction table
-			$data['transaction_type']  = 4;
-			$data['transaction_type']  = $_SESSION['branch_number'];
+			$data['transaction_type']  = 3;
+			$data['branch_number']  = $_SESSION['income_type'];
 			$data['transacted_by']  = $data['paid_by'];
 			$data['transaction_date'] = $data['date_added'];
 			$data['approved_by']= $data['received_by'];
@@ -138,7 +147,8 @@ if(isset($_POST['add_loan'])){
 		$data['person_number'] = $person_id;
 		$member_id = $member->addMember($data);
 		if($member_id){
-			$data['account_number'] =  sprintf('%10d', $person_id);
+			$act= sprintf('%08d', $person_id);
+			$data['account_number'] =  $act;
 			$data['balance'] = 0.00;
 			$data['status'] = 1;
 			$data['date_created'] = date("Y-m-d");

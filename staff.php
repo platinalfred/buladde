@@ -52,14 +52,14 @@ $all_staff =  $staff->findAllActive();
 							?>
 							<tr>
 								<td><input type="checkbox" class="flat" name="table_records"></td>
-								<td><a href="" ><?php echo $person_data['person_number']; ?></A></td>
+								<td><a href="update_staff.php?id=<?php echo $single['id']; ?>" ><?php echo $person_data['person_number']; ?></a></td>
 								<td><?php echo $person->combineNames($person_data); ?></td>
 								<td><?php $p = $person->getfrec("position", "name", "id=".$single['position_id'], "", ""); echo $p['name']; ?></td>
 								<td><?php echo $person_data['phone'] ?></td>
 								<td><?php echo date("j F, Y", strtotime($person_data['dateofbirth'])); ?></td>
 								<td><?php  echo $person->findBranchByBranchNo($single['branch_number']);  ?></td>
 						  <td>
-								<a href="update_staff.php?id=<?php echo $person_data['id']; ?>" class="btn btn-success" id="<?php echo $person_data['id']; ?>" ><i class="fa fa-edit" > Edit</i></a>
+								<a href="update_staff.php?id=<?php echo $single['id']; ?>" class="btn btn-success" id="<?php echo $single['id']; ?>" ><i class="fa fa-edit" > Edit</i></a>
 								<a href="#" class="btn btn-danger delete" id="<?php echo $person_data['id']; ?>_staff" ><i class="fa fa-trash-o"></i> Delete </a>
 						  </td>
 							 

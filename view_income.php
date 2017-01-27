@@ -34,7 +34,7 @@ $income = new Income();
 					</div>
 					<div class="modal-body">
 						<?php 
-						include("add_imcome.php");
+						include("add_income.php");
 						?>
 					</div>
 				</div>

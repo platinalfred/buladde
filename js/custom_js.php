@@ -245,7 +245,9 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 			form[0].reset();
 		});
 	}
-	
+	$('.member_modal, .add_photo, .expense_modal, .staff_modal, .add_repayment').on('hidden.bs.modal', function () {
+		location.reload();
+	});
 	function saveData(){
 		$(".save_data").click(function(){
 			if(areAllFilled()){
@@ -257,7 +259,6 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 					data: formData,
 					cache: false,
 					success: function(response){
-						alert(response);
 						if(response.trim() == "success"){
 							<?php 
 							if(isset($_GET['task']) && ($_GET['task'] == "withdraw.add")){ ?>
@@ -353,7 +354,6 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 					data: $('.form-horizontal').serialize(),
 					cache: false,
 					success: function(response){
-						alert(response);
 						if(response.trim() == "success"){
 							showStatusMessage('A staff has been successfully updated!', "success");
 							setTimeout(function(){
@@ -417,7 +417,6 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 				data: $('.form-horizontal').serialize(),
 				cache: false,
 				success: function(response){
-					alert(response);
 					if($.isNumeric(response)){
 						showStatusMessage('A member has been successfully added!', "success");
 						setTimeout(function(){
@@ -1008,6 +1007,7 @@ ko.applyBindings(guarantor);
 				  } */,columns:[ { data: 'account_number'},
 						{ data: 'transaction_type' , render: function ( data, type, full, meta ) {
 							var trans_type = "";
+							
 							switch(data){
 								case "1":
 								trans_type = "Deposit";

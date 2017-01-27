@@ -88,7 +88,7 @@ $member_details =  $member->personDetails($_GET['member_id']);
 						<div class="form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-3">Date Of Birth <span class="required">*</span></label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
-							  <input type="text" name="dateofbirth" required="required" value="<?php echo date("d/m/Y", strtotime($member_details['dateofbirth'])); ?>" class="form-control required_f" data-inputmask="'mask': '99/99/9999'">
+							  <input type="text" name="dateofbirth" required="required" value="<?php echo date("d/m/Y", strtotime($member_details['dateofbirth'])); ?>" class="form-control required_f">
 							</div>
 						</div>
 						<div class="item form-group">

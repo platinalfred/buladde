@@ -1113,7 +1113,7 @@ Class Reports{
 								</tbody>
 								</tfoot>
 									<tr>
-										<th colspan="2">Total Shares</th>
+										<th colspan="1">Total Shares</th>
 										<th class="a-right " colspan="2"><?php echo number_format($shares_sum,0,".",","); ?></th>
 									</tr>
 								</tfoot>

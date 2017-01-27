@@ -38,6 +38,12 @@
 								$p_type = $person_type['id'];
 								?>
 								<div class="form-group">
+									<label class="control-label col-md-3 col-sm-3 col-xs-12">Member Type</label>
+									<div class="col-md-6 col-sm-6 col-xs-12">
+										<?php	$member->loadList("SELECT * FROM membertype", "member_type", "id", "name", "member_type"); ?>
+									</div>
+								</div>
+								<div class="form-group">
 									<label class="control-label col-md-3 col-sm-3 col-xs-12">Title</label>
 									<div class="col-md-6 col-sm-6 col-xs-12">
 									  <select class="form-control" name="title">

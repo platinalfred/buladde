@@ -33,7 +33,7 @@ $all_expenses = array();
 				<thead>
 					<tr>
 						<?php 
-						$header_keys = array("Expense No", "Expense Type", "Expensed Staff", "Amount", "Description", "Date of Expense");
+						$header_keys = array("Expense No", "Expense Type", "Expensed Staff","Date of Expense", "Amount", "Description");
 						foreach($header_keys as $key){ ?>
 							<th><?php echo $key; ?></th>
 							<?php
@@ -143,9 +143,9 @@ include("includes/footer.php");
 				}
 		  },
 		  "footerCallback": function (tfoot, data, start, end, display ) {
-            var api = this.api(), total = api.column(3).data().sum();
+            var api = this.api(), total = api.column(4).data().sum();
 			// UPDATE FOOTER //
-            $(api.column(3).footer()).html( format1(total) );
+            $(api.column(4).footer()).html( format1(total) );
 		  },"columnDefs": [ {
 			  "targets": [0],
 			  "orderable": false

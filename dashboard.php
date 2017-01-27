@@ -19,7 +19,7 @@ include("includes/header.php");
 		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="scptions_percent">3% </i></span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-		  <span class="count_top"><i class="fa fa-money"></i> Total Shares</span>
+		  <span class="count_top"><i class="fa fa-money"></i> Total Shares Bought</span>
 		  <div><a class="count green dash_link" href="view_shares.php" title="Details" id="total_shares">0</a></div>
 		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="shares_percent">34% </i></span>
 		</div>
@@ -217,7 +217,12 @@ include("includes/header.php");
 
 </div>
 <!-- /page content -->
-<?php } else {include("includes/error_400.php"); }?> 
+<?php 
+} else { 
+	$exclude = true;
+	include("view_members.php");
+	
+}?> 
 <?php 
 include("includes/footer.php"); 
 ?>

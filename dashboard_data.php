@@ -37,9 +37,9 @@ $tables['ploans'] = $loan->findAll("`id` IN (SELECT `loan_id` FROM `loan_repayme
 
 //No of members
 //1 in this period
-$figures['no_members'] = $member->noOfMembers("(`date_added` BETWEEN '".$start_date."' AND '".$end_date."')");
+$figures['no_members'] = $member->noOfMembers("(`date_added` BETWEEN '".$start_date."' AND '".$end_date."') AND active=1");
 //before this period
-$members_b4 = $member->noOfMembers("(`date_added` < '".$start_date."')");
+$members_b4 = $member->noOfMembers("(`date_added` < '".$start_date."') AND active=1");
 $percents['members_percent'] = $members_b4>0?round((($members_b4 - $figures['no_members'])/$members_b4)*100,2):0;
 
 //Total amount of paid subscriptions
