@@ -30,8 +30,8 @@ class Loans extends Db {
 		 return !empty($results) ? $results['loan_number'] : false;
 	}
 	public function findExpectedPayBackAmount($where = 1){
-		 $results  = $this->getfrec(self::$table_name, "expected_payback", $where, "", "");
-		 return !empty($results) ? $results['expected_payback'] : false;
+		 $results  = $this->getfrec(self::$table_name, "sum(expected_payback) amount", $where, "", "");
+		 return !empty($results) ? $results['amount'] : 0;
 	}
 	public function findAmountPaid($where = 1){
 		 $results  = $this->getfrec("loan_repayment", "sum(amount) amount_paid", $where, "", "");

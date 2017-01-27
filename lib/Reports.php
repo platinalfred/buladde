@@ -513,10 +513,10 @@ Class Reports{
 						</thead>
 						<tbody>
 							<tr>
-								<th>Principle + Expected Interest</th><td id="expected_payback">0</td><td></td>
+								<th>Principle + Expected Interest</th><td class="expected_payback">0</td><td></td>
 							</tr>
 							<tr>
-								<th>Amount Paid</th><td></td><td id="amount_paid">0</td>
+								<th>Amount Paid</th><td></td><td class="amount_paid">0</td>
 							</tr>
 						</tbody>
                     </table>
