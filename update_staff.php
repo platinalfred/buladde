@@ -10,7 +10,6 @@ $locations = new Locations();
 $all_staff = array();
 $found_member = array();
 $staff_details =  $staff->personDetails($_GET['id']);
-
 ?>
 <!-- page content -->
 <div class="right_col" role="main">
@@ -135,7 +134,7 @@ $staff_details =  $staff->personDetails($_GET['id']);
 								<label class="control-label col-md-3 col-sm-3 col-xs-12">Position</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<?php 
-									$staff->loadList("SELECT * FROM position", "position_id", "id","name","", $staff_details['position_id']);
+									$staff->loadList("SELECT * FROM position", "position_id", "id","name","position", $staff_details['position_id']);
 									?>
 								</div>
 							</div>
@@ -143,7 +142,7 @@ $staff_details =  $staff->personDetails($_GET['id']);
 								<label class="control-label col-md-3 col-sm-3 col-xs-12">Access Level</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<?php 
-									$staff->loadList("SELECT * FROM accesslevel", "access_level", "id","name","", $staff_details['access_level']);
+									$staff->loadList("SELECT * FROM accesslevel", "access_level", "id","name","level", $staff_details['access_level']);
 									?>
 								</div>
 							</div>

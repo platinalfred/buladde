@@ -1,8 +1,11 @@
 <?php 
 //This will prevent data tables js from showing on every page for speed increase
 $show_table_js = true;
+if(!@$exclude){
 include("includes/header.php"); 
+}
 require_once("lib/Libraries.php");
+
 $member = new Member();
 $person = new Person();
 
@@ -32,7 +35,7 @@ $person = new Person();
 				<thead>
 					<tr>
 						<?php
-						$header_keys = array("Person Number", "Name", "Phone", "Member since", "Subscription", "Shares", "Savings", "Loans");
+						$header_keys = array("Person Number", "Name", "Phone", "Member since", "Member Type", "Shares", "Savings", "Loans");
 						foreach($header_keys as $key){ ?>
 							<th><?php echo $key; ?></th>
 							<?php
