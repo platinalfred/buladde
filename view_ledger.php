@@ -66,8 +66,8 @@ $income = new Income();
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<th>Income</th><td id="income_ac_subscription">xx</td><td></td>
+							<tr id="deposits">
+								<th>Income</th><td id="income">xx</td><td></td>
 							</tr>
 							<tr>
 								<th>Expenses</th><td></td><td id="expenses">xx</td>
