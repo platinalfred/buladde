@@ -33,7 +33,7 @@ $figures['withdraws'] = $dashboard->getSumOfDeposits("transaction_type = 2 AND (
 $figures['expected_payback'] = $loan->findExpectedPayBackAmount("(`loan_date` BETWEEN '".$start_date."'AND '".$end_date."') AND person_number = $person_number");
 
 //sum of paid amount
-$figures['amount_paid'] = $loan->findAmountPaid("loan_id IN  (SELECT id FROM `loan` WHERE `loan_date` BETWEEN '".$start_date."'AND '".$end_date."') (`transaction_date` BETWEEN '".$start_date."' AND '".$end_date."') AND person_number = $person_number");
+$figures['amount_paid'] = $loan->findAmountPaid("loan_id IN  (SELECT id FROM `loan` WHERE `loan_date` BETWEEN '".$start_date."'AND '".$end_date."') AND (`transaction_date` BETWEEN '".$start_date."' AND '".$end_date."') AND person_number = $person_number");
 
 //Expenses"
 //$figures['sum_expenses'] = $expense->findSumOfExpenses("`date_of_expense` BETWEEN '".$start_date."' AND '".$end_date."'");
