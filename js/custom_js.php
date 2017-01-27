@@ -999,9 +999,11 @@ ko.applyBindings(guarantor);
 								trans_type = "Withdraw";
 								break;
 								case "3":
-								trans_type = "Shares";
+								trans_type = "Loan Repayment";
 								break;
 								case "4":
+								trans_type = "Shares";
+								case "5":
 								trans_type = "Membership";
 								break;
 								default:
