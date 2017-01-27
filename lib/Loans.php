@@ -29,6 +29,14 @@ class Loans extends Db {
 		 $results  = $this->getfrec(self::$table_name, "loan_number", "id=".$id, "", "");
 		 return !empty($results) ? $results['loan_number'] : false;
 	}
+	public function findExpectedPayBackAmount($where = 1){
+		 $results  = $this->getfrec(self::$table_name, "expected_payback", "id=".$id, "", "");
+		 return !empty($results) ? $results['expected_payback'] : false;
+	}
+	public function findAmountPaid($where = 1){
+		 $results  = $this->getfrec("loan_repayment", "sum(amount) amount_paid", $where, "", "");
+		 return !empty($results) ? $results['amount_paid'] : 0;
+	}
 	public function isLoanAboutToExpire($id, $duratn){
 		$days = $this->findLoanPayBackDays($duratn);
 		$six_days_to = $days-14; 

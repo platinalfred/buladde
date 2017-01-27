@@ -23,8 +23,13 @@ class Expenses extends Db {
 	}
 	
 	public function findAmountExpensed($id){
-		$result = $this->getfrec(self::$table_name, "amount_used", "id='$id'", "");
+		$result = $this->getfrec(self::$table_name, "amount_used", "id='$id'", "", "");
 		return !empty($result) ? $result['amount']:false;
+	}
+	
+	public function findSumOfExpenses($where = 1){
+		$result = $this->getfrec(self::$table_name, "sum(`amount_used`) expenseSum ", $where, "", "");
+		return !empty($result) ? (($result['expenseSum']!=NULL)?$result['expenseSum']:0) : 0;
 	}
 	
 	

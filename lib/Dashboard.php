@@ -17,13 +17,21 @@ class Dashboard extends Db {
 		$result = $this->getfrec("shares", "sum(`no_of_shares`) sharesSum ", $where, "", "");
 		return !empty($result) ? (($result['sharesSum']!=NULL)?$result['sharesSum']:0) : 0;
 	}
-	public function getCountOfShares($where = 1){
-		$result = $this->getfrec("shares", "count(`id`) sharesCount ", $where, "", "");
-		return !empty($result) ? (($result['sharesCount']!=NULL)?$result['sharesCount']:0) : 0;
+	public function getAmountOfShares($where = 1){
+		$result = $this->getfrec("transaction", "sum(`amount`) sharesSum ", $where, "", "");
+		return !empty($result) ? (($result['sharesSum']!=NULL)?$result['sharesSum']:0) : 0;
 	}
 	public function getSumOfSubscriptions($where = 1){
 		$result = $this->getfrec("subscription", "sum(`amount`) subsSum ", $where, "", "");
 		return !empty($result) ? (($result['subsSum']!=NULL)?$result['subsSum']:0) : 0;
+	}
+	public function getSumOfDeposits($where = 1){
+		$result = $this->getfrec("transaction", "sum(`amount`) depositsSum ", $where, "", "");
+		return !empty($result) ? (($result['depositsSum']!=NULL)?$result['depositsSum']:0) : 0;
+	}
+	public function getSumOfWithdraws($where = 1){
+		$result = $this->getfrec("transaction", "sum(`amount`) withdrawsSum ", $where, "", "");
+		return !empty($result) ? (($result['withdrawsSum']!=NULL)?$result['withdrawsSum']:0) : 0;
 	}
 	public function getCountOfSubscriptions($where = 1){
 		$result = $this->getfrec("subscription", "count(`id`) subsCount ", $where, "", "");

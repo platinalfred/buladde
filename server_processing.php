@@ -25,7 +25,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
 
 	$primary_key = "`member`.`id`";
 
-	$columns = array( "`person`.`person_number`", "`firstname`", "`lastname`", "`othername`", "`phone`", "`date_added`", "`member_type`", ", `shares`", "`savings`", "`member`.`id` as `member_id`", "`loans`", "`dateofbirth`", "`gender`", "`email`", "`postal_address`", "`physical_address`", "`branch_number`" );
+	$columns = array( "`person`.`person_number`", "`firstname`", "`lastname`", "`othername`", "`phone`", "`date_added`", "`member_type`", ", `shares`", "`savings`", "`member`.`id` `member_id`", "`loans`", "`dateofbirth`", "`gender`", "`email`", "`postal_address`", "`physical_address`", "`branch_number`" );
 }
 //list of all the expenses
 if ( isset($_POST['page']) && $_POST['page'] == "view_expenses" ) {
@@ -150,7 +150,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "member_savings" ) {
 }
 //list of the deposits
 if ( isset($_POST['page']) && $_POST['page'] == "deposits" ) {
-		$where = "transaction_type=2";
+		$where = "transaction_type=1";
 	
 	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 		$where .= " AND (`transaction_date` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
@@ -163,7 +163,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "deposits" ) {
 }
 //list of the withdraws
 if ( isset($_POST['page']) && $_POST['page'] == "withdraws" ) {
-		$where = "transaction_type=1";
+		$where = "transaction_type=2";
 	
 	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 		$where .= " AND (`transaction_date` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";

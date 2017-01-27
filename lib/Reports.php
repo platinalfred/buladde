@@ -51,6 +51,9 @@ Class Reports{
 			case 'loantypes';
 				$this->loanTypes();
 			break;
+			case 'ledger';
+				$this->ledger();
+			break;
 			case '';
 				$this->branches();
 			break;
@@ -377,6 +380,149 @@ Class Reports{
 			  </div>
 			</div>
 		  </div>
+		</div>
+		<?php
+	}
+	public function ledger(){ 
+		$loan = new Loans();
+		$expense = new Expenses();
+		$dashboard = new Dashboard();
+		//This will prevent data tables js from showing on every page for speed increase
+		$show_table_js = true;
+		?>
+		<div class="page-title" >
+		  <div class="title_left" style="width:35%;">
+			<h3>Ledger <small>Accounts</small></h3> 
+		  </div>
+		  <div class="title_right" style="width:55%;">
+			<div class="col-md-12 col-sm-12 col-xs-12 form-group">
+				<div id="reportrange" class="pull-left" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+				  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+				  <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
+				</div>
+				<span style="margin-top: 40px; margin-left:10px;">Select period</span>
+			</div>
+		  </div>
+		</div>
+		<div class="clearfix"></div>
+		<div class="row">
+            <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Personal <small>Account</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <table id="personal_account" class="table table-hover">
+						<thead>
+							<tr>
+								<?php 
+								$header_keys = array("&nbsp;", "Dr", "Cr");
+								foreach($header_keys as $key){ ?>
+									<th><?php echo $key; ?></th>
+									<?php 
+								} ?>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th>Subscription</th><td></td><td class="subscriptions">xx</td>
+							</tr>
+							<tr>
+								<th>Shares</th><td></td><td class="shares">xx</td>
+							</tr>
+							<tr>
+								<th>Deposits</th><td></td><td id="deposits" class="deposits">xx</td>
+							</tr>
+							<tr>
+								<th>Withdraws</th><td class="withdraws">xx</td><td></td>
+							</tr>
+						</tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Income <small>Account</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <table id="income_account" class="table table-hover">
+						<thead>
+							<tr>
+								<?php
+								foreach($header_keys as $key){ ?>
+									<th><?php echo $key; ?></th>
+									<?php 
+								} ?>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th>Subscription</th><td></td><td class="subscriptions">xx</td>
+							</tr>
+							<tr>
+								<th>Deposits</th><td class="deposits">xx</td><td></td>
+							</tr>
+							<!--tr>
+								<th>Expenses</th><td></td><td id="expenses">xx</td>
+							</tr-->
+						</tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+			  
+            <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Loans <small>Account</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <table id="loans_account" class="table table-hover">
+						<thead>
+							<tr>
+								<?php 
+								$header_keys = array("&nbsp;", "Dr", "Cr");
+								foreach($header_keys as $key){ ?>
+									<th><?php echo $key; ?></th>
+									<?php 
+								} ?>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th>Principle + Expected Interest</th><td id="expected_payback">0</td><td></td>
+							</tr>
+							<tr>
+								<th>Amount Paid</th><td></td><td id="amount_paid">0</td>
+							</tr>
+						</tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
 		</div>
 		<?php
 	}

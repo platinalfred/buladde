@@ -11,6 +11,7 @@ $accounts = new Accounts();
 $all_members = array();
 $found_member = array();
 $names  = "";
+$person_number  = "";
 
 if(isset($_GET['p_id'])){
 	$id = $member->findMemberIdByPersonIdNo($_GET['p_id']);
@@ -21,6 +22,7 @@ if(isset($_GET['p_id'])){
 }else{
 	if($_GET['member_id']){
 		$member_data  = $member->findById($_GET['member_id']);
+		$person_number = $member_data['person_number'];
 		$person_data = $person->findByid($member_data['person_number']);
 		$names =  $person_data['firstname']." ". $person_data['lastname']." ".$person_data['othername']; 
 	}else{
@@ -172,6 +174,7 @@ include("includes/header.php");
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=myshares" class="btn btn-success"><i class="fa fa-folder-open-o"></i>My Shares</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=nok" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Next of kin details</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=mysavings" class="btn btn-success"><i class="fa fa-folder-open-o"></i>My savings</a></li>
+				   <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=ledger" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Ledger</a></li>
 				   <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=client_trasaction_history" class="btn btn-success"><i class="fa fa-folder-open-o"></i> Transaction History</a></li>
 				</ul>
 			</div>

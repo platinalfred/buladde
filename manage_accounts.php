@@ -159,7 +159,7 @@ include("includes/footer.php");
 			  "url":"server_processing.php",
 			  "type": "POST",
 			  "data": function(d){
-				d.page = 'deposits';
+				d.page = 'withdraws';
 				d.start_date = getStartDate();
 				d.end_date = getEndDate();
 				}
@@ -202,7 +202,7 @@ include("includes/footer.php");
 			  "url":"server_processing.php",
 			  "type": "POST",
 			  "data": function(d){
-				d.page = 'withdraws';
+				d.page = 'deposits';
 				d.start_date = getStartDate();
 				d.end_date = getEndDate();
 				}

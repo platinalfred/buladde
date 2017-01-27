@@ -694,6 +694,9 @@ ko.applyBindings(guarantor);
 					getDashboardData(startDate, endDate);
 					format_hrefs(startDate, endDate);
 				}
+				if(document.getElementById("deposits")){
+					displayLedgerData(startDate, endDate);
+				}
 				searchTable(startDate,endDate);
 		});
 		$('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
@@ -785,6 +788,20 @@ ko.applyBindings(guarantor);
 					$("#income").html(draw_income_table(response.tables.income));
 					//draw the expenses table
 					$("#expenses").html(draw_expense_table(response.tables.expenses));
+				}
+			});
+		}
+		//display ledger data
+		function displayLedgerData(startDate, endDate){
+			$.ajax({
+				type: "post",
+				dataType: "json",
+				data:{person_number:<?php if(isset($person_number))echo $person_number; ?>, start_date:startDate, end_date:endDate},
+				url: "ledger_data.php",
+				success: function(response){
+					$.each(response, function(key, value){
+						$("."+key).html(format1(parseFloat(value)));
+					});
 				}
 			});
 		}
@@ -960,9 +977,9 @@ ko.applyBindings(guarantor);
 		if(document.getElementById("nploans")){
 			getDashboardData(moment().subtract(29, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
 		}
-		<?php if($show_table_js){?>
-			//searchTable(start_date.subtract(29, 'days').format('YYYY-MM-DD'),end_date.format('YYYY-MM-DD'));
-		<?php }?>
+		if(document.getElementById("deposits")){
+			displayLedgerData(moment().subtract(29, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
+		}
 		
 	//Clients transaction details
 		<?php 
