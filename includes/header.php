@@ -91,6 +91,7 @@ $foto = $staff->findPersonsPhoto($_SESSION['person_number']);
                       <li><a href="view_subscriptions.php">Subscriptions</a></li>
                       <li><a href="view_member_savings.php">Member's Savings</a></li>
                        <li><a href="#">Inactive Accounts</a></li>
+					   <li><a href="#">Log Reports</a></li>
                     </ul>
                   </li>
 				   <li><a href="view_income.php"> <i class="fa fa-money"></i>Income</a></li>
