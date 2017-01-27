@@ -17,6 +17,10 @@ class Dashboard extends Db {
 		$result = $this->getfrec("shares", "sum(`no_of_shares`) sharesSum ", $where, "", "");
 		return !empty($result) ? (($result['sharesSum']!=NULL)?$result['sharesSum']:0) : 0;
 	}
+	public function getCountOfShares($where = 1){
+		$result = $this->getfrec("shares", "count(`id`) sharesCount ", $where, "", "");
+		return !empty($result) ? (($result['sharesCount']!=NULL)?$result['sharesCount']:0) : 0;
+	}
 	public function getAmountOfShares($where = 1){
 		$result = $this->getfrec("transaction", "sum(`amount`) sharesSum ", $where, "", "");
 		return !empty($result) ? (($result['sharesSum']!=NULL)?$result['sharesSum']:0) : 0;
