@@ -116,7 +116,10 @@ include("includes/footer.php");
 			"columnDefs": [ {
 			  "targets": [0],
 			  "orderable": false
-		  }],
+		  },{
+			  "targets": [5,6,7],
+			  "searchable": false
+		  }], 
 		  columns:[ { data: 'member_id', render: function ( data, type, full, meta ) {return '<a href="member-details.php?member_id='+data+'" title="Update details">'+full.person_number+'</a>';}},
 				{ data: 'firstname', render: function ( data, type, full, meta ) {return full.firstname + ' ' + full.othername + ' ' + full.lastname;}},
 				{ data: 'phone' },

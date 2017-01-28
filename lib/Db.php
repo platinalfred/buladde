@@ -57,7 +57,7 @@ class Db{
 	function prepareStatement($query){
 		$statement = $this->conn->prepare($query);
 		if($statement === false) {
-			trigger_error('Wrong SQL: ' . $query . ' Error: ' . $this->conn->errno . ' ' . $this->conn->error, E_USER_ERROR);
+			trigger_error('SQL Error: ' . $this->conn->errno . ' ' . $this->conn->error, E_USER_ERROR);
 		}
 		return $statement;
 	}

@@ -16,16 +16,12 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
 			$where = " added_by = ".$_SESSION['user_id']." AND active=1";
 		}
 	}
-	if(strlen($where)>0){
-		$where .= " AND active = 1";
-	}else{
-		$where = " active = 1";
-	}
+	
 	$table = "`member` JOIN `person` ON `member`.`person_number` = `person`.`id` LEFT JOIN (SELECT SUM(`balance`) savings, `person_number` FROM `accounts` GROUP BY `person_number`) `client_savings` ON `member`.`person_number` = `client_savings`.`person_number` LEFT JOIN (SELECT SUM(`amount`) `shares`, `person_number` FROM `shares` GROUP BY `person_number`) `client_shares` ON `member`.`person_number` = `client_shares`.`person_number` LEFT JOIN (SELECT COUNT(`id`) `loans`, `person_number` FROM `loan` GROUP BY `person_number`) `client_loans` ON `member`.`person_number` = `client_loans`.`person_number`";
 
 	$primary_key = "`member`.`id`";
 
-	$columns = array( "`person`.`person_number`", "`firstname`", "`lastname`", "`othername`", "`phone`", "`date_added`", "`member_type`", ", `shares`", "`savings`", "`member`.`id` `member_id`", "`loans`", "`dateofbirth`", "`gender`", "`email`", "`postal_address`", "`physical_address`", "`branch_number`" );
+	$columns = array( "`person`.`person_number`", "`firstname`", "`lastname`", "`othername`", "`phone`", "`date_added`", "`member_type`", "`member`.`id` `member_id`", "`loans`", ", `shares`", "`savings`", "`dateofbirth`", "`gender`", "`email`", "`postal_address`", "`physical_address`", "`branch_number`" );
 }
 //list of all the expenses
 if ( isset($_POST['page']) && $_POST['page'] == "view_expenses" ) {
