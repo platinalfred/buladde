@@ -153,6 +153,7 @@ class Db{
 		$myyear=$mydate[2];
 		return ($myyear."-".$mymonth."-".$myday);
 	}
+	
 	function formatSlashedDate($date) {
 		$mydate = explode('/', $date);
 		$mymonth = "";
@@ -171,6 +172,7 @@ class Db{
 		$myyear=$mydate[2];
 		return ($myyear."-".$mymonth."-".$myday);
 	}
+	
 	function Password($password_length = 9){
         srand(make_seed());
 
@@ -181,6 +183,7 @@ class Db{
         }
         return md5($token);
     }
+	
 	function loadList($query, $name, $value_field,$display_field,$field_id="",$selected_id="", $add_link = "", $roles = array(1, 2, 3, 4), $select = "single", $selected=""){
        //  $result = mysql_query($query) or die(mysql_error());
 		$results = $this->queryData($query);

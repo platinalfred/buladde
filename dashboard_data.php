@@ -26,14 +26,24 @@ $_result['lineBarChart'] = getGraphData($start_date, $end_date);
 $_result['pieChart'][] = $dashboard->getSumOfLoans("`loan_date` <= '".$end_date."' AND id IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)");
 $_result['pieChart'][] = $dashboard->getSumOfLoans("`loan_date` <= '".$end_date."' AND id NOT IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)");
 
+//querty for the loans
+$query = "SELECT `loan`.`id`, `loan`.`loan_number`, `expected_payback`, COALESCE((`expected_payback`- `paid_amount`),`expected_payback`) `balance`, `member`.`id` `member_id` FROM `loan` JOIN `member` ON `member`.`person_number` = `loan`.`person_number` LEFT JOIN (SELECT COALESCE(SUM(amount),0) paid_amount, `loan_id` FROM `loan_repayment` WHERE (`transaction_date` <= '".$end_date."')) `payment` ON `loan`.`id` = `payment`.`loan_id`";
+
+$order_by_clause = " ORDER BY `balance` DESC LIMIT 10";
+
 //Non performing loans
-$tables['nploans'] = $loan->findAll("(`loan_date` <= '".$end_date."') AND `expected_payback` > COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id`),0) AND `id` NOT IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)", "expected_payback DESC", "10");
+$where_clause = " WHERE (`loan_date` <= '".$end_date."') AND `expected_payback` > COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id`),0) AND `loan`.`id` NOT IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)";
+
+$tables['nploans'] = $loan->findLoans($query . $where_clause . $order_by_clause);
 
 //active loans
-$tables['actvloans'] = $loan->findAll("((`loan_date` <= '".$end_date."') AND `expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE (`transaction_date` <= '".$end_date."') AND `loan_id` = `loan`.`id`),0))", "expected_payback DESC", "10");
+$where_clause =  " WHERE ((`loan_date` <= '".$end_date."') AND `expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE (`transaction_date` <= '".$end_date."') AND `loan_id` = `loan`.`id`),0))";
+
+$tables['actvloans'] = $loan->findLoans($query . $where_clause . $order_by_clause);
 
 //Performing loans
-$tables['ploans'] = $loan->findAll("`id` IN (SELECT `loan_id` FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)", "expected_payback DESC", "10");
+$where_clause =  " WHERE `loan`.`id` IN (SELECT `loan_id` FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)";
+$tables['ploans'] = $loan->findLoans($query . $where_clause . $order_by_clause);
 
 //No of members
 //1 in this period

@@ -1,5 +1,5 @@
 <script>
-var start_date = <?php echo isset($_GET['s_dt'])?"moment('{$_GET['s_dt']}','YYYY-MM-DD')":"moment().subtract(29, 'days')"; ?>,
+var start_date = <?php echo isset($_GET['s_dt'])?"moment('{$_GET['s_dt']}','YYYY-MM-DD')":"moment().subtract(30, 'days')"; ?>,
 end_date = <?php echo isset($_GET['e_dt'])?"moment('{$_GET['e_dt']}','YYYY-MM-DD')":"moment()"; ?>;
 
 var st_date = start_date.format('YYYY-MM-DD'), //start date for the datatable
@@ -654,7 +654,7 @@ ko.applyBindings(guarantor);
             'Today': [moment(), moment()],
             'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
             'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(30, 'days'), moment()],
             'This Month': [moment().startOf('month'), moment().endOf('month')],
             'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
           },
@@ -866,20 +866,21 @@ ko.applyBindings(guarantor);
 				"</thead>"+
 				  "<tbody>";
 		$.each(loans_data, function(key, value){
+				
 			html_data += "<tr>"+
-						  "<td><a href='#"+value.id+"' title='View details'>"+value.loan_number+"</a></td>"+
+						  "<td><a href='member-details.php?member_id="+value.member_id+"&view=client_loan&lid="+value.id+"' title='View details'>"+value.loan_number+"</a></td>"+
 						  "<td>"+format1(parseInt(value.expected_payback))+"</td>"+
-						  "<td>"+format1(parseInt(value.loan_amount))+"</td>"+
+						  "<td>"+((parseInt(value.balance)<0)?"("+format1((parseInt(value.balance) * -1))+")":format1(parseInt(value.balance)))+"</td>"+
 						"</tr>";
 						amount += parseInt(value.expected_payback); 
-						balance += parseInt(value.loan_amount);
+						balance += parseInt(value.balance);
 		});
 		html_data += "</tbody>"+
 				  "<tfoot>"+
 					"<tr>"+
 					  "<th scope='row'>Total</th>"+
 					  "<th>"+format1(amount)+"</th>"+
-					  "<th>"+format1(balance)+"</th>"+
+					  "<th>"+((balance<0)?"("+format1(balance * -1)+")":format1(balance))+"</th>"+
 					"</tr>"+
 				  "</tfoot>";
 		return html_data;
@@ -978,10 +979,10 @@ ko.applyBindings(guarantor);
 		  });
 	  }
 		if(document.getElementById("nploans")){
-			getDashboardData(moment().subtract(29, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
+			getDashboardData(moment().subtract(30, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
 		}
 		if(document.getElementById("deposits")){
-			displayLedgerData(moment().subtract(29, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
+			displayLedgerData(moment().subtract(30, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
 		}
 		
 	//Clients transaction details

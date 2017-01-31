@@ -98,9 +98,9 @@ include("includes/footer.php");
 		  },columns:[ { data: 'loan_number', render: function ( data, type, full, meta ) {return '<a href="member-details.php?member_id='+full.member_id+'&view=client_loan&lid='+full.id+'" title="View details">'+data+'</a>';}},
 				{ data: 'firstname', render: function ( data, type, full, meta ) {return full.firstname+' '+full.lastname+' '+full.othername;}},
 				{ data: 'name'},
-				{ data: 'loan_amount' , render: function ( data, type, full, meta ) {return format1(parseFloat(data));}},
+				{ data: 'loan_amount' , render: function ( data, type, full, meta ) {return format1(data);}},
 				{ data: 'interest_rate', render: function ( data, type, full, meta ) {return data+'%';}},
-				{ data: 'expected_payback', render: function ( data, type, full, meta ) {return format1(parseFloat(data));}},
+				{ data: 'expected_payback', render: function ( data, type, full, meta ) {return format1(data);}},
 				{ data: 'loan_date',  render: function ( data, type, full, meta ) {return moment(data, 'YYYY-MM-DD hh:mm:ss').format('YYYY-MM-DD');}},
 				{ data: 'duration'},
 				{ data: 'loan_end_date'}

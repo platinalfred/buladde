@@ -93,7 +93,7 @@ include("includes/header.php");
 				{ data: 'loan_number', render: function ( data, type, full, meta ) {return '<a href="#" title="View details">'+data+'</a>';}},
 				{ data: 'lastname', render: function ( data, type, full, meta ) {return full.firstname+' '+full.lastname+' '+full.othername;}},
 				{ data: 'transaction_date' },
-				{ data: 'amount'},
+				{ data: 'amount', render: function ( data, type, full, meta ) {return format1(data);}},
 				{ data: 'comments'}
 				] ,
 		  buttons: [

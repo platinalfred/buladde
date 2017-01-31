@@ -17,6 +17,10 @@ class Loans extends Db {
 		$result_array = $this->getarray(self::$table_name, $where, $order_by, $limit);
 		return !empty($result_array) ? $result_array : false;
 	}
+	public function findLoans($query){
+		$result_array = $this->queryData($query);
+		return $result_array;
+	}
 	public function findLoanType($id){
 		 $results  = $this->getfrec("loan_type", "name", "id=".$id, "", "");
 		 return !empty($results) ? $results['name'] : false;

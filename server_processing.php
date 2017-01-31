@@ -49,7 +49,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_loans" ) {
 		
 		if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 			
-			$where = "(`loan_date` <= '".$_POST['end_date']."') AND `expected_payback` > COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id`),0) AND `id` NOT IN (SELECT `loan_id` FROM `loan_repayment` WHERE DATEDIFF('".$_POST['end_date']."',`transaction_date`)<61)";
+			$where = "(`loan_date` <= '".$_POST['end_date']."') AND `expected_payback` > COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id`),0) AND `loan`.`id` NOT IN (SELECT `loan_id` FROM `loan_repayment` WHERE DATEDIFF('".$_POST['end_date']."',`transaction_date`)<61)";
 		}else{
 			$where = "`loan`.`id` NOT IN (SELECT `loan_id` FROM `loan_repayment` WHERE DATEDIFF(`transaction_date`,CURDATE())<61)";
 		}
@@ -101,7 +101,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_shares" ) {
 
 	$primary_key = "`shares`.`id`";
 
-	$columns = array( "`firstname`", "`lastname`", "`othername`", "`shares`.`person_number`", "SUM(`no_of_shares`) `share`");
+	$columns = array( "`firstname`", "`lastname`", "`othername`", "`shares`.`person_number`", "SUM(`amount`) `share`");
 }
 //list of all the client subscriptions
 if ( isset($_POST['page']) && $_POST['page'] == "view_subcriptns" ) {

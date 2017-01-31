@@ -276,7 +276,7 @@ Class Reports{
 						<div class="col-md-12 col-sm-12 col-xs-12 form-group" style="border-top:1px solid #09A; padding-top:10px;">
 							<div class="x_panel">
 							  <div class="x_title">
-								<h2>loan Payment History</small></h2>
+								<h2>Loan Payment History</small></h2>
 								<div class="clearfix"></div>
 							  </div>
 							  <div class="x_content">
@@ -305,9 +305,9 @@ Class Reports{
 												<tr class="even pointer ">
 													<td class=""><?php echo $single['branch_number']; ?></td>
 													<td class=""><?php echo $loans->findLoanNumber($single['loan_id']); ?> </td>
-													<td class=""><?php echo $single['amount']; ?> </td>
+													<td class=""><?php echo number_format($single['amount'],2,".",","); ?> </td>
 													<td class="a-right a-right"><?php echo date("j F, Y", strtotime($single['transaction_date'])); ?></td>
-													<td class="a-right a-right"><?php echo $member->findMemberNames($single['receiving_staff']); ?></td>
+													<td class="a-right a-right"><?php echo $member->findMemberNames($single['recieving_staff']); ?></td>
 													<td class="a-right a-right"><?php echo $single['comments']; ?></td>
 												</tr>
 												<?php
@@ -670,7 +670,7 @@ Class Reports{
 							</div>
 						<?php 
 						}else{
-							echo "<p>There currently no Security Types.</p>";
+							echo "<p>There currently no Member Types.</p>";
 						}
 						?>
                   </div>
@@ -733,7 +733,7 @@ Class Reports{
 							</div>
 						<?php 
 						}else{
-							echo "<p>There currently no Security Types.</p>";
+							echo "<p>There currently no Branches.</p>";
 						}
 						?>
                   </div>
@@ -1103,9 +1103,9 @@ Class Reports{
 									foreach($all_client_shares as $single){ 
 										?>
 										<tr class="even pointer " >
-											<td class="a-right a-right"><?php echo date("j F, Y", strtotime($single['date_paid'])); ?></td>
-											<td ><?php $shares_sum += $single['no_of_shares']; echo number_format($single['no_of_shares'],0,".",","); ?></td>
-											<td ><?php  echo number_format($single['amount'],0,".",","); ?></td>
+											<td><?php echo date("j F, Y", strtotime($single['date_paid'])); ?></td>
+											<td><?php $shares_sum += $single['no_of_shares']; echo number_format($single['no_of_shares'],0,".",","); ?></td>
+											<td><?php  echo number_format($single['amount'],0,".",","); ?></td>
 										</tr>
 										<?php
 									}
@@ -1257,7 +1257,7 @@ Class Reports{
 											</td>
 											<td class=" "><?php echo $single['transacted_by']; ?></td>
 											<td class="a-right a-right "><?php echo date("j F, Y", strtotime($single['transaction_date'])); ?></td>
-											<td class=" "><?php $savings_sum += $single['amount']; echo $single['amount']; ?></td>
+											<td class=" "><?php $savings_sum += $single['amount']; echo number_format($single['amount'],2,".",","); ?></td>
 											<td class=" "><?php echo $single['amount_description']; ?> </td>
 										</tr>
 										<?php
@@ -1267,7 +1267,7 @@ Class Reports{
 								</tfoot>
 									<tr>
 										<th colspan="3">Total (UGX)</th>
-										<th><?php echo $savings_sum; ?></th>
+										<th><?php echo number_format($savings_sum,2,".",","); ?></th>
 										<th>&nbsp;</th>
 									</tr>
 								</tfoot>
