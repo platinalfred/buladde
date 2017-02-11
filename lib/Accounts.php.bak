@@ -68,7 +68,7 @@ class Accounts extends Db {
 
 		$fields = array( "`firstname`", "`lastname`", "`othername`", "`amount`", "`account_number`", "`person`.`person_number`", "`transacted_by`", "`transaction_date`", "`transaction`.`id`", "`member_id`");
 		
-		$results = $this->getfarray($table, implode(",", $fields), $where, "transaction_date ASC", "");
+		$results = $this->getfarray($table, implode(",", $fields), $where, "transaction_date DESC", "");
 		return !empty($results) ? $results : false;
 	}
 	public function findOpeningBalance($where = "", $inner_where = ""){

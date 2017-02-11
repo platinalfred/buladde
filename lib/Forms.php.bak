@@ -186,9 +186,10 @@ Class Forms{
 						<div class="col-md-6 col-sm-6 col-xs-12">
 							<select name="loan_duration" id="loan_duration" class="form-control col-md-7 col-xs-12">
 								<option>Please select </option>
-								<option value="1">1 month</option>
+								<option value="7"> 1 week</option>
+								<option value="30">1 month</option>
 						   <?php for($i=2; $i<25;$i++){?>}
-								<option value="<?php echo $i;?>"> <?php echo $i; ?> months</option>
+								<option value="<?php echo ($i*30);?>"> <?php echo $i; ?> months</option>
 							<?php }?>
 							</select>
 						</div>

@@ -179,22 +179,22 @@ include("includes/header.php");
 						</div>      
 					</div> -->
 		
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=loan.add" class="btn btn-primary"><i class="fa fa-plus"></i> Record a Loan</a> </li>
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=subscription.add" class="btn btn-primary"><i class="fa fa-plus"></i> Subscribe</a></li>
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=shares.add" class="btn btn-primary"><i class="fa fa-plus"></i> Buy Shares</a></li>
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=nok.add" class="btn btn-primary"><i class="fa fa-plus"></i></i> Add Next of Kin</a></li>
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=deposit.add" class="btn btn-primary"><i class="fa fa-plus"></i> Deposit Saving</a></li>
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=withdraw.add" class="btn btn-primary"><i class="fa fa-plus"></i> Withdraw</a></li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=loan.add" class=" btn-sm btn-primary"><i class="fa fa-plus"></i> Record a Loan</a> </li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=subscription.add" class=" btn-sm btn-primary"><i class="fa fa-plus"></i> Subscribe</a></li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=shares.add" class=" btn-sm btn-primary"><i class="fa fa-plus"></i> Buy Shares</a></li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=nok.add" class=" btn-sm btn-primary"><i class="fa fa-plus"></i></i> Add Next of Kin</a></li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=deposit.add" class=" btn-sm btn-primary"><i class="fa fa-plus"></i> Deposit Saving</a></li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=withdraw.add" class=" btn-sm btn-primary"><i class="fa fa-plus"></i> Withdraw</a></li>
 				 
 				 
 				</ul>
 				<ul class="nav navbar-right panel_toolbox">
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=client_loans" class="btn btn-success"><i class="fa fa-folder-open-o"></i> View Loans</a></li>
-				   <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=mysubscriptions" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Subscriptions</a></li>
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=myshares" class="btn btn-success"><i class="fa fa-folder-open-o"></i>My Shares</a></li>
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=nok" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Next of kin details</a></li>
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=mysavings" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Savings</a></li>
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=ledger" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Ledger</a></li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=client_loans" class=" btn-sm btn-success"><i class="fa fa-folder-open-o"></i> View Loans</a></li>
+				   <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=mysubscriptions" class=" btn-sm btn-success"><i class="fa fa-folder-open-o"></i>Subscriptions</a></li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=myshares" class=" btn-sm btn-success"><i class="fa fa-folder-open-o"></i>My Shares</a></li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=nok" class=" btn-sm btn-success"><i class="fa fa-folder-open-o"></i>Next of kin details</a></li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=mysavings" class=" btn-sm btn-success"><i class="fa fa-folder-open-o"></i>Savings</a></li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=ledger" class=" btn-sm btn-success"><i class="fa fa-folder-open-o"></i>Ledger</a></li>
 				</ul>
 			</div>
 		  </div>

@@ -89,8 +89,8 @@ $foto = $staff->findPersonsPhoto($_SESSION['person_number']);
 					  <li><a href="view_loans.php">Loans</a></li>
                       <li><a href="view_shares.php">Shares</a></li>
                       <li><a href="view_subscriptions.php">Subscriptions</a></li>
-                      <li><a href="view_ledger.php">Ledger</a></li>
                       <li><a href="view_member_savings.php">Member's Savings</a></li>
+                      <li><a href="view_ledger.php">Ledger</a></li>
                        <li><a href="#">Inactive Accounts</a></li>
 					   <li><a href="#">Log Reports</a></li>
                     </ul>
@@ -110,7 +110,6 @@ $foto = $staff->findPersonsPhoto($_SESSION['person_number']);
 				  <?php }?>
 				  
                   <li><a href="view_expenses.php"><i class="fa fa-table"></i>Expenses</a></li>
-                  <li><a href="manage_accounts.php"><i class="fa fa-user"></i>Manage Accounts</a> </li>
                 </ul>
               </div>
 			<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>

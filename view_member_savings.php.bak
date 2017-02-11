@@ -75,11 +75,7 @@ require_once("lib/Libraries.php");
 		  "ajax": {
 			  "url":"ajax_data.php",
 			  "type": "POST",
-			  "data":  function(d){
-				d.origin = 'client_savings';
-				d.start_date = getStartDate();
-				d.end_date = getEndDate();
-				}
+			  "data":  {'origin':'client_savings','start_date':getStartDate(), 'end_date':getEndDate()}
 		  },
 		  "footerCallback": function (tfoot, data, start, end, display ) {
 			//the closing balance (according to the json data returned) is found in the last cell of the last row of data

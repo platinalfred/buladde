@@ -1,7 +1,7 @@
 <?php 
 //This will prevent data tables js from showing on every page for speed increase
 $show_table_js = true;
-$page_title = "Income";
+$page_title = "Ledger";
 include("includes/header.php"); 
 require_once("lib/Libraries.php");
 $income = new Income();

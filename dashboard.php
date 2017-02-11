@@ -1,5 +1,6 @@
 <?php 
 $show_table_js = false;
+$page_title = "Dashboard";
 include("includes/header.php");
 ?>
 

@@ -208,8 +208,8 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 	});
 	$("#loan_duration").change(function(){
 		var loan_duration = parseInt($(this).val());
-		$("#loan_end_date").val(moment().add(loan_duration, 'months').format('YYYY-MM-DD HH:mm:ss'));
-		$("#loan_end_date1").val(moment().add(loan_duration, 'months').format('D MMMM, YYYY'));
+		$("#loan_end_date").val(moment().add(loan_duration, 'days').format('YYYY-MM-DD HH:mm:ss'));
+		$("#loan_end_date1").val(moment().add(loan_duration, 'days').format('D MMMM, YYYY'));
 	});
 	$("#deposit_amount, #withdraw_amount").keyup(function(){
 		var currentInput  = parseInt($(this).val());

@@ -568,10 +568,7 @@ Class Reports{
 											$interest = ($single['loan_amount'] * ($single['interest_rate']/100));
 										}
 										?>
-										<tr class="even pointer
-										<?php if($loans->isLoanAboutToExpire($single['id'], $single['repayment_duration'])){ echo "danger"; } ?>
-										
-										" >
+										<tr class="even pointer <?php if($loans->isLoanAboutToExpire($single['id'], $single['repayment_duration'])){ echo "danger"; } ?>" >
 											<td class=""><a href="?member_id=<?php echo $_GET['member_id'];?>&view=client_loan&lid=<?php echo $single['id'];?>"><?php echo $single['loan_number']; ?></a></td>
 											<td class=""><?php echo $loans->findLoanType($single['loan_type']); ?> </td>
 											<td class="a-right a-right"><?php echo date("j F, Y", strtotime($single['loan_date'])); ?></td>

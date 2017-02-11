@@ -83,7 +83,7 @@ include("includes/footer.php");
 	  if ($("#datatable-buttons").length) {
 		dTable = $('#datatable-buttons').DataTable({
 		  dom: "Bfrtip",
-		  "order": [ /* [6, 'desc' ],[4, 'desc' ], */[7, 'desc' ]],
+		  "order": [ [6, 'desc' ],[4, 'desc' ],[7, 'desc' ]],
 		  "processing": true,
 		  "serverSide": true,
 		  "deferRender": true,

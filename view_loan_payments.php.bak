@@ -90,7 +90,7 @@ include("includes/header.php");
             $(api.column(4).footer()).html( format1(total) );
 		  },
 		  columns:[ { data: 'transaction_id', render: function ( data, type, full, meta ) {return '<a href="#" title="View details">'+data+'</a>';}},
-				{ data: 'loan_number', render: function ( data, type, full, meta ) {return '<a href="member-details.php?member_id='+full.member_id+'&view=client_loan&lid='+full.loan_id+'" title="View details">'+data+'</a>';}},
+				{ data: 'loan_number', render: function ( data, type, full, meta ) {return '<a href="#" title="View details">'+data+'</a>';}},
 				{ data: 'lastname', render: function ( data, type, full, meta ) {return full.firstname+' '+full.lastname+' '+full.othername;}},
 				{ data: 'transaction_date' },
 				{ data: 'amount', render: function ( data, type, full, meta ) {return format1(data);}},
