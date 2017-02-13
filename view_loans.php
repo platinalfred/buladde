@@ -108,7 +108,7 @@ include("includes/footer.php");
 				{ data: 'loan_amount' , render: function ( data, type, full, meta ) {return format1(parseInt(data));}},
 				{ data: 'interest', render: function ( data, type, full, meta ) {return format1(data);}},
 				{ data: 'expected_payback', render: function ( data, type, full, meta ) {return format1(parseInt(data));}},
-				{ data: 'interest', render: function ( data, type, full, meta ) {return format1(parseInt(data));}},
+				{ data: 'def_days', render: function ( data, type, full, meta ) {return format1(parseInt(parseInt(data)*parseInt(full.daily_default_amount)/100*parseInt(full.expected_payback)));}},
 				{ data: 'amount_paid', render: function ( data, type, full, meta ) {return format1(parseInt(data));}},
 				{ data: 'loan_date',  render: function ( data, type, full, meta ) {return moment(data, 'YYYY-MM-DD hh:mm:ss').format('DD-MMM-YYYY');}},
 				{ data: 'duration'},

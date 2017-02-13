@@ -549,7 +549,7 @@ Class Reports{
 								<thead>
 								  <tr class="headings">
 									<?php 
-									$header_keys = array("Loan Number", "Loan Type", "Date", "Duration", "End Date", "Principal", "Interest", "Total Amount", "Amount Paid");
+									$header_keys = array("Loan Number", "Loan Type", "Date", "Duration", "End Date", "Principal", "Interest", "Total Amount", "Penalties", "Amount Paid");
 									foreach($header_keys as $key){ ?>
 										<th><?php echo $key; ?></th>
 										<?php
@@ -560,7 +560,7 @@ Class Reports{
 
 								<tbody>
 									<?php
-									$loan_sum = $expected_payback_sum = $amount_paid_sum = $interest_sum = 0;
+									$loan_sum = $expected_payback_sum = $default_amount_sum = $amount_paid_sum = $interest_sum = 0;
 									foreach($member_loans as $single){ 
 										
 										$interest = 0;
@@ -568,7 +568,10 @@ Class Reports{
 											$interest = ($single['loan_amount'] * ($single['interest_rate']/100));
 										}
 										?>
-										<tr class="even pointer <?php if($loans->isLoanAboutToExpire($single['id'], $single['repayment_duration'])){ echo "danger"; } ?>" >
+										<tr class="even pointer
+										<?php if($loans->isLoanAboutToExpire($single['id'], $single['repayment_duration'])){ echo "danger"; } ?>
+										
+										" >
 											<td class=""><a href="?member_id=<?php echo $_GET['member_id'];?>&view=client_loan&lid=<?php echo $single['id'];?>"><?php echo $single['loan_number']; ?></a></td>
 											<td class=""><?php echo $loans->findLoanType($single['loan_type']); ?> </td>
 											<td class="a-right a-right"><?php echo date("j F, Y", strtotime($single['loan_date'])); ?></td>
@@ -576,7 +579,8 @@ Class Reports{
 											<td class="a-right a-right"><?php echo date("F j, Y", strtotime($single['loan_end_date'])); ?></td>
 											<td class=""><?php $loan_sum += $single['loan_amount']; echo number_format($single['loan_amount'],2,".",","); ?> </td>
 											<td class=""><?php $interest_sum += $interest; echo number_format($interest,2,".",","); ?></td>
-											<td class=" "><?php $expected_payback_sum += $single['loan_amount'] + $interest; echo number_format($single['loan_amount'] + $interest,2,".",","); ?></td>
+											<td class=" "><?php $expected_payback_sum += $expected_payback = $single['loan_amount'] + $interest; echo number_format($expected_payback,2,".",","); ?></td>
+											<td class=" "><?php $default_amount_sum += $default_amount=($single['loan_amount']*$single['def_days']*$single['daily_default_amount']/100); echo number_format($default_amount,2,".",","); ?></td>
 											<td class=" "><?php $amount_paid_sum += $single['amount_paid']; echo number_format($single['amount_paid'],2,".",","); ?></td>
 										</tr>
 										<?php
@@ -589,6 +593,7 @@ Class Reports{
 											<th><?php echo number_format($loan_sum,2,".",","); ?> </th>
 											<th><?php echo number_format($interest_sum,2,".",","); ?></th>
 											<th><?php echo number_format($expected_payback_sum,2,".",","); ?></th>
+											<th><?php echo number_format($default_amount_sum,2,".",","); ?></th>
 											<th><?php echo number_format($amount_paid_sum,2,".",","); ?></th>
 										</tr>
 								</tfoot>

@@ -862,7 +862,7 @@ ko.applyBindings(guarantor);
 	function draw_loans_table(loans_data){
 		var amount = balance = 0;
 		var html_data = "<thead>"+
-					"<tr><th>Loan No</th><th>Amount</th><th>Balance</th></tr>"+
+					"<tr><th>Loan No</th><th>Amount</th><!--th>Balance</th--></tr>"+
 				"</thead>"+
 				  "<tbody>";
 		$.each(loans_data, function(key, value){
@@ -870,17 +870,17 @@ ko.applyBindings(guarantor);
 			html_data += "<tr>"+
 						  "<td><a href='member-details.php?member_id="+value.member_id+"&view=client_loan&lid="+value.id+"' title='View details'>"+value.loan_number+"</a></td>"+
 						  "<td>"+format1(parseInt(value.expected_payback))+"</td>"+
-						  "<td>"+((parseInt(value.balance)<0)?"("+format1((parseInt(value.balance) * -1))+")":format1(parseInt(value.balance)))+"</td>"+
+						  //"<td>"+((parseInt(value.balance)<0)?"("+format1((parseInt(value.balance) * -1))+")":format1(parseInt(value.balance)))+"</td>"+
 						"</tr>";
 						amount += parseInt(value.expected_payback); 
-						balance += parseInt(value.balance);
+						//balance += parseInt(value.balance);
 		});
 		html_data += "</tbody>"+
 				  "<tfoot>"+
 					"<tr>"+
 					  "<th scope='row'>Total</th>"+
 					  "<th>"+format1(amount)+"</th>"+
-					  "<th>"+((balance<0)?"("+format1(balance * -1)+")":format1(balance))+"</th>"+
+					  //"<th>"+((balance<0)?"("+format1(balance * -1)+")":format1(balance))+"</th>"+
 					"</tr>"+
 				  "</tfoot>";
 		return html_data;

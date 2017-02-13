@@ -13,7 +13,7 @@ class Loans extends Db {
 		
 		$table = "`loan` LEFT JOIN (SELECT COALESCE(SUM(amount),0) `amount_paid`, `loan_id` FROM `loan_repayment` GROUP BY `loan_id`)`payment` ON `loan`.`id` = `payment`.`loan_id`";
 
-		$fields = array("id", "person_number", "loan_number", "branch_number", "loan_type", "loan_date", "loan_end_date","loan_amount", "loan_amount_word", "interest_rate", "daily_default_amount", "expected_payback", "loan_duration", "amount_paid");
+		$fields = array("id", "person_number", "loan_number", "branch_number", "loan_type", "loan_date", "loan_end_date","loan_amount", "loan_amount_word", "interest_rate", "daily_default_amount", "expected_payback", "loan_duration", "amount_paid", "daily_default_amount", "default_days(`loan`.`id`, `loan_date`, `loan_end_date`, CURDATE(),`expected_payback`)def_days");
 		
 		
 		$results = $this->getfarray($table, implode(",", $fields), $where, "loan_date DESC", "");

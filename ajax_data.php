@@ -25,26 +25,26 @@ if(isset($_POST['origin'])&&$_POST['origin']=='dashboard'){
 	//line and barchart
 	$_result['lineBarChart'] = getGraphData($start_date, $end_date);
 	//pie chart
-	$_result['pieChart'][] = $dashboard->getSumOfLoans("`loan_date` <= '".$end_date."' AND id IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)");
-	$_result['pieChart'][] = $dashboard->getSumOfLoans("`loan_date` <= '".$end_date."' AND id NOT IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)");
+	$_result['pieChart'][] = $dashboard->getSumOfLoans("`loan_date` <= '".$end_date."' AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$end_date."')) <= COALESCE((SELECT SUM(`amount`) FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= '".$end_date."'),0)");
+	$_result['pieChart'][] = $dashboard->getSumOfLoans("`loan_date` <= '".$end_date."' AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$end_date."')) > COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= '".$end_date."'),0)");
 
-	//querty for the loans
+	//query for the loans
 	$query = "SELECT `loan`.`id`, `loan`.`loan_number`, `expected_payback`, COALESCE((`expected_payback`- `paid_amount`),`expected_payback`) `balance`, `member`.`id` `member_id` FROM `loan` JOIN `member` ON `member`.`person_number` = `loan`.`person_number` LEFT JOIN (SELECT COALESCE(SUM(amount),0) paid_amount, `loan_id` FROM `loan_repayment` WHERE (`transaction_date` <= '".$end_date."') GROUP BY `loan_id`) `payment` ON `loan`.`id` = `payment`.`loan_id`";
 
 	$order_by_clause = " ORDER BY `balance` DESC LIMIT 10";
-
-	//Non performing loans
-	$where_clause = " WHERE (`loan_date` <= '".$end_date."') AND `expected_payback` > COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id`),0) AND `loan`.`id` NOT IN (SELECT loan_id FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)";
-
-	$tables['nploans'] = $loan->findLoans($query . $where_clause . $order_by_clause);
 
 	//active loans
 	$where_clause =  " WHERE ((`loan_date` <= '".$end_date."') AND `expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE (`transaction_date` <= '".$end_date."') AND `loan_id` = `loan`.`id`),0))";
 
 	$tables['actvloans'] = $loan->findLoans($query . $where_clause . $order_by_clause);
 
+	//Non performing loans
+	$where_clause = " WHERE (`loan_date` <= '".$end_date."') AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$end_date."')) > COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= '".$end_date."'),0)";
+
+	$tables['nploans'] = $loan->findLoans($query . $where_clause . $order_by_clause);
+
 	//Performing loans
-	$where_clause =  " WHERE `loan`.`id` IN (SELECT `loan_id` FROM `loan_repayment` WHERE DATEDIFF('".$end_date."',`transaction_date`)<61)";
+	$where_clause =  " WHERE (`loan_date` <= '".$end_date."') AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$end_date."')) <= COALESCE((SELECT SUM(`amount`) FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= '".$end_date."'),0)";
 	$tables['ploans'] = $loan->findLoans($query . $where_clause . $order_by_clause);
 
 	//No of members
@@ -90,7 +90,7 @@ if(isset($_POST['origin'])&&$_POST['origin']=='dashboard'){
 	//1 in this period
 	//(`transaction_date` BETWEEN DATE_ADD(loan_date, INTERVAL  TIMESTAMPDIFF(MONTH,loan_date,'".$end_date."') MONTH) AND DATE_ADD(loan_date, INTERVAL  TIMESTAMPDIFF(MONTH,loan_date,'".$end_date."')+1 MONTH)) AND 
 	//(`loan_date` <= '".$end_date."') AND (DAY('".$end_date."') >= DAY(`loan_date`)) AND 
-	$figures['due_loans'] = $dashboard->getCountOfDueLoans("`loan`.`id` NOT IN (SELECT loan_id FROM `loan_repayment` WHERE (SELECT COALESCE(SUM(`amount`),0) FROM `loan_repayment` WHERE `transaction_date`<='".$end_date."')< ((loan.expected_payback/TIMESTAMPDIFF(MONTH,loan.loan_date,loan.loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$end_date."')+1))");
+	$figures['due_loans'] = $dashboard->getCountOfDueLoans("`loan`.`id` NOT IN (SELECT loan_id FROM `loan_repayment` WHERE (SELECT COALESCE(SUM(`amount`),0) FROM `loan_repayment` WHERE `transaction_date`<='".$end_date."')< ((loan.expected_payback/TIMESTAMPDIFF(MONTH,loan.loan_date,loan.loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$end_date."')))");
 	
 	//before this period  
 	//(`transaction_date` BETWEEN DATE_ADD(loan_date, INTERVAL  TIMESTAMPDIFF(MONTH,loan_date,'".$start_date."') MONTH) AND DATE_ADD(loan_date, INTERVAL  TIMESTAMPDIFF(MONTH,loan_date,'".$start_date."')+1 MONTH)) AND 

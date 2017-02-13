@@ -2,15 +2,26 @@
 drop procedure if exists calc_exceeded_days;
 delimiter $$
 create procedure calc_exceeded_days(IN loans_id INT, IN loan_date DATE, IN cur_date date, IN loan_duration INT, IN exp_payback DECIMAL(12,2), OUT no_days INT)
-    begin
-        SELECT DATEDIFF(cur_date, DATE_ADD(loan_date, INTERVAL  TIMESTAMPDIFF(MONTH,loan_date,cur_date) MONTH)) INTO no_days
-		FROM `loan_repayment` `lp`
-		WHERE
-		### (`transaction_date` BETWEEN DATE_ADD(loan_date, INTERVAL  TIMESTAMPDIFF(MONTH,loan_date,cur_date) MONTH) AND DATE_ADD(loan_date, INTERVAL TIMESTAMPDIFF(MONTH,loan_date,cur_date)+1 MONTH)) AND
-		`lp`.`loan_id` = loans_id AND
-		###Check if the amount paid before is, less than the total amount that should have been paid by the next scheduled payment date AND
-		(SELECT COALESCE(SUM(`amount`),0) FROM `loan_repayment` WHERE `transaction_date`<=cur_date)< ((exp_payback/loan_duration)*TIMESTAMPDIFF(MONTH,loan_date,cur_date)+1);
-    end $$
+    BEGIN
+	DECLARE done INT DEFAULT FALSE;
+	DECLARE paidAmount DECIMAL(12,2);
+	DECLARE cur2 CURSOR FOR SELECT SUM(`amount`)amount_paid FROM `loan_repayment` `lp` WHERE (`loan_id` = loans_id AND COALESCE((SELECT SUM(`amount`) FROM `loan_repayment` WHERE  `loan_id`=1 AND `transaction_date`<=cur_date),0) < ((exp_payback/loan_duration)*loan_age) OR `loan_id` NOT IN (SELECT `loan_id` FROM `loan_repayment` WHERE  `transaction_date`<=cur_date));
+
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+	OPEN cur2;
+	  read_loop: LOOP
+		FETCH cur2 INTO paidAmount;
+		IF done THEN
+			IF paidAmount IS NULL THEN
+				SET no_days = DATEDIFF(cur_date, DATE_ADD(loan_date, INTERVAL  loan_age+1 MONTH));
+				ELSE
+				SET no_days = 0;
+				END IF;
+			LEAVE read_loop;
+		END IF;
+		END LOOP;
+	CLOSE cur2;
+	end $$
 delimiter ;
 
 
