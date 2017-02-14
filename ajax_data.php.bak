@@ -18,6 +18,7 @@ if(isset($_POST['origin'])&&$_POST['origin']=='dashboard'){
 	$share = new Shares();
 	$income = new Income();
 	$dashboard = new Dashboard();
+	$accounts = new Accounts();
 
 	//set the respective variables to be received from the calling page
 	$figures = $tables = $percents = array();
@@ -90,13 +91,53 @@ if(isset($_POST['origin'])&&$_POST['origin']=='dashboard'){
 	//1 in this period
 	//(`transaction_date` BETWEEN DATE_ADD(loan_date, INTERVAL  TIMESTAMPDIFF(MONTH,loan_date,'".$end_date."') MONTH) AND DATE_ADD(loan_date, INTERVAL  TIMESTAMPDIFF(MONTH,loan_date,'".$end_date."')+1 MONTH)) AND 
 	//(`loan_date` <= '".$end_date."') AND (DAY('".$end_date."') >= DAY(`loan_date`)) AND 
-	$figures['due_loans'] = $dashboard->getCountOfDueLoans("`loan`.`id` NOT IN (SELECT loan_id FROM `loan_repayment` WHERE (SELECT COALESCE(SUM(`amount`),0) FROM `loan_repayment` WHERE `transaction_date`<='".$end_date."')< ((loan.expected_payback/TIMESTAMPDIFF(MONTH,loan.loan_date,loan.loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$end_date."')+1))");
+	$figures['due_loans'] = $dashboard->getCountOfLoans("`loan`.`id` NOT IN (SELECT loan_id FROM `loan_repayment` WHERE (SELECT COALESCE(SUM(`amount`),0) FROM `loan_repayment` WHERE `transaction_date`<='".$end_date."')< ((loan.expected_payback/TIMESTAMPDIFF(MONTH,loan.loan_date,loan.loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$end_date."')))");
 	
 	//before this period  
 	//(`transaction_date` BETWEEN DATE_ADD(loan_date, INTERVAL  TIMESTAMPDIFF(MONTH,loan_date,'".$start_date."') MONTH) AND DATE_ADD(loan_date, INTERVAL  TIMESTAMPDIFF(MONTH,loan_date,'".$start_date."')+1 MONTH)) AND 
-	$due_loans_b4 = $dashboard->getCountOfDueLoans("`loan`.`id` NOT IN (SELECT loan_id FROM `loan_repayment` WHERE (SELECT COALESCE(SUM(`amount`),0) FROM `loan_repayment` WHERE `transaction_date`<='".$start_date."')> ((loan.expected_payback/TIMESTAMPDIFF(MONTH,loan.loan_date,loan.loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$start_date."')+1))");
+	$due_loans_b4 = $dashboard->getCountOfLoans("`loan`.`id` NOT IN (SELECT loan_id FROM `loan_repayment` WHERE (SELECT COALESCE(SUM(`amount`),0) FROM `loan_repayment` WHERE `transaction_date`<='".$start_date."')> ((loan.expected_payback/TIMESTAMPDIFF(MONTH,loan.loan_date,loan.loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$start_date."')))");
 	//percentage increase/decrease
 	$percents['due_loans_percent'] = $due_loans_b4>0?round((($due_loans_b4 - $figures['due_loans'])/$due_loans_b4)*100,2):0;
+
+	//Non performing loans
+	//1 in this period
+	//$figures['np_loans'] = $dashboard->getCountOfLoans("`loan`.`id` NOT IN (SELECT loan_id FROM `loan_repayment` WHERE (SELECT COALESCE(SUM(`amount`),0) FROM `loan_repayment` WHERE `transaction_date`<='".$end_date."')< ((loan.expected_payback/TIMESTAMPDIFF(MONTH,loan.loan_date,loan.loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$end_date."')) AND DATEDIFF('".$end_date."',`transaction_date`)>61)");
+	$figures['np_loans'] = $dashboard->getCountOfLoans("(`loan_date` <= '".$end_date."') AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$end_date."')) > COALESCE((SELECT SUM(`amount`) FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= '".$end_date."'),0)");
+	
+	//before this period  
+	//$np_loans_b4 = $dashboard->getCountOfLoans("`loan`.`id` NOT IN (SELECT loan_id FROM `loan_repayment` WHERE (SELECT COALESCE(SUM(`amount`),0) FROM `loan_repayment` WHERE `transaction_date`<='".$start_date."')> ((loan.expected_payback/TIMESTAMPDIFF(MONTH,loan.loan_date,loan.loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$start_date."')) AND DATEDIFF('".$start_date."',`transaction_date`)>61)");
+	$np_loans_b4 = $dashboard->getCountOfLoans("(`loan_date` <= '".$start_date."') AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$start_date."')) > COALESCE((SELECT SUM(`amount`) FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= '".$start_date."'),0)");
+	//percentage increase/decrease
+	$percents['np_loans_percent'] = $np_loans_b4>0?round((($np_loans_b4 - $figures['np_loans'])/$np_loans_b4)*100,2):0;
+
+	//Performing loans
+	//1 in this period
+	//$figures['np_loans'] = $dashboard->getCountOfLoans("`loan`.`id` IN (SELECT loan_id FROM `loan_repayment` WHERE (SELECT COALESCE(SUM(`amount`),0) FROM `loan_repayment` WHERE `transaction_date`<='".$end_date."')< ((loan.expected_payback/TIMESTAMPDIFF(MONTH,loan.loan_date,loan.loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$end_date."')) AND DATEDIFF('".$end_date."',`transaction_date`)>61)");
+	$figures['np_loans'] = $dashboard->getCountOfLoans("(`loan_date` <= '".$end_date."') AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$end_date."'))  <= COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= '".$end_date."'),0)");
+	
+	//before this period  
+	//$np_loans_b4 = $dashboard->getCountOfLoans("`loan`.`id` IN (SELECT loan_id FROM `loan_repayment` WHERE (SELECT COALESCE(SUM(`amount`),0) FROM `loan_repayment` WHERE `transaction_date`<='".$start_date."')> ((loan.expected_payback/TIMESTAMPDIFF(MONTH,loan.loan_date,loan.loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$start_date."')) AND DATEDIFF('".$start_date."',`transaction_date`)>61)");
+	$np_loans_b4 = $dashboard->getCountOfLoans("(`loan_date` <= '".$start_date."') AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$start_date."'))  <= COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= '".$start_date."'),0)");
+	//percentage increase/decrease
+	$percents['np_loans_percent'] = $np_loans_b4>0?round((($np_loans_b4 - $figures['np_loans'])/$np_loans_b4)*100,2):0;
+
+	//Withdraws
+	//1 in this period
+	$figures['withdraws'] = ($accounts->findAccountBalance("`transaction_type`=2 AND `transaction_date` BETWEEN '".$start_date."' AND '".$end_date."'")*-1);
+	
+	//before this period  
+	$withdraws_b4 = ($accounts->findAccountBalance("`transaction_type`=2 AND `transaction_date` < '".$start_date."'")*-1);
+	//percentage increase/decrease
+	$percents['withdraws_percent'] = $withdraws_b4>0?round((($withdraws_b4 - $figures['withdraws'])/$withdraws_b4)*100,2):0;
+
+	//Deposits
+	//1 in this period
+	$figures['deposits'] = $accounts->findAccountBalance("`transaction_type`=1 AND `transaction_date` BETWEEN '".$start_date."' AND '".$end_date."'");
+	
+	//before this period  
+	$withdraws_b4 = $accounts->findAccountBalance("`transaction_type`=1 AND `transaction_date` < '".$start_date."'");
+	//percentage increase/decrease
+	$percents['deposits_percent'] = $withdraws_b4>0?round((($withdraws_b4 - $figures['withdraws'])/$withdraws_b4)*100,2):0;
 
 	//Income
 	$tables['income'] = $income->findAll("`date_added` BETWEEN '".$start_date."' AND '".$end_date."'", "amount DESC", "10");

@@ -981,7 +981,7 @@ ko.applyBindings(guarantor);
 		if(document.getElementById("nploans")){
 			getDashboardData(moment().subtract(30, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
 		}
-		if(document.getElementById("deposits")){
+		if(document.getElementById("ledger")){
 			displayLedgerData(moment().subtract(30, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
 		}
 		

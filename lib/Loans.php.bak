@@ -13,7 +13,7 @@ class Loans extends Db {
 		
 		$table = "`loan` LEFT JOIN (SELECT COALESCE(SUM(amount),0) `amount_paid`, `loan_id` FROM `loan_repayment` GROUP BY `loan_id`)`payment` ON `loan`.`id` = `payment`.`loan_id`";
 
-		$fields = array("id", "person_number", "loan_number", "branch_number", "loan_type", "loan_date", "loan_end_date","loan_amount", "loan_amount_word", "interest_rate", "daily_default_amount", "expected_payback", "loan_duration", "amount_paid", "default_days(`loan`.`id`, `loan_date`, `loan_end_date`, CURDATE(),`expected_payback`)def_days");
+		$fields = array("id", "person_number", "loan_number", "branch_number", "loan_type", "loan_date", "loan_end_date","loan_amount", "loan_amount_word", "interest_rate", "daily_default_amount", "expected_payback", "loan_duration", "amount_paid", "daily_default_amount", "default_days(`loan`.`id`, `loan_date`, `loan_end_date`, CURDATE(),`expected_payback`)def_days");
 		
 		
 		$results = $this->getfarray($table, implode(",", $fields), $where, "loan_date DESC", "");
@@ -48,6 +48,14 @@ class Loans extends Db {
 	public function findAmountPaid($where = 1){
 		 $results  = $this->getfrec("loan_repayment", "sum(amount) amount_paid", $where, "", "");
 		 return !empty($results) ? ($results['amount_paid']!=null?$results['amount_paid'] : 0) : 0;
+	}
+	public function findDefaultAmount($where = 1){
+		 $results  = $this->getfrec(self::$table_name, "default_days(`loan`.`id`, `loan_date`, `loan_end_date`, CURDATE(),`expected_payback`)*`expected_payback`*`daily_default_amount`/100 default_amount", $where, "", "");
+		 return !empty($results) ? ($results['default_amount']!=null?$results['default_amount'] : 0) : 0;
+	}
+	public function findDefaultDays($where = 1){
+		 $results  = $this->getfrec(self::$table_name, "default_days(`loan`.`id`, `loan_date`, `loan_end_date`, CURDATE(),`expected_payback`) def_days", $where, "", "");
+		 return !empty($results) ? ($results['default_amount']!=null?$results['default_amount'] : 0) : 0;
 	}
 	public function isLoanAboutToExpire($id, $duratn){
 		$days = $this->findLoanPayBackDays($duratn);

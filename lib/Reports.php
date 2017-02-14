@@ -80,8 +80,9 @@ Class Reports{
 		if($loan_data['interest_rate'] > 0){
 			$interest = ($loan_data['loan_amount'] * ($loan_data['interest_rate']/100));
 		}
-		$payments_sum = $loans->findAmountPaid("loan_id = {$_GET['lid']} transaction_type = 1");
-		$defaults_sum = $loans->findAmountPaid("loan_id = {$_GET['lid']} transaction_type = 2");
+		$payments_sum = $loans->findAmountPaid("loan_id = {$_GET['lid']}");
+		$defaults_sum = $loans->findDefaultAmount("`loan`.`id` = {$_GET['lid']}");
+		$default_days = $loans->findDefaultDays("`loan`.`id` = {$_GET['lid']}");
 		?>
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="x_panel">
@@ -159,28 +160,30 @@ Class Reports{
 						<div class="table-responsive">
 							<table class="table table-stripped">
 								<tr>
-									<th>Loan Type</th><th>Loan Date</th><th>Loan Amount</th><th>Total PayBack</th><th>Expected Amount Paid</th>
+									<th>Loan Type</th><th>Loan Date</th><th>Loan Amount</th><th>Interest</th><th>Total PayBack</th><th>Amount Paid</th>
 								</tr>
 								<tr>
 									<td><?php echo $loans->findLoanType($loan_data['loan_type']); ?></td>
 									<td><?php echo date("j F, Y", strtotime($loan_data['loan_date'])); ?></td>
 									<td><?php echo number_format($loan_data["loan_amount"],2,".",","); ?></td>
+									<td><?php echo number_format($interest,2,".",","); ?></td>
 									<td><?php echo number_format(($loan_data['loan_amount'] + $interest),2,".",","); ?></td>
 									<td><?php echo number_format($payments_sum,2,".",","); ?></td>
 								</tr>
 								<tr>
-									<th>End Date</th><th>Loan Duration</th><th>Interest</th><th>Daily Default Rate</th><th>Default Amount Paid</th>
+									<th>End Date</th><th>Loan Duration</th><th>Daily Default Rate</th><th>Default Days</th><th>Default Amount</th><th>Balance</th>
 								</tr>
 								<tr>
 									<td><?php echo date("F j, Y", strtotime($loan_data['loan_end_date'])); ?></td>
 									<td><?php $months = round((($loan_data['loan_duration']>0)?($loan_data['loan_duration']/30):0),1); echo $months; ?> month<?php echo $months==1?"":"s"; ?></td>
-									<td><?php echo number_format($interest,2,".",","); ?></td>
-									<td><?php echo number_format($loan_data["daily_default_amount"],2,".",","); ?></td>
+									<td><?php echo number_format($loan_data["daily_default_amount"],2,".",","); ?>%</td>
+									<td><?php echo number_format($default_days); ?></td>
 									<td><?php echo number_format($defaults_sum,2,".",","); ?></td>
+									<td><?php echo number_format($loan_data['loan_amount'] + $interest + $defaults_sum - $payments_sum,2,".",","); ?></td>
 								</tr>
 								<tr>
 									<th>Comments</th>
-									<th colspan="4"><?php  echo $loan_data["comments"]; ?></th>
+									<th colspan="5"><?php  echo $loan_data["comments"]; ?></th>
 								</tr>
 							</table>
 						</div>
@@ -549,7 +552,7 @@ Class Reports{
 								<thead>
 								  <tr class="headings">
 									<?php 
-									$header_keys = array("Loan Number", "Loan Type", "Date", /* "Duration", */ "End Date", "Principal", "Interest", "Total Amount", "Penalties", "Amount Paid");
+									$header_keys = array("Loan Number", "Date", /* "Duration", */ "End Date", "Principal", "Interest", "Total Amount", "Days Defaulted", "Penalties", "Amount Paid", "Balance", "Loan Type");
 									foreach($header_keys as $key){ ?>
 										<th><?php echo $key; ?></th>
 										<?php
@@ -560,7 +563,7 @@ Class Reports{
 
 								<tbody>
 									<?php
-									$loan_sum = $expected_payback_sum = $default_amount_sum = $amount_paid_sum = $interest_sum = 0;
+									$loan_sum = $expected_payback_sum = $default_amount_sum = $amount_paid_sum = $interest_sum = $balance_sum = 0;
 									foreach($member_loans as $single){ 
 										
 										$interest = 0;
@@ -573,15 +576,17 @@ Class Reports{
 										
 										" >
 											<td class=""><a href="?member_id=<?php echo $_GET['member_id'];?>&view=client_loan&lid=<?php echo $single['id'];?>"><?php echo $single['loan_number']; ?></a></td>
-											<td class=""><?php echo $loans->findLoanType($single['loan_type']); ?> </td>
 											<td class="a-right a-right"><?php echo date("j F, Y", strtotime($single['loan_date'])); ?></td>
 											<!--td class="a-right a-right"><?php $months = round((($single['loan_duration']>0)?($single['loan_duration']/30):0),1); echo $months; ?> month<?php echo $months==1?"":"s"; ?></td-->
 											<td class="a-right a-right"><?php echo date("F j, Y", strtotime($single['loan_end_date'])); ?></td>
 											<td class=""><?php $loan_sum += $single['loan_amount']; echo number_format($single['loan_amount'],2,".",","); ?> </td>
 											<td class=""><?php $interest_sum += $interest; echo number_format($interest,2,".",","); ?></td>
 											<td class=" "><?php $expected_payback_sum += $expected_payback = $single['loan_amount'] + $interest; echo number_format($expected_payback,2,".",","); ?></td>
-											<td class=" "><?php $default_amount_sum += $default_amount=($single['loan_amount']*$single['def_days']*$single['daily_default_amount']/100); echo number_format($default_amount,2,".",","); ?></td>
+											<td><?php ; echo number_format($single['def_days']); ?></td>
+											<td class=" "><?php $default_amount_sum += $default_amount=($single['expected_payback']*$single['def_days']*$single['daily_default_amount']/100); echo number_format($default_amount,2,".",","); ?></td>
 											<td class=" "><?php $amount_paid_sum += $single['amount_paid']; echo number_format($single['amount_paid'],2,".",","); ?></td>
+											<td class=" "><?php $balance_sum += $balance = $expected_payback + $default_amount - $single['amount_paid']; echo number_format($balance,2,".",","); ?></td>
+											<td class=""><?php echo $loans->findLoanType($single['loan_type']); ?> </td>
 										</tr>
 										<?php
 									}
@@ -589,12 +594,15 @@ Class Reports{
 								</tbody>
 								<tfoot>
 										<tr>
-											<th colspan="4">Total (UGX)</th>
+											<th colspan="3">Total (UGX)</th>
 											<th><?php echo number_format($loan_sum,2,".",","); ?> </th>
 											<th><?php echo number_format($interest_sum,2,".",","); ?></th>
 											<th><?php echo number_format($expected_payback_sum,2,".",","); ?></th>
+											<th>&nbsp;</th>
 											<th><?php echo number_format($default_amount_sum,2,".",","); ?></th>
 											<th><?php echo number_format($amount_paid_sum,2,".",","); ?></th>
+											<th><?php echo number_format($balance_sum,2,".",","); ?></th>
+											<th>&nbsp;</th>
 										</tr>
 								</tfoot>
 							  </table>

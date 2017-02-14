@@ -15,7 +15,7 @@ include("includes/header.php");
 		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="members_percent">0% </i></span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-		  <span class="count_top"><i class="fa fa-money"></i> Subscriptions</span>
+		  <span class="count_top"><i class="fa fa-money"></i> Subscription</span>
 		  <div class="count"><a class="count green dash_link" href="view_subscriptions.php" title="Details" id="total_scptions">0</a></div>
 		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="scptions_percent">0% </i></span>
 		</div>

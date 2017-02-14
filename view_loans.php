@@ -40,7 +40,7 @@ include("includes/header.php");
 				<thead>
 					<tr>
 						<?php 
-						$header_keys = array("Loan Number", "Client", "Principal", "Interest", "Total","Default","Paid","Loan Date","Duration", "Loan Type", "Expected PayBack Date");
+						$header_keys = array("Loan Number", "Client", "Type", /* "Principal", "Interest",  */"Amount","Default","Paid","Loan Date","Duration", "Expected PayBack Date");
 						foreach($header_keys as $key){ ?>
 							<th><?php echo $key; ?></th>
 							<?php
@@ -52,10 +52,9 @@ include("includes/header.php");
 				</tbody>
 				<tfoot>
 					<tr>
-						<th colspan="2">Total (UGX)</th>
-						<th>&nbsp;</th>
-						<th>&nbsp;</th>
-						<th>&nbsp;</th>
+						<th colspan="3">Total (UGX)</th>
+						<!--th>&nbsp;</th>
+						<th>&nbsp;</th-->
 						<th>&nbsp;</th>
 						<th>&nbsp;</th>
 						<th>&nbsp;</th>
@@ -98,21 +97,21 @@ include("includes/footer.php");
 				}
 		  },
 		  "footerCallback": function (tfoot, data, start, end, display ) {
-            var api = this.api(), cols = [2,3,4,5,6];
+            var api = this.api(), cols = [3,4,5/* 2,,6 */];
 			$.each(cols, function(key, val){
 				var total = api.column(val).data().sum();
 				$(api.column(val).footer()).html( format1(total) );
 			});
 		  },columns:[ { data: 'loan_number', render: function ( data, type, full, meta ) {return '<a href="member-details.php?member_id='+full.member_id+'&view=client_loan&lid='+full.id+'" title="View details">'+data+'</a>';}},
 				{ data: 'firstname', render: function ( data, type, full, meta ) {return full.firstname+' '+full.lastname+' '+full.othername;}},
-				{ data: 'loan_amount' , render: function ( data, type, full, meta ) {return format1(parseInt(data));}},
-				{ data: 'interest', render: function ( data, type, full, meta ) {return format1(data);}},
+				/* { data: 'loan_amount' , render: function ( data, type, full, meta ) {return format1(parseInt(data));}},
+				{ data: 'interest', render: function ( data, type, full, meta ) {return format1(data);}}, */
+				{ data: 'name'},
 				{ data: 'expected_payback', render: function ( data, type, full, meta ) {return format1(parseInt(data));}},
 				{ data: 'def_days', render: function ( data, type, full, meta ) {return format1(parseInt(parseInt(data)*parseInt(full.daily_default_amount)/100*parseInt(full.expected_payback)));}},
 				{ data: 'amount_paid', render: function ( data, type, full, meta ) {return format1(parseInt(data));}},
 				{ data: 'loan_date',  render: function ( data, type, full, meta ) {return moment(data, 'YYYY-MM-DD hh:mm:ss').format('DD-MMM-YYYY');}},
 				{ data: 'duration'},
-				{ data: 'name'},
 				{ data: 'loan_end_date'}
 				] ,
 		  buttons: [

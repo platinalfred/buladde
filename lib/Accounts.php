@@ -24,7 +24,7 @@ class Accounts extends Db {
             return 'error'; 
         }   
     }
-        public function Deposit($amount){
+    public function Deposit($amount){
 
         $this->balance = $this->balance + $amount;  
     }
@@ -45,6 +45,10 @@ class Accounts extends Db {
 	public function findByAccountBalance($pno){
 		$result = $this->getfrec(self::$table_name,"balance", "person_number=".$pno, "", "");
 		return !empty($result) ? $result['balance']:false;
+	}   
+	public function findAccountBalance($where = ""){
+		$result = $this->getfrec("transaction","SUM(amount) amount", $where, "", "");
+		return !empty($result) ? $result['amount']:0;
 	}
 	public function findByAccountNumber($accno){
 		$result = $this->getrec(self::$table_name, "account_number='$accno'", "");

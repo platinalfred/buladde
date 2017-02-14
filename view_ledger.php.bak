@@ -66,7 +66,7 @@ $income = new Income();
 							</tr>
 						</thead>
 						<tbody>
-							<tr id="ledger">
+							<tr id="deposits">
 								<th>Income</th><td id="income">xx</td><td></td>
 							</tr>
 							<tr>

@@ -40,16 +40,16 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_loans" ) {
 		
 		if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 			
-			$where = "`loan`.`id` IN (SELECT `loan_id` FROM `loan_repayment` WHERE DATEDIFF('".$_POST['end_date']."',`transaction_date`)<61)";
+			$where = "(`loan_date` <= '".$_POST['end_date']."') AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$_POST['end_date']."'))  <= COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= '".$_POST['end_date']."'),0)";
 		}else{
-			$where = "`loan`.`id` IN (SELECT `loan_id` FROM `loan_repayment` WHERE DATEDIFF(`transaction_date`,CURDATE())<61)";
+			$where = "(`loan_date` <= CURDATE()) AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,CURDATE()))  <= COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= CURDATE()),0)";
 		}
 	}
 	if(isset($_POST['type']) && $_POST['type'] == 2){ //non-performing loans
 		
 		if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 			
-			$where = "(`loan_date` <= '".$_POST['end_date']."') AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$_POST['end_date']."')) > COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= '".$_POST['end_date']."'),0)";
+			$where = "(`loan_date` <= '".$_POST['end_date']."') AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$_POST['end_date']."')) > COALESCE((SELECT SUM(`amount`) FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= '".$_POST['end_date']."'),0)";
 		}else{
 			$where = "(`loan_date` <= CURDATE()) AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,CURDATE())) > COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= CURDATE()),0)";
 		}

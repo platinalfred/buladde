@@ -873,7 +873,7 @@ ko.applyBindings(guarantor);
 						  //"<td>"+((parseInt(value.balance)<0)?"("+format1((parseInt(value.balance) * -1))+")":format1(parseInt(value.balance)))+"</td>"+
 						"</tr>";
 						amount += parseInt(value.expected_payback); 
-						balance += parseInt(value.balance);
+						//balance += parseInt(value.balance);
 		});
 		html_data += "</tbody>"+
 				  "<tfoot>"+
