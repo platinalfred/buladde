@@ -25,10 +25,10 @@ $figures['subscriptions'] = $dashboard->getSumOfSubscriptions("(`date_paid` BETW
 $figures['shares'] = $dashboard->getSumOfShares("(`date_paid` BETWEEN '".$start_date."' AND '".$end_date."') $where_person");
 
 //sum of deposits
-//$figures['depositss'] = $dashboard->getSumOfDeposits("transaction_type = 1 AND (`transaction_date` BETWEEN '".$start_date."' AND '".$end_date."') $where_person");
+$figures['depositss'] = $dashboard->getSumOfDeposits("transaction_type = 1 AND (`transaction_date` BETWEEN '".$start_date."' AND '".$end_date."') $where_person");
 
 //sum of withdraws
-//$figures['withdraws'] = $dashboard->getSumOfDeposits("transaction_type = 2 AND (`transaction_date` BETWEEN '".$start_date."' AND '".$end_date."') $where_person");
+$figures['withdraws'] = $dashboard->getSumOfDeposits("transaction_type = 2 AND (`transaction_date` BETWEEN '".$start_date."' AND '".$end_date."') $where_person");
 
 //sum of expected payback
 $expected_payback = $loan->findExpectedPayBackAmount("(`loan_date` < '".$end_date."') $where_person");

@@ -65,9 +65,9 @@ if(isset($_POST['origin'])&&$_POST['origin']=='dashboard'){
 
 	//Total shares bought
 	//1 in this period
-	$figures['total_shares'] = $dashboard->getSumOfShares("(`date_paid` BETWEEN '".$start_date."' AND '".$end_date."')");
+	$figures['total_shares'] = $dashboard->getCountOfShares("(`date_paid` BETWEEN '".$start_date."' AND '".$end_date."')");
 	//before this period
-	$total_shares_b4 = $dashboard->getSumOfShares("(`date_paid` < '".$start_date."')");
+	$total_shares_b4 = $dashboard->getCountOfShares("(`date_paid` < '".$start_date."')");
 	//percentage increase/decrease
 	$percents['shares_percent'] = $total_shares_b4>0?round((($total_shares_b4 - $figures['total_shares'])/$total_shares_b4)*100,2):0;
 

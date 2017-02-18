@@ -32,7 +32,7 @@ $income = new Income();
 				<thead>
 					<tr>
 						<?php 
-						$header_keys = array("Client", "Amount", "Subscription Year", "Date");
+						$header_keys = array("Client", "Date", "Subscription Year", "Amount");
 						foreach($header_keys as $key){ ?>
 							<th><?php echo $key; ?></th>
 						<?php } ?>
@@ -44,8 +44,8 @@ $income = new Income();
 				<tfoot>
 					<tr>
 						<th class="right_remove"><b>Total (UGX)</b></th>
+						<th colspan="2" class="right_remove left_remove"></th>
 						<th class="right_remove left_remove"></th>
-						<th colspan="2"></th>
 					</tr>
 				</tfoot>
 			</table>
@@ -82,14 +82,14 @@ include("includes/footer.php");
 				}
 		  },
 		  "footerCallback": function (tfoot, data, start, end, display ) {
-            var api = this.api(), total = api.column(1).data().sum();
+            var api = this.api(), total = api.column(3).data().sum();
 			// UPDATE TOTALS //
-            $(api.column(1).footer()).html( format1(total) );
+            $(api.column(3).footer()).html( format1(total) );
 		  },
 		  columns:[ { data: 'firstname', render: function ( data, type, full, meta ) {return '<a href="member-details.php?member_id='+full.person_number+'" title="Member details">' + full.firstname+' '+full.lastname+' '+full.othername + '</a>';}},
-				{ data: 'amount' , render: function ( data, type, full, meta ) {return format1(parseFloat(data));}},
 				{ data: 'subscription_year'},
-				{ data: 'date_paid'}
+				{ data: 'date_paid'},
+				{ data: 'amount' , render: function ( data, type, full, meta ) {return format1(parseFloat(data));}}
 				] ,
 		  buttons: [
 			{

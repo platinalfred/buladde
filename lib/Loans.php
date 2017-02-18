@@ -43,11 +43,11 @@ class Loans extends Db {
 	}
 	public function findExpectedPayBackAmount($where = 1){
 		 $results  = $this->getfrec(self::$table_name, "sum(expected_payback) amount", $where, "", "");
-		 return !empty($results) ? ($results['amount']!=null?$results['amount'] : 0) : 0;
+		 return !empty($results) ? ($results['amount']!=NULL?$results['amount'] : 0) : 0;
 	}
 	public function findAmountPaid($where = 1){
 		 $results  = $this->getfrec("loan_repayment", "sum(amount) amount_paid", $where, "", "");
-		 return !empty($results) ? ($results['amount_paid']!=null?$results['amount_paid'] : 0) : 0;
+		 return !empty($results) ? ($results['amount_paid']!=NULL?$results['amount_paid'] : 0) : 0;
 	}
 	public function findDefaultAmount($where = 1){
 		 $results  = $this->getfrec(self::$table_name, "default_days(`loan`.`id`, `loan_date`, `loan_end_date`, CURDATE(),`expected_payback`)*`expected_payback`*`daily_default_amount`/100 default_amount", $where, "", "");

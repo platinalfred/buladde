@@ -55,7 +55,7 @@ class Loans extends Db {
 	}
 	public function findDefaultDays($where = 1){
 		 $results  = $this->getfrec(self::$table_name, "default_days(`loan`.`id`, `loan_date`, `loan_end_date`, CURDATE(),`expected_payback`) def_days", $where, "", "");
-		 return !empty($results) ? ($results['default_amount']!=null?$results['default_amount'] : 0) : 0;
+		 return !empty($results) ? ($results['def_days']!=null?$results['def_days'] : 0) : 0;
 	}
 	public function isLoanAboutToExpire($id, $duratn){
 		$days = $this->findLoanPayBackDays($duratn);

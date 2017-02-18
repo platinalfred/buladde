@@ -693,7 +693,7 @@ ko.applyBindings(guarantor);
 					getDashboardData(startDate, endDate);
 					format_hrefs(startDate, endDate);
 				}
-				if(document.getElementById("deposits")){
+				if(document.getElementById("ledger")){
 					displayLedgerData(startDate, endDate);
 				}
 				searchTable(startDate,endDate);
@@ -799,12 +799,13 @@ ko.applyBindings(guarantor);
 				url: "ledger_data.php",
 				success: function(response){
 					$.each(response, function(key, value){
-						$("."+key).html(format1(parseFloat(value)));
+						var a = parseFloat(value);			
+						$("#"+key).html((a<0)?("("+format1(a*-1)+")"):format1(a));
 					});
-					if(document.getElementById("income")){
+					/* if(document.getElementById("income")){
 						$("#income").html( format1( parseFloat(response.subscriptions)+parseFloat(response.shares) +(parseFloat(response.expected_payback)-parseFloat(response.amount_paid )) ));;
 						$("#expenses").html(format1(parseFloat(response.expenses)));;
-					}
+					} */
 				}
 			});
 		}

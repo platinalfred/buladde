@@ -1,7 +1,7 @@
 <?php 
 //This will prevent data tables js from showing on every page for speed increase
 $show_table_js = true;
-$page_title = "Ledger";
+$page_title = "Income Statement";
 include("includes/header.php"); 
 require_once("lib/Libraries.php");
 $income = new Income();
@@ -15,7 +15,7 @@ $income = new Income();
 	
 	<div class="row x_title">
 	  <div class="col-md-4">
-		<h3>Ledger <small>Account</small></h3>
+		<h3>Income <small>Statement</small></h3>
 	  </div>
 	  <div class="col-md-6">
 		<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
@@ -23,23 +23,6 @@ $income = new Income();
 		  <span>November 20, 2016 - December 19, 2016</span> <b class="caret"></b>
 		</div>
 	  </div>
-		<div class="col-md-2"><li><a class="btn btn-primary" data-toggle="modal" data-target=".member_modal"> <i class="fa fa-plus"></i> Receive Income</a></li></div>
-		<div class="modal fade member_modal" tabindex="-1" role="dialog" aria-hidden="true">
-			<div class="modal-dialog modal-md">
-				<div class="modal-content">
-					<div class="modal-header">
-					  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-					  </button>
-					  <h4 class="modal-title" id="myModalLabel">Record Received Income</h4>
-					</div>
-					<div class="modal-body">
-						<?php 
-						include("add_imcome.php");
-						?>
-					</div>
-				</div>
-			</div>      
-		</div>
 	</div>
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
@@ -54,25 +37,55 @@ $income = new Income();
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                    <table id="income_account" class="table table-hover">
+                    <table id="income_account" class="table table-hover table-condensed table-bordered">
 						<thead>
 							<tr>
-								<?php
-								$header_keys = array("&nbsp;", "Dr", "Cr");
-								foreach($header_keys as $key){ ?>
-									<th><?php echo $key; ?></th>
-									<?php 
-								} ?>
+								<th colspan="2">REVENUES & GAINS</th>
 							</tr>
 						</thead>
-						<tbody>
-							<tr id="deposits">
-								<th>Income</th><td id="income">xx</td><td></td>
+						<tbody id="ledger">
+							<tr>
+								<td>Shares</td><td id="shares">xx</td>
 							</tr>
 							<tr>
-								<th>Expenses</th><td></td><td id="expenses">xx</td>
+								<td>Subscriptions</td><td id="subscriptions">xx</td>
+							</tr>
+							<tr>
+								<td>Interest on Loan</td><td id="loan_income">xx</td>
+							</tr>
+							<tr>
+								<th>Total Revenues & Gains</th><td id="sum_dr">0</td>
+							</tr>
+							<!--tr>
+								<th>Deposits</th><td id="depositss">xx</td>
+							</tr>
+							<tr>
+								<th>Withdraws</th><td id="withdraws">xx</td>
+							</tr-->
+							<tr>
+								<th colspan="2">&nbsp;</th>
+							</tr>
+							<tr>
+								<th colspan="2">EXPENSES & LOSSES</th>
+							</tr>
+							<tr>
+								<td>Losses from bad loans</td><td id="bad_loans">0</td>
+							</tr>
+							<tr>
+								<td>Other Expenses</td><td id="bad_loans">0</td>
+							</tr>
+							<tr>
+								<th>Total Expenses & Losses</th><td id="total_expenses">0</td>
+							</tr>
+							<tr>
+								<th colspan="2">&nbsp;</th>
 							</tr>
 						</tbody>
+						<tfoot>
+							<tr>
+								<th>NET INCOME</th><td>00</td>
+							</tr>
+						</tfoot>
                     </table>
                   </div>
                 </div>

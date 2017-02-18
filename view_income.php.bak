@@ -50,7 +50,7 @@ $income = new Income();
 				<thead>
 					<tr>
 						<?php 
-						$header_keys = array("#", "Income Type", "Description", "Date", "Amount");
+						$header_keys = array("#", "Income Type", "Amount", "Description", "Date");
 						foreach($header_keys as $key){ ?>
 							<th><?php echo $key; ?></th>
 							<?php 
@@ -62,8 +62,9 @@ $income = new Income();
 				<tfoot>
 					<tr>
 						<th class="right_remove">Total (UGX)</th>
-						<th class="right_remove left_remove" colspan="3"></th>
 						<th class="right_remove left_remove"></th>
+						<th class="right_remove left_remove"></th>
+						<th class="right_remove left_remove" colspan="2"></th>
 					</tr>
 				</tfoot>
 			</table>
@@ -116,9 +117,9 @@ $income = new Income();
 				}
 		  },
 		  "footerCallback": function (tfoot, data, start, end, display ) {
-            var api = this.api(), total = api.column(4).data().sum();
+            var api = this.api(), total = api.column(2).data().sum();
 			// UPDATE TOTALS //
-            $(api.column(4).footer()).html( "<strong>" + format1(total) + "<strong>" );
+            $(api.column(2).footer()).html( "<strong>" + format1(total) + "<strong>" );
 		  },/* "columnDefs": [ {
 			  "targets": [4],
 			  "orderable": false,
@@ -126,9 +127,9 @@ $income = new Income();
 		  }], */
 		  columns:[ { data: 'id'},
 				{ data: 'name'},
+				{ data: 'amount' },
 				{ data: 'description'},
-				{ data: 'date_added'},
-				{ data: 'amount' }
+				{ data: 'date_added'}
 				] ,
 		  buttons: [
 			{

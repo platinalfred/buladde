@@ -14,11 +14,11 @@ class Dashboard extends Db {
 		return !empty($result) ? (($result['loanSum']!=NULL)?$result['loanSum']:0) : 0;
 	}
 	public function getSumOfShares($where = 1){
-		$result = $this->getfrec("shares", "sum(`no_of_shares`) sharesSum ", $where, "", "");
+		$result = $this->getfrec("shares", "sum(`amount`) sharesSum ", $where, "", "");
 		return !empty($result) ? (($result['sharesSum']!=NULL)?$result['sharesSum']:0) : 0;
 	}
 	public function getCountOfShares($where = 1){
-		$result = $this->getfrec("shares", "count(`id`) sharesCount ", $where, "", "");
+		$result = $this->getfrec("shares", "sum(`no_of_shares`) sharesCount ", $where, "", "");
 		return !empty($result) ? (($result['sharesCount']!=NULL)?$result['sharesCount']:0) : 0;
 	}
 	public function getAmountOfShares($where = 1){
