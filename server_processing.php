@@ -21,7 +21,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
 
 	$primary_key = "`member`.`id`";
 
-	$columns = array( "`person`.`id`", "`person`.`person_number`", "`firstname`", "`lastname`", "`othername`", "`phone`", "`date_added`", "`member_type`", "`member`.`id` `member_id`", "`loans`", " `shares`", "`savings`", "`dateofbirth`", "`gender`", "`email`", "`postal_address`", "`physical_address`", "`branch_number`" );
+	$columns = array( "`person`.`id`", "`person`.`person_number`", "`firstname`", "`lastname`", "`othername`", "`phone`", "`date_added`", "`member_type`", "`member`.`id` `member_id`", "`loans`", " `shares`", "`savings`", "`dateofbirth`", "`gender`", "`email`", "`postal_address`", "`physical_address`", "`branch_id`" );
 }
 //list of all the expenses
 if ( isset($_POST['page']) && $_POST['page'] == "view_expenses" ) {
