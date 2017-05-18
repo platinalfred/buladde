@@ -10,19 +10,14 @@ include("includes/header.php");
 	 <!-- top tiles -->
 	  <div class="row tile_count">
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-		  <span class="count_top"><i class="fa fa-user"></i> Profit</span>
-		  <div class="count"><a class="count green dash_link" href="view_members.php" title="Details" id="profit_fig">0</a></div>
-		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="members_percent">0% </i></span>
+		  <span class="count_top"><i class="fa fa-money"></i> Profit</span>
+		  <div class="count"><a class="count green dash_link" href="view_ledger.php" title="Details" id="profit_fig">0</a></div>
+		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="profit_percent">0% </i></span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-		  <span class="count_top"><i class="fa fa-user"></i> Income</span>
-		  <div class="count"><a class="count green dash_link" href="view_members.php" title="Details" id="income_fig">0</a></div>
+		  <span class="count_top"><i class="fa fa-money"></i> Loan Portfolio</span>
+		  <div class="count"><a class="count green dash_link" href="view_loans.php" title="Details" id="income_fig">0</a></div>
 		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="members_percent">0% </i></span>
-		</div>
-		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-		  <span class="count_top"><i class="fa fa-money"></i> Shares</span>
-		  <div><a class="count green dash_link" href="view_shares.php" title="Details" id="total_shares">0</a></div>
-		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="shares_percent">0% </i></span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
 		  <span class="count_top"><i class="fa fa-money"></i> Deposits</span>
@@ -50,24 +45,29 @@ include("includes/header.php");
 		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="due_loans_percent">0% </i></span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-		  <span class="count_top"><i class="fa fa-money"></i> P Loans</span>
+		  <span class="count_top"><i class="fa fa-money"></i> Performing Loans</span>
 		  <div class="count"><a href="view_loans.php?type=1" class="count green dash_link" title="Details" id="p_loans">0</a></div>
 		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="p_loans_percent">0% </i></span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-		  <span class="count_top"><i class="fa fa-money"></i> NP Loans</span>
+		  <span class="count_top"><i class="fa fa-money"></i> Non Performing Loans</span>
 		  <div class="count"><a href="view_loans.php?type=2" class="count green dash_link" title="Details" id="np_loans">0</a></div>
 		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="np_loans_percent">0% </i></span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-		  <span class="count_top"><i class="fa fa-user"></i> Members</span>
-		  <div class="count"><a class="count green dash_link" href="view_members.php" title="Details" id="no_members">0</a></div>
-		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="members_percent">0% </i></span>
+		  <span class="count_top"><i class="fa fa-money"></i> Shares</span>
+		  <div><a class="count green dash_link" href="view_shares.php" title="Details" id="total_shares">0</a></div>
+		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="shares_percent">0% </i></span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
 		  <span class="count_top"><i class="fa fa-money"></i> Subscriptions</span>
 		  <div class="count"><a class="count green dash_link" href="view_subscriptions.php" title="Details" id="total_scptions">0</a></div>
 		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="scptions_percent">0% </i></span>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+		  <span class="count_top"><i class="fa fa-user"></i> Members</span>
+		  <div class="count"><a class="count green dash_link" href="view_members.php" title="Details" id="no_members">0</a></div>
+		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="members_percent">0% </i></span>
 		</div>
 	  </div>
 	  <!-- /top tiles -->

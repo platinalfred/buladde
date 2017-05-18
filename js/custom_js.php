@@ -805,7 +805,7 @@ ko.applyBindings(guarantor);
 				success: function(response){
 					$.each(response, function(key, value){
 						var a = parseFloat(value);			
-						$("#"+key).html((a<0)?("("+format1(a*-1)+")"):format1(a));
+						$("#"+key).html(format1(a));
 					});
 					/* if(document.getElementById("income")){
 						$("#income").html( format1( parseFloat(response.subscriptions)+parseFloat(response.shares) +(parseFloat(response.expected_payback)-parseFloat(response.amount_paid )) ));;

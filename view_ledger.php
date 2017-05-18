@@ -37,7 +37,8 @@ include("includes/header.php");
                     <table id="income_account" class="table table-hover table-condensed table-bordered">
 						<thead>
 							<tr>
-								<th colspan="2">REVENUES & GAINS</th>
+								<th>REVENUES & GAINS</th>
+								<th>UGX</th>
 							</tr>
 						</thead>
 						<tbody id="ledger">
@@ -48,10 +49,10 @@ include("includes/header.php");
 								<td>Subscriptions</td><td id="subscriptions">xx</td>
 							</tr>
 							<tr>
-								<td>Interest on Loan</td><td id="loan_income">xx</td>
+								<td>Interest from Loans</td><td id="loan_income">xx</td>
 							</tr>
 							<tr>
-								<th>Total Revenues & Gains</th><td id="sum_dr">0</td>
+								<th>Total Revenues & Gains</th><td><strong id="total_revenue">0</strong></td>
 							</tr>
 							<!--tr>
 								<th>Deposits</th><td id="depositss">xx</td>
@@ -69,10 +70,10 @@ include("includes/header.php");
 								<td>Losses from bad loans</td><td id="bad_loans">0</td>
 							</tr>
 							<tr>
-								<td>Other Expenses</td><td id="bad_loans">0</td>
+								<td>Other Expenses</td><td id="other_expenses">0</td>
 							</tr>
 							<tr>
-								<th>Total Expenses & Losses</th><td id="total_expenses">0</td>
+								<th>Total Expenses & Losses</th><td><strong id="total_expenses">0</strong></td>
 							</tr>
 							<tr>
 								<th colspan="2">&nbsp;</th>
@@ -80,7 +81,7 @@ include("includes/header.php");
 						</tbody>
 						<tfoot>
 							<tr>
-								<th>NET INCOME</th><td>00</td>
+								<th>NET INCOME</th><td><strong id="net_income">0</strong></td>
 							</tr>
 						</tfoot>
                     </table>
