@@ -125,10 +125,19 @@ if(isset($_POST['origin'])&&$_POST['origin']=='dashboard'){
 	//1 in this period
 	$figures['loan_portfolio'] = $dashboard->getSumOfLoans("(`loan_date` BETWEEN '".$start_date."' AND '".$end_date."')");
 	
-	//before this period  
-	$loan_portfolio = $dashboard->getCountOfLoans("(`loan_date` < '".$start_date."')");
+	//before this period
+	$loan_portfolio_b4 = $dashboard->getSumOfLoans("(`loan_date` < '".$start_date."')");
 	//percentage increase/decrease
-	$percents['loan_portfolio_percent'] = $loan_portfolio>0?round((($loan_portfolio - $figures['loan_portfolio'])/$loan_portfolio)*100,2):0;
+	$percents['loan_portfolio_percent'] = $loan_portfolio_b4>0?round((($loan_portfolio_b4 - $figures['loan_portfolio'])/$loan_portfolio_b4)*100,2):0; 
+
+	//Profits
+	//1 in this period
+	$figures['profit'] = $figures['loan_payments'] - $figures['loan_portfolio'];
+	
+	//before this period   
+	$profits_b4 = $loan_payments_b4 - $loan_portfolio_b4;
+	//percentage increase/decrease
+	$percents['profit_percent'] = $profits_b4>0?round((($profits_b4 - $figures['profit'])/$profits_b4)*100,2):0;
 
 	//Withdraws
 	//1 in this period

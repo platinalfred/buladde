@@ -11,7 +11,7 @@ include("includes/header.php");
 	  <div class="row tile_count">
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
 		  <span class="count_top"><i class="fa fa-money"></i> Profit/Loss</span>
-		  <div class="count"><a class="count green dash_link" href="view_ledger.php" title="Details" id="profit_fig">0</a></div>
+		  <div class="count"><a class="count green dash_link" href="view_ledger.php" title="Details" id="profit">0</a></div>
 		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="profit_percent">0% </i></span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
