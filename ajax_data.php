@@ -81,9 +81,9 @@ if(isset($_POST['origin'])&&$_POST['origin']=='dashboard'){
 
 	//Total loan payments
 	//1 in this period
-	$figures['loan_payments'] = $dashboard->getCountOfLoanRepayments("(`transaction_date` BETWEEN '".$start_date."' AND '".$end_date."')");
+	$figures['loan_payments'] = $dashboard->getSumOfLoanRepayments("(`transaction_date` BETWEEN '".$start_date."' AND '".$end_date."')");
 	//before this period
-	$loan_payments_b4 = $dashboard->getCountOfLoanRepayments("(`transaction_date` < '".$start_date."')");
+	$loan_payments_b4 = $dashboard->getSumOfLoanRepayments("(`transaction_date` < '".$start_date."')");
 	//percentage increase/decrease
 	$percents['loan_payments_percent'] = $loan_payments_b4>0?round((($loan_payments_b4 - $figures['loan_payments'])/$loan_payments_b4)*100,2):0;
 
@@ -120,6 +120,15 @@ if(isset($_POST['origin'])&&$_POST['origin']=='dashboard'){
 	$p_loans_b4 = $dashboard->getCountOfLoans("(`loan_date` <= '".$start_date."') AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$start_date."'))  <= COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= '".$start_date."'),0)");
 	//percentage increase/decrease
 	$percents['p_loans_percent'] = $p_loans_b4>0?round((($p_loans_b4 - $figures['p_loans'])/$p_loans_b4)*100,2):0;
+
+	//Loan portfolio
+	//1 in this period
+	$figures['loan_portfolio'] = $dashboard->getSumOfLoans("(`loan_date` BETWEEN '".$start_date."' AND '".$end_date."')");
+	
+	//before this period  
+	$loan_portfolio = $dashboard->getCountOfLoans("(`loan_date` < '".$start_date."')");
+	//percentage increase/decrease
+	$percents['loan_portfolio_percent'] = $loan_portfolio>0?round((($loan_portfolio - $figures['loan_portfolio'])/$loan_portfolio)*100,2):0;
 
 	//Withdraws
 	//1 in this period

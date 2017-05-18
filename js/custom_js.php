@@ -771,7 +771,7 @@ ko.applyBindings(guarantor);
 					//display the figures
 					//var figures = ["no_members","total_scptions","total_shares","total_actv_loans","loan_payments","due_loans"];
 					$.each(response.figures, function(key, value){
-						$("#"+key).html(value);
+						$("#"+key).html(format1(parseFloat(value)));
 					});
 					//iterate over the percentages
 					$.each(response.percents, function(key, value){

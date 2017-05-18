@@ -10,14 +10,14 @@ include("includes/header.php");
 	 <!-- top tiles -->
 	  <div class="row tile_count">
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-		  <span class="count_top"><i class="fa fa-money"></i> Profit</span>
+		  <span class="count_top"><i class="fa fa-money"></i> Profit/Loss</span>
 		  <div class="count"><a class="count green dash_link" href="view_ledger.php" title="Details" id="profit_fig">0</a></div>
 		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="profit_percent">0% </i></span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
 		  <span class="count_top"><i class="fa fa-money"></i> Loan Portfolio</span>
-		  <div class="count"><a class="count green dash_link" href="view_loans.php" title="Details" id="income_fig">0</a></div>
-		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="members_percent">0% </i></span>
+		  <div class="count"><a class="count green dash_link" href="view_loans.php" title="Details" id="loan_portfolio">0</a></div>
+		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="loan_portfolio_percent">0% </i></span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
 		  <span class="count_top"><i class="fa fa-money"></i> Loan Payments</span>

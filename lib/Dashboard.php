@@ -41,8 +41,8 @@ class Dashboard extends Db {
 		$result = $this->getfrec("subscription", "count(`id`) subsCount ", $where, "", "");
 		return !empty($result) ? (($result['subsCount']!=NULL)?$result['subsCount']:0) : 0;
 	}
-	public function getCountOfLoanRepayments($where = 1){
-		$result = $this->getfrec("loan_repayment", "count(`id`) loanPayments ", $where, "", "");
+	public function getSumOfLoanRepayments($where = 1){
+		$result = $this->getfrec("loan_repayment", "sum(`amount`) loanPayments ", $where, "", "");
 		return !empty($result) ? (($result['loanPayments']!=NULL)?$result['loanPayments']:0) : 0;
 	}
 }
