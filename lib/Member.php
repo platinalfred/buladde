@@ -13,6 +13,10 @@ class Member extends Db {
 		$result = $this->getrec(self::$table_name, "person_id=".$pno, "", "");
 		return !empty($result) ? $result:false;
 	}
+	public function findPersonsPersonNumber($id){
+		$result = $this->getfrec("person", "person_number", "id=".$id, "", "");
+		return !empty($result) ? $result['person_number']: false;
+	}
 	public function findPersonNumber($id){
 		$result = $this->getfrec(self::$table_name, "person_id", "id=".$id, "", "");
 		return !empty($result) ? $result['person_id']: false;
@@ -30,11 +34,11 @@ class Member extends Db {
 		return false;
 	}
 	public function findBranch($br){
-		$result = $this->getfrec("branch", "branch_name", "branch_number='$br'","","");
+		$result = $this->getfrec("branch", "branch_name", "id=".$br,"","");
 		return !empty($result) ? $result['branch_name'] : false;
 	}
 	public function findMemberNames($p_id){
-		$result = $this->getfrec("person", "firstname, lastname, othername", "id=".$pno, "", "");
+		$result = $this->getfrec("person", "firstname, lastname, othername", "id=".$p_id, "", "");
 		return !empty($result) ? $result['firstname']." ".$result['othername']." ".$result['lastname'] : false;
 	}
 	public function personDetails($id){

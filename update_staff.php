@@ -6,6 +6,7 @@ require_once("lib/Libraries.php");
 require_once("lib/Forms.php");
 $person = new Person();
 $staff = new Staff();
+$branch = new Branch();
 $locations = new Locations();
 $all_staff = array();
 $found_member = array();
@@ -29,19 +30,14 @@ $staff_details =  $staff->personDetails($_GET['id']);
 			<div id="" class="">
 				<form class="form-horizontal form-label-left" novalidate>
 					<div id="step-1">
-						<input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
+						<input type="hidden" name="id" value="<?php echo $staff_details['id']; ?>">
 							<?php
 							$type = "staff";
 							$person_type = $staff->getfrec("persontype","id","name= '$type'","", "");
 							$p_type = $person_type['id'];
 							?>
 							<input type="hidden" name="person_type" value="<?php echo $p_type;?>">
-							<div class="form-group">
-								<label class="control-label col-md-3 col-sm-3 col-xs-12">Person Number</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
-								  <input type="text" class="form-control" name="person_number" value="<?php echo $staff_details['person_number']; ?>" readonly="readonly" placeholder="Read-Only Input">
-								</div>
-							</div>
+							
 							<div class="form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12">Title</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
@@ -222,7 +218,8 @@ $staff_details =  $staff->personDetails($_GET['id']);
 							<div class="form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12">Registration Branch</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-								  <input type="text" class="form-control" name="branch_number" value="<?php echo $_SESSION['branch_number']; ?>" readonly="readonly" placeholder="Read-Only Input">
+								  <input type="hidden" class="form-control" name="branch_number" value="<?php echo $_SESSION['branch_id']; ?>" readonly="readonly" placeholder="Read-Only Input">
+								  <?php echo $branch->findBranchName($staff_details['branch_id']); ?>
 								</div>
 							</div>
 							<div class="item form-group">

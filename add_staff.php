@@ -245,7 +245,8 @@
 					<div class="form-group">
 						<label class="control-label col-md-3 col-sm-3 col-xs-12">Registration Branch</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-						  <input type="text" class="form-control" name="branch_number" value="<?php echo $_SESSION['branch_number']; ?>" readonly="readonly" placeholder="Read-Only Input">
+						  <input type="hidden" class="form-control" name="branch_id" value="<?php echo $_SESSION['branch_id']; ?>" readonly="readonly" placeholder="Read-Only Input">
+						  <?php echo $branch->findBranchName($_SESSION['branch_id']); ?>
 						</div>
 					</div>
 					<div class="item form-group">

@@ -8,7 +8,7 @@ require_once("lib/Libraries.php");
 
 $member = new Member();
 $person = new Person();
-
+$branch = new Branch();
 ?>
 <!-- page content -->
 <div class="right_col" role="main">

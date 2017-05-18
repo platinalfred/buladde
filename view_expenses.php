@@ -80,7 +80,7 @@ $all_expenses = array();
 						<div class="col-md-6 col-sm-6 col-xs-12">
 							<select class="form-control" name="staff">
 								<?php 
-								$all_staff = $person->queryData("SELECT p.firstname, p.lastname, p.id FROM staff s ,person p WHERE p.id = s.person_number");
+								$all_staff = $person->queryData("SELECT p.firstname, p.lastname, p.id FROM staff s ,person p WHERE p.id = s.person_id");
 								if($all_staff){
 									foreach($all_staff as $single){ ?>
 										<option value="<?php echo $single['id']; ?>" ><?php echo $single['firstname']." ".$single['lastname']; ?></option>

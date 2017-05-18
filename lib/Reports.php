@@ -74,7 +74,7 @@ Class Reports{
 		$accounts = new Accounts();
 		$loans = new Loans();
 		$member_data = $member->findById($_GET['member_id']);
-		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_number']);
+		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_id']);
 		$loan_data = $loans->findById($_GET['lid']); 
 		$interest = 0;
 		if($loan_data['interest_rate'] > 0){
@@ -200,8 +200,8 @@ Class Reports{
 								<form class="form-horizontal form-label-left"   novalidate>
 									<input type="hidden" name="loan_id" id="loan_id" value=""/>
 									<input type="hidden" name="loan_repayment"  value="loan_repayment"/>
-									<input type="hidden" name="branch_number"  value="<?php echo $_SESSION['branch_number']; ?>"/>
-									<input type="hidden" name="person_number"  value="<?php echo $member_data['person_number']; ?>"/>
+									<input type="hidden" name="branch_id"  value="<?php echo $_SESSION['branch_id']; ?>"/>
+									<input type="hidden" name="person_id"  value="<?php echo $member_data['person_id']; ?>"/>
 									
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Loan Being Repaid<span class="required">*</span>
@@ -241,8 +241,8 @@ Class Reports{
 										<label class="control-label col-md-3 col-sm-3 col-xs-12" for="telephone">Receiving Staff 
 										</label>
 										<div class="col-md-6 col-sm-6 col-xs-12">
-										  <input type="tel" id="telephone" readonly = "readonly" name="" value="<?php echo $member->findMemberNames($_SESSION['person_number']); ?>"  class="form-control col-md-7 col-xs-12">
-										  <input type="hidden" value="<?php echo $_SESSION['person_number']; ?>" name="receiving_staff">
+										  <input type="tel" id="telephone" readonly = "readonly" name="" value="<?php echo $member->findMemberNames($_SESSION['person_id']); ?>"  class="form-control col-md-7 col-xs-12">
+										  <input type="hidden" value="<?php echo $_SESSION['person_id']; ?>" name="receiving_staff">
 										</div>
 									</div>
 									<div class="ln_solid"></div>
@@ -394,7 +394,7 @@ Class Reports{
 		$show_table_js = true;
 		
 		$member_data = $member->findById($_GET['member_id']);
-		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_number']);
+		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_id']);
 		?>
 		<div class="page-title" >
 		  <div class="col-md-5">
@@ -534,8 +534,8 @@ Class Reports{
 		$accounts = new Accounts();
 		$loans = new Loans();
 		$member_data = $member->findById($_GET['member_id']);
-		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_number']);
-		$member_loans = $loans->findMemberLoans("`person_number`=".$member_data['person_number']); //->findAll();//
+		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_id']);
+		$member_loans = $loans->findMemberLoans("`person_id`=".$member_data['person_id']); //->findAll();//
 		?>
 		 <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
@@ -994,8 +994,8 @@ Class Reports{
 		$accounts = new Accounts();
 		$subscription = new Subscription();
 		$member_data = $member->findById($_GET['member_id']);
-		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_number']);
-		$all_client_subscriptions = $subscription->findMemberSubscriptions($member_data['person_number']); 
+		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_id']);
+		$all_client_subscriptions = $subscription->findMemberSubscriptions($member_data['person_id']); 
 		?>
 		 <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
@@ -1058,8 +1058,8 @@ Class Reports{
 		$accounts = new Accounts();
 		$shares = new Shares();
 		$member_data = $member->findById($_GET['member_id']);
-		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_number']);
-		$all_client_shares = $shares->findMemberShares($member_data['person_number']); 
+		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_id']);
+		$all_client_shares = $shares->findMemberShares($member_data['person_id']); 
 		?>
 		 <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
@@ -1126,8 +1126,8 @@ Class Reports{
 		$accounts = new Accounts();
 		$nok = new Nok();
 		$member_data = $member->findById($_GET['member_id']);
-		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_number']);
-		$noks = $nok->findMemberNextOfKin($member_data['person_number']); 
+		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_id']);
+		$noks = $nok->findMemberNextOfKin($member_data['person_id']); 
 		?>
 		 <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
@@ -1201,7 +1201,7 @@ Class Reports{
 		$accounts = new Accounts();
 		$member_data = $member->findById($_GET['member_id']);
 		
-		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_number']);
+		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_id']);
 		?>
 		 <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
