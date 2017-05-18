@@ -2,10 +2,7 @@
 //This will prevent data tables js from showing on every page for speed increase
 $show_table_js = true;
 $page_title = "Income Statement";
-include("includes/header.php"); 
-require_once("lib/Libraries.php");
-$income = new Income();
-
+include("includes/header.php");
 ?>
 <?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
 <!-- page content -->

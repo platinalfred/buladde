@@ -17,11 +17,11 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_members" ) {
 		}
 	}
 	
-	$table = "`member` JOIN `person` ON `member`.`person_number` = `person`.`id` LEFT JOIN (SELECT SUM(`balance`) savings, `person_number` FROM `accounts` GROUP BY `person_number`) `client_savings` ON `member`.`person_number` = `client_savings`.`person_number` LEFT JOIN (SELECT SUM(`amount`) `shares`, `person_number` FROM `shares` GROUP BY `person_number`) `client_shares` ON `member`.`person_number` = `client_shares`.`person_number` LEFT JOIN (SELECT COUNT(`id`) `loans`, `person_number` FROM `loan` GROUP BY `person_number`) `client_loans` ON `member`.`person_number` = `client_loans`.`person_number`";
+	$table = "`member` JOIN `person` ON `member`.`person_id` = `person`.`id` LEFT JOIN (SELECT SUM(`balance`) savings, `person_id` FROM `accounts` GROUP BY `person_id`) `client_savings` ON `member`.`person_id` = `client_savings`.`person_id` LEFT JOIN (SELECT SUM(`amount`) `shares`, `person_id` FROM `shares` GROUP BY `person_id`) `client_shares` ON `member`.`person_id` = `client_shares`.`person_id` LEFT JOIN (SELECT COUNT(`id`) `loans`, `person_id` FROM `loan` GROUP BY `person_id`) `client_loans` ON `member`.`person_id` = `client_loans`.`person_id`";
 
 	$primary_key = "`member`.`id`";
 
-	$columns = array( "`person`.`person_number`", "`firstname`", "`lastname`", "`othername`", "`phone`", "`date_added`", "`member_type`", "`member`.`id` `member_id`", "`loans`", ", `shares`", "`savings`", "`dateofbirth`", "`gender`", "`email`", "`postal_address`", "`physical_address`", "`branch_number`" );
+	$columns = array( "`person`.`id`", "`firstname`", "`lastname`", "`othername`", "`phone`", "`date_added`", "`member_type`", "`member`.`id` `member_id`", "`loans`", " `shares`", "`savings`", "`dateofbirth`", "`gender`", "`email`", "`postal_address`", "`physical_address`", "`branch_number`" );
 }
 //list of all the expenses
 if ( isset($_POST['page']) && $_POST['page'] == "view_expenses" ) {
@@ -74,7 +74,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_loans" ) {
 		}
 	}
 
-	$table = "`loan` JOIN (SELECT `person`.`person_number`, `person`.`id` `person_id`, `firstname`, `lastname`, `othername`, `member`.`id` `member_id` FROM `member` JOIN `person` ON `member`.`person_number` = `person`.`id` WHERE active = 1)`person` ON `loan`.`person_number` = `person`.`person_id` JOIN `loan_type` ON `loan`.`loan_type` = `loan_type`.`id` LEFT JOIN (SELECT SUM(amount) `amount_paid`, `loan_id` FROM `loan_repayment` GROUP BY `loan_id`)`payment` ON `loan`.`id` = `payment`.`loan_id`";
+	$table = "`loan` JOIN (SELECT `person`.`person_number`, `person`.`id` `person_id`, `firstname`, `lastname`, `othername`, `member`.`id` `member_id` FROM `member` JOIN `person` ON `member`.`person_id` = `person`.`id` WHERE active = 1)`person` ON `loan`.`person_id` = `person`.`person_id` JOIN `loan_type` ON `loan`.`loan_type` = `loan_type`.`id` LEFT JOIN (SELECT SUM(amount) `amount_paid`, `loan_id` FROM `loan_repayment` GROUP BY `loan_id`)`payment` ON `loan`.`id` = `payment`.`loan_id`";
 	
 	$primary_key = "`loan`.`id`";
 	$columns = array( "`loan`.`id`", "`loan`.`loan_number`", "`firstname`", "`loan_type`.`name`", "`lastname`", "`othername`", "`loan_amount`",/* "`loan_amount`*(`interest_rate`/100) interest", */"`expected_payback`", "COALESCE(`amount_paid`,0) `amount_paid`", "`loan_date`", "`member_id`", "`loan_end_date`", "DATEDIFF(`loan_end_date`,`loan_date`) `duration`", "`daily_default_amount`" , "default_days(`loan`.`id`, `loan_date`, `loan_end_date`, CURDATE(),`expected_payback`)def_days" );
@@ -97,13 +97,13 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_shares" ) {
 		$where = "(`date_paid` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
 	}
 	
-	$table = "`shares` JOIN `person` ON `shares`.`person_number` = `person`.`id`";
+	$table = "`shares` JOIN `person` ON `shares`.`person_id` = `person`.`id`";
 	
-	$group_by = "`person_number`";
+	$group_by = "`person_id`";
 
 	$primary_key = "`shares`.`id`";
 
-	$columns = array( "`firstname`", "`lastname`", "`othername`", "`shares`.`person_number`", "SUM(`amount`) `amount`", "SUM(`no_shares`) `share`");
+	$columns = array( "`firstname`", "`lastname`", "`othername`", "`shares`.`person_id`", "SUM(`amount`) `amount`", "SUM(`no_shares`) `share`");
 }
 //list of all the client subscriptions
 if ( isset($_POST['page']) && $_POST['page'] == "view_subcriptns" ) {
@@ -112,13 +112,13 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_subcriptns" ) {
 		$where = "(`date_paid` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
 	}
 	
-	$table = "`subscription` JOIN `person` ON `subscription`.`person_number` = `person`.`id`";
+	$table = "`subscription` JOIN `person` ON `subscription`.`person_id` = `person`.`id`";
 	
-	$group_by = "`person_number`";
+	$group_by = "`person_id`";
 
 	$primary_key = "`subscription`.`id`";
 
-	$columns = array( "`firstname`", "`lastname`", "`othername`", "`amount`", "`subscription_year`", "`date_paid`", "`subscription`.`person_number`");
+	$columns = array( "`firstname`", "`lastname`", "`othername`", "`amount`", "`subscription_year`", "`date_paid`", "`subscription`.`person_id`");
 }
 //list of all the client loan payments
 if ( isset($_POST['page']) && $_POST['page'] == "view_loan_payments" ) {
@@ -127,7 +127,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_loan_payments" ) {
 		$where = "(`transaction_date` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
 	}
 	
-	$table = "`loan_repayment` JOIN (SELECT `firstname`, `lastname`, `othername`, `loan`.`id`, `member_id`, `loan_number` FROM `loan` JOIN (SELECT `person`.`person_number`, `person`.`id`, `firstname`, `lastname`, `othername`, `member`.`id` `member_id` FROM `member` JOIN `person` ON `member`.`person_number` = `person`.`id`)`person` ON `loan`.`person_number` = `person`.`id`) `loan` ON `loan_repayment`.`loan_id` = `loan`.`id`";
+	$table = "`loan_repayment` JOIN (SELECT `firstname`, `lastname`, `othername`, `loan`.`id`, `member_id`, `loan_number` FROM `loan` JOIN (SELECT `person`.`person_number`, `person`.`id`, `firstname`, `lastname`, `othername`, `member`.`id` `member_id` FROM `member` JOIN `person` ON `member`.`person_id` = `person`.`id`)`person` ON `loan`.`person_id` = `person`.`id`) `loan` ON `loan_repayment`.`loan_id` = `loan`.`id`";
 	
 	$primary_key = "`loan_repayment`.`id`";
 
@@ -140,7 +140,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "member_savings" ) {
 	if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 		$where .= " AND (`transaction_date` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."')";
 	}	
-	$table = "`transaction` JOIN (SELECT `person`.`person_number`, `person`.`id` `person_id`, `firstname`, `lastname`, `othername`, `member`.`id` `member_id` FROM `member` JOIN `person` ON `member`.`person_number` = `person`.`id`)`person` ON `transaction`.`person_number` = `person`.`person_id` JOIN accounts ON `transaction`.`person_number` = `accounts`.`person_number`";
+	$table = "`transaction` JOIN (SELECT `person`.`person_number`, `person`.`id` `person_id`, `firstname`, `lastname`, `othername`, `member`.`id` `member_id` FROM `member` JOIN `person` ON `member`.`person_id` = `person`.`id`)`person` ON `transaction`.`person_id` = `person`.`person_id` JOIN accounts ON `transaction`.`person_id` = `accounts`.`person_id`";
 	
 	$primary_key = "`transaction`.`id`";
 
