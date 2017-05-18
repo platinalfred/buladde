@@ -20,6 +20,11 @@ include("includes/header.php");
 		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="members_percent">0% </i></span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+		  <span class="count_top"><i class="fa fa-money"></i> Loan Payments</span>
+		  <div class="count"><a href="view_loan_payments.php" class="count green dash_link" title="Details" id="loan_payments">0</a></div>
+		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="loan_payments_percent">0% </i></span>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
 		  <span class="count_top"><i class="fa fa-money"></i> Deposits</span>
 		  <div><a class="count green dash_link" href="view_member_savings.php" title="Details" id="deposits">0</a></div>
 		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="deposits_percent">0% </i></span>
@@ -28,11 +33,6 @@ include("includes/header.php");
 		  <span class="count_top"><i class="fa fa-money"></i> Withdrawals</span>
 		  <div><a class="count green dash_link" href="view_member_savings.php" title="Details" id="withdraws">0</a></div>
 		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="withdraws_percent">0% </i></span>
-		</div>
-		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-		  <span class="count_top"><i class="fa fa-money"></i> Loan Payments</span>
-		  <div class="count"><a href="view_loan_payments.php" class="count green dash_link" title="Details" id="loan_payments">0</a></div>
-		  <span class="count_bottom"><i class="green fa fa-sort-asc" id="loan_payments_percent">0% </i></span>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
 		  <span class="count_top"><i class="fa fa-money"></i> Active Loans</span>
