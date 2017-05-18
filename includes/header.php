@@ -7,7 +7,7 @@ $logged = $_SESSION["Logged"];
 if(!$logged){
 	header("Location:index.php");
 }
-$logged_in_user = $staff->findNamesById($_SESSION['id']);
+$logged_in_user = $staff->findNamesById($_SESSION['user_id']);
 $foto = $staff->findPersonsPhoto($_SESSION['person_id']);
 ?>
 <!DOCTYPE html>

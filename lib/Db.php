@@ -104,7 +104,7 @@ class Db{
 		$to_add = array("id","username","access_level", "branch_id", "person_id");
 		$password = md5($password);
 		$results = $this->getfrec("staff", implode(",",$to_add), "username='$username' AND password='$password'", "", "");
-		if(count($results) > 0){
+		if($results){
 		   $_SESSION['Logged'] = true;
 		   foreach($results as $key => $value){
 				if(!is_numeric($key)){
@@ -187,7 +187,6 @@ class Db{
 	function loadList($query, $name, $value_field,$display_field,$field_id="",$selected_id="", $add_link = "", $roles = array(1, 2, 3, 4), $select = "single", $selected=""){
        //  $result = mysql_query($query) or die(mysql_error());
 		$results = $this->queryData($query);
-		
 		if($results){
 			$count = count($results);
 			if($count > 0){
@@ -195,6 +194,7 @@ class Db{
 				<select class="select2_single form-control" id="<?php echo $field_id; ?>"  name="<?php echo $name; ?>" name="country" tabindex="-1" select="<?php ($select == 'single')? 'single': $select;?>">
 					<?php
 					foreach($results as $result){ 
+						
 						?>
                         <option <?php if($result[$display_field] == "Uganda"){ ?> selected="selected" <?php }elseif($result[$value_field] == $selected_id){?> selected="selected" <?php } ?> value="<?php echo $result[$value_field]; ?>"><?php echo $result[$display_field]; ?></option>
 						<?php

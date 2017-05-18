@@ -34,8 +34,12 @@ class Branch extends Db {
 		$result_array = $this->getarray(self::$table_name, "","id DESC", "");
 		return !empty($result_array) ? $result_array : false;
 	}
+	public function findBranchName($id){
+		$result = $this->getfrec(self::$table_name, "branch_name", "id=".$id, "", "");
+		return !empty($result) ? $result['branch_name'] :false;
+	}
 	public function findBranchNameByNumber($bno){
-		$result = $this->getrec(self::$table_name, "branch_name", "branch_number='$pno'", "", "");
+		$result = $this->getfrec(self::$table_name, "branch_name", "branch_number='$bno'", "", "");
 		return !empty($result) ? $result['branch_name'] :false;
 	}
 	public function doesBranchNoExist($bno){

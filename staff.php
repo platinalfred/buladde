@@ -7,6 +7,7 @@ require_once("lib/Forms.php");
 $person = new Person();
 $staff = new Staff();
 $locations = new Locations();
+$branch = new Branch();
 $all_staff = array();
 $found_member = array();
 $names  = "";
@@ -48,7 +49,7 @@ $all_staff =  $staff->findAllActive();
 					<?php 
 					if($all_staff){
 						foreach($all_staff as $single){ 
-							$person_data = $person->findById($single['person_number']);
+							$person_data = $person->findById($single['person_id']);
 							?>
 							<tr>
 								<td><input type="checkbox" class="flat" name="table_records"></td>
@@ -57,7 +58,7 @@ $all_staff =  $staff->findAllActive();
 								<td><?php $p = $person->getfrec("position", "name", "id=".$single['position_id'], "", ""); echo $p['name']; ?></td>
 								<td><?php echo $person_data['phone'] ?></td>
 								<td><?php echo date("j F, Y", strtotime($person_data['dateofbirth'])); ?></td>
-								<td><?php  echo $person->findBranchByBranchNo($single['branch_number']);  ?></td>
+								<td><?php  echo $branch->findBranchName($single['branch_id']);  ?></td>
 						  <td>
 								<a href="update_staff.php?id=<?php echo $single['id']; ?>" class="btn btn-success" id="<?php echo $single['id']; ?>" ><i class="fa fa-edit" > Edit</i></a>
 								<a href="#" class="btn btn-danger delete" id="<?php echo $person_data['id']; ?>_staff" ><i class="fa fa-trash-o"></i> Delete </a>

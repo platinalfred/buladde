@@ -94,8 +94,8 @@ Class Forms{
 	}	
 	function addLoan(){
 		$db = new Db();
-		$bno = $_SESSION['branch_number'];
-		 $branch = $db->getfrec("branch","branch_name", "branch_number='BR00001'","", "");
+		$bno = $_SESSION['branch_id'];
+		 $branch = $db->getfrec("branch","branch_name", "id=".$bno,"", "");
 		 $branch_name = $branch['branch_name'];
 		$initials = ($branch['branch_name'] != "")? strtoupper($branch['branch_name']) : strtoupper(substr($branch_name, 0, 3));
          $date = date("ymdis");
@@ -108,7 +108,7 @@ Class Forms{
 			  <div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 				  <div class="x_title">
-					<h2>Add Loan Information <small></small></h2>
+					<h2>Add Loan Application <small></small></h2>
 					<ul class="nav navbar-right panel_toolbox">
 					  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
 					</ul>
@@ -218,7 +218,7 @@ Class Forms{
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="	approved_by">Approved By <span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-							<?php  $d = $db->getfrec("person", "firstname, lastname",  "id = ".$_SESSION['person_number'], "", ""); 
+							<?php  $d = $db->getfrec("person", "firstname, lastname",  "id = ".$_SESSION['person_id'], "", ""); 
 							echo $d['firstname']. " ".$d['lastname']; ; ?>
 						  <input type="hidden" id="approved_by" value="<?php echo $_SESSION['id']; ?>" readonly = "readonly" name="approved_by" class="form-control col-md-7 col-xs-12">
 						</div>
@@ -248,14 +248,14 @@ Class Forms{
 					<div class="modal-body">
 								<script>
 								<?php $member = new Member(); $member_details = $member->findById($_GET['member_id']);?>
-									var memberList = <?php $members = $member->findGuarantors($member_details['person_number']); echo json_encode($members);?>;
+									var memberList = <?php $members = $member->findGuarantors($member_details['person_id']); echo json_encode($members);?>;
 									function get_total_members(){
 										var max_size = 5;
 										if(memberList.length < max_size) { max_size = memberList.length; }
 										return max_size;
 									}
 								</script>
-								<input  type="hidden"  name="person_number" value="<?php echo $member_details['person_number'];?>" required="required">
+								<input  type="hidden"  name="person_number" value="<?php echo $member_details['person_id'];?>" required="required">
 								<div class="col-md-12 col-sm-12 col-xs-12">
 									<table  class="table table-striped table-condensed table-hover">
 										<thead>
@@ -443,8 +443,8 @@ Class Forms{
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="telephone">Approved By
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-						  <input type="text" disabled="disabled" name="received_by"  value="<?php echo $member->findMemberNames($_SESSION['person_number']); ?>" class="form-control col-md-7 col-xs-12">
-						  <input type="hidden" name="received_by"  value="<?php echo $_SESSION['person_number'] ; ?>" class="form-control col-md-7 col-xs-12">
+						  <input type="text" disabled="disabled" name="received_by"  value="<?php echo $member->findMemberNames($_SESSION['person_id']); ?>" class="form-control col-md-7 col-xs-12">
+						  <input type="hidden" name="received_by"  value="<?php echo $_SESSION['person_id'] ; ?>" class="form-control col-md-7 col-xs-12">
 						</div>
 					  </div>
 					  <div class="ln_solid"></div>
@@ -493,8 +493,8 @@ Class Forms{
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="telephone">Changed By
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-						  <input type="text" disabled="disabled" name="received_by"  value="<?php echo $member->findMemberNames($_SESSION['person_number']); ?>" class="form-control col-md-7 col-xs-12">
-						  <input type="hidden" name="added_by"  value="<?php echo $_SESSION['person_number'] ; ?>" class="form-control col-md-7 col-xs-12">
+						  <input type="text" disabled="disabled" name="received_by"  value="<?php echo $member->findMemberNames($_SESSION['person_id']); ?>" class="form-control col-md-7 col-xs-12">
+						  <input type="hidden" name="added_by"  value="<?php echo $_SESSION['person_id'] ; ?>" class="form-control col-md-7 col-xs-12">
 						</div>
 					  </div>
 					  <div class="ln_solid"></div>
@@ -536,7 +536,7 @@ Class Forms{
 				<input type="hidden" id="rate_amount" name="" value="<?php echo $rate['amount']; ?>">
 				<form class="form-horizontal form-label-left" novalidate>
 					<input type="hidden" name="add_share" value="add_share">
-					<input type="hidden" name="person_number" value="<?php echo $pno; ?>">
+					<input type="hidden" name="person_id" value="<?php echo $pno; ?>">
 					<input type="hidden" name="income_type" value="<?php echo $src['id']; ?>">
 					<div class="item form-group">
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="amount">Number of Shares<span class="required">*</span>
@@ -564,8 +564,8 @@ Class Forms{
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="telephone">Approved By
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-						  <input type="text" disabled="disabled" name="received_by"  value="<?php echo $member->findMemberNames($_SESSION['person_number']); ?>" class="form-control col-md-7 col-xs-12">
-						  <input type="hidden" name="received_by"  value="<?php echo $_SESSION['person_number'] ; ?>" class="form-control col-md-7 col-xs-12">
+						  <input type="text" disabled="disabled" name="received_by"  value="<?php echo $member->findMemberNames($_SESSION['person_id']); ?>" class="form-control col-md-7 col-xs-12">
+						  <input type="hidden" name="received_by"  value="<?php echo $_SESSION['person_id'] ; ?>" class="form-control col-md-7 col-xs-12">
 						</div>
 					  </div>
 					  <div class="ln_solid"></div>
@@ -730,8 +730,8 @@ Class Forms{
 							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="added_by">Added By 
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
-							  <input type="text" id="added_by" value="<?php echo   $member->findMemberNames($_SESSION['person_number']); ?>"  readonly = "readonly" class="form-control col-md-7 col-xs-12">
-							   <input type="hidden"  name="added_by" required="required"  value="<?php echo $_SESSION['person_number']; ?>" class="form-control col-md-7 col-xs-12">
+							  <input type="text" id="added_by" value="<?php echo   $member->findMemberNames($_SESSION['person_id']); ?>"  readonly = "readonly" class="form-control col-md-7 col-xs-12">
+							   <input type="hidden"  name="added_by" required="required"  value="<?php echo $_SESSION['person_id']; ?>" class="form-control col-md-7 col-xs-12">
 							</div>
 						  </div>
 						  <div class="ln_solid"></div>
@@ -756,7 +756,7 @@ Class Forms{
 		$accounts = new Accounts();
 		$member = new Member();
 		$member_data = $member->findById($_GET['member_id']);
-		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_number']);
+		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_id']);
 		?>
 		<div class="row">
 		  <div class="col-md-12 col-sm-12 col-xs-12">
@@ -770,14 +770,14 @@ Class Forms{
 			  </div>
 			  <div class="x_content">
 				<form class="form-horizontal form-label-left"  action="" method="" novalidate>
-					<input type="hidden" value="<?php echo $member_data['person_number']; ?>" name="person_number">
+					<input type="hidden" value="<?php echo $member_data['person_id']; ?>" name="person_id">
 					<input type="hidden" value="add_deposit" name="add_deposit">
 					<input type="hidden" value="<?php echo $_SESSION['branch_number']; ?>" name="branch_number">
 				  <div class="item form-group">
 					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Account Number
 					</label>
 					<div class="col-md-6 col-sm-6 col-xs-12">
-					  <input type="number"  name="account_number"  value="<?php echo $accounts->findAccountNoByPersonNumber($member_data['person_number']); ?>" readonly = "readonly"  class="form-control col-md-7 col-xs-12">
+					  <input type="number"  name="account_number"  value="<?php echo $accounts->findAccountNoByPersonNumber($member_data['person_id']); ?>" readonly = "readonly"  class="form-control col-md-7 col-xs-12">
 					</div>
 				  </div>			
 				  <div class="item form-group">
@@ -810,7 +810,7 @@ Class Forms{
 					<label class="control-label col-md-3 col-sm-3 col-xs-12" for="approved_by">Approved By <span class="required">*</span>
 					</label>
 					<div class="col-md-6 col-sm-6 col-xs-12">
-					  <input type="text"  readonly = "readonly" value="<?php $logged_in_as = $accounts->findAccountNamesByPersonNumber($_SESSION['person_number']); echo $logged_in_as['firstname']." ".$logged_in_as['othername']." ".$logged_in_as['lastname']; ?>"  required="required" data-validate-length-range="8,20" class="form-control col-md-7 col-xs-12">
+					  <input type="text"  readonly = "readonly" value="<?php $logged_in_as = $accounts->findAccountNamesByPersonNumber($_SESSION['person_id']); echo $logged_in_as['firstname']." ".$logged_in_as['othername']." ".$logged_in_as['lastname']; ?>"  required="required" data-validate-length-range="8,20" class="form-control col-md-7 col-xs-12">
 					  <input type="hidden" id="approved_by" name="approved_by" value="<?php echo $_SESSION['id']; ?>">
 					</div>
 				  </div>
@@ -839,8 +839,8 @@ Class Forms{
 		
 		$member_data = $member->findById($_GET['member_id']);
 		$minimum_amount = $accounts->findMinimumBalance();
-		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_number']);
-		$account_balance = $accounts->findByAccountBalance($member_data['person_number']);
+		$account_names = $accounts->findAccountNamesByPersonNumber($member_data['person_id']);
+		$account_balance = $accounts->findByAccountBalance($member_data['person_id']);
 		$max_withdraw = $account_balance - $minimum_amount;
 		
 		?>
@@ -862,14 +862,14 @@ Class Forms{
 				}else{
 					?>
 					<form class="form-horizontal form-label-left"  action="" method="" novalidate>
-						<input type="hidden" value="<?php echo $member_data['person_number']; ?>" name="person_number">
+						<input type="hidden" value="<?php echo $member_data['person_id']; ?>" name="person_number">
 						<input type="hidden" value="2" name="withdraw_cash">
-						<input type="hidden" value="<?php echo $_SESSION['branch_number']; ?>" name="branch_number">
+						<input type="hidden" value="<?php echo $_SESSION['branch_id']; ?>" name="branch_number">
 					  <div class="item form-group">
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Account Number
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-						  <input type="number"  name="account_number"  value="<?php echo $accounts->findAccountNoByPersonNumber($member_data['person_number']); ?>" readonly = "readonly"  class="form-control col-md-7 col-xs-12">
+						  <input type="number"  name="account_number"  value="<?php echo $accounts->findAccountNoByPersonNumber($member_data['person_id']); ?>" readonly = "readonly"  class="form-control col-md-7 col-xs-12">
 						</div>
 					  </div>
 						<div class="item form-group">
@@ -909,7 +909,7 @@ Class Forms{
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="approved_by">Approved By <span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-						  <input type="text"  readonly = "readonly" value="<?php $logged_in_as = $accounts->findAccountNamesByPersonNumber($_SESSION['person_number']); echo $logged_in_as['firstname']." ".$logged_in_as['othername']." ".$logged_in_as['lastname']; ?>"  required="required" data-validate-length-range="8,20" class="form-control col-md-7 col-xs-12">
+						  <input type="text"  readonly = "readonly" value="<?php $logged_in_as = $accounts->findAccountNamesByPersonNumber($_SESSION['person_id']); echo $logged_in_as['firstname']." ".$logged_in_as['othername']." ".$logged_in_as['lastname']; ?>"  required="required" data-validate-length-range="8,20" class="form-control col-md-7 col-xs-12">
 						  <input type="hidden" id="approved_by" name="approved_by" value="<?php echo $_SESSION['id']; ?>">
 						</div>
 					  </div>

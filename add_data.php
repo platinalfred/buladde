@@ -144,7 +144,7 @@ if(isset($_POST['add_loan'])){
 	$data['active']=1;
 	$person_id = $person->addPerson($data);
 	if($person_id){
-		$data['person_number'] = $person_id;
+		$data['person_id'] = $person_id;
 		$member_id = $member->addMember($data);
 		if($member_id){
 			$act= sprintf('%08d', $person_id);
@@ -168,10 +168,10 @@ if(isset($_POST['add_loan'])){
 	$person = new Person();
 	$accounts = new Accounts();
 	$member_d = $data;
-	$p['person_number'] = $member->findPersonNumber($data['id']);
-	$member_d['person_number'] = $p['person_number']; 
+	$p['person_id'] = $member->findPersonNumber($data['id']);
+	$member_d['person_id'] = $p['person_id']; 
 	if($member->updateMember($member_d)){
-		$data['id'] = $p['person_number']; 
+		$data['id'] = $p['person_id']; 
 		$data['dateofbirth'] = $member->formatSlashedDate($data['dateofbirth']);
 		$person->updatePerson($data);
 		echo "success";
@@ -192,7 +192,7 @@ if(isset($_POST['add_loan'])){
 	$data['password'] = md5($data['password']);
 	$person_id = $person->addPerson($data);
 	if($person_id){
-		$data['person_number'] = $person_id;
+		$data['person_id'] = $person_id;
 		if($staff->addStaff($data)){
 			$data['account_number'] = substr(number_format(time() * rand(),0,'',''),0,10);
 			$data['balance'] = 0.00;
@@ -216,10 +216,9 @@ if(isset($_POST['add_loan'])){
 		$data['password'] = md5($data['password']);
 	}
 	$staff_d = $data;
-	$p['person_number'] = $staff->findPersonNumber($data['id']);
-	$staff_d['person_number'] = $p['person_number']; 
+	$p['person_id'] = $staff->findPersonNumber($data['id']);
 	if($staff->updateStaff($staff_d)){
-		$data['id'] = $p['person_number']; 
+		$data['id'] = $p['person_id']; 
 		$data['dateofbirth'] = $staff->formatSlashedDate($data['dateofbirth']);
 		$person->updatePerson($data);
 		echo "success";

@@ -10,7 +10,7 @@ $locations = new Locations();
 $all_staff = array();
 $found_member = array();
 $member_details =  $member->personDetails($_GET['member_id']);
-
+$branch = new Branch();
 ?>
 <!-- page content -->
 <div class="right_col" role="main">
@@ -40,7 +40,8 @@ $member_details =  $member->personDetails($_GET['member_id']);
 						<div class="form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12">Person Number</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
-							  <input type="text" class="form-control" name="person_number" value="<?php echo $member_details['person_number']; ?>" readonly="readonly" placeholder="Read-Only Input">
+							  <input type="hidden" class="form-control" name="person_id" value="<?php echo $member_details['person_id']; ?>" readonly="readonly" placeholder="Read-Only Input">
+							  <?php echo $member->findPersonsPersonNumber($member_details['person_id']); ?>
 							</div>
 						</div>
 						<div class="form-group">
@@ -187,7 +188,8 @@ $member_details =  $member->personDetails($_GET['member_id']);
 						<div class="form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12">Registration Branch</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
-							  <input type="text" class="form-control" name="branch_number" value="<?php echo $_SESSION['branch_number']; ?>" readonly="readonly" placeholder="Read-Only Input">
+							  <input type="hidden" class="form-control" name="branch_number" value="<?php echo $_SESSION['branch_id']; ?>" readonly="readonly" placeholder="Read-Only Input">
+							  <?php echo $branch->findBranchName($_SESSION['branch_id']); ?>
 							</div>
 						</div>
 						<div class="item form-group">
@@ -203,7 +205,7 @@ $member_details =  $member->personDetails($_GET['member_id']);
 							</div>
 						</div>
 						
-						<input type="hidden" name="added_by" value="<?php echo $_SESSION['id'];?>">
+						<input type="hidden" name="added_by" value="<?php echo $_SESSION['user_id'];?>">
 						<div class="form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12"></label>
 							<div class="col-md-6 col-sm-6 col-xs-12">

@@ -194,7 +194,8 @@
 								<div class="form-group">
 									<label class="control-label col-md-3 col-sm-3 col-xs-12">Registration Branch</label>
 									<div class="col-md-6 col-sm-6 col-xs-12">
-									  <input type="text" class="form-control" name="branch_number" value="<?php echo $_SESSION['branch_number']; ?>" readonly="readonly" placeholder="Read-Only Input">
+									  <input type="hidden" class="form-control" name="branch_id" value="<?php echo $_SESSION['branch_id']; ?>" readonly="readonly" placeholder="Read-Only Input">
+									  <?php echo $branch->findBranchName($_SESSION['branch_id']); ?>
 									</div>
 								</div>
 								<div class="item form-group">
@@ -212,11 +213,11 @@
 								<div class="form-group">
 									<label class="control-label col-md-3 col-sm-3 col-xs-12">Registered By</label>
 									<div class="col-md-6 col-sm-6 col-xs-12">
-									 <?php echo $member->findMemberNames($_SESSION['person_number']); ?>
+									 <?php echo $member->findMemberNames($_SESSION['person_id']); ?>
 									</div>
-									 <input type="hidden" class="form-control" name="registered_by" value="<?php echo $_SESSION['person_number']; ?>" readonly="readonly" placeholder="Read-Only Input">
+									 <input type="hidden" class="form-control" name="registered_by" value="<?php echo $_SESSION['person_id']; ?>" readonly="readonly" placeholder="Read-Only Input">
 								</div>
-								<input type="hidden" name="added_by" value="<?php echo $_SESSION['person_number'];?>">
+								<input type="hidden" name="added_by" value="<?php echo $_SESSION['person_id'];?>">
 							</form>
 						</div>
 					</div>

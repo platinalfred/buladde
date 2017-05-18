@@ -17,13 +17,13 @@ if(isset($_GET['p_id'])){
 	$id = $member->findMemberIdByPersonIdNo($_GET['p_id']);
 	$_GET['member_id'] = $id;
 	$member_data  = $member->findById($_GET['member_id']);
-	$person_data = $person->findByid($member_data['person_number']);
+	$person_data = $person->findByid($member_data['person_id']);
 	$names =  $person_data['firstname']." ". $person_data['lastname']." ".$person_data['othername']; 
 }else{
 	if($_GET['member_id']){
 		$member_data  = $member->findById($_GET['member_id']);
-		$person_number = $member_data['person_number'];
-		$person_data = $person->findByid($member_data['person_number']);
+		$person_id = $member_data['person_id'];
+		$person_data = $person->findByid($member_data['person_id']);
 		$names =  $person_data['firstname']." ". $person_data['lastname']." ".$person_data['othername']; 
 	}else{
 		header("Location:view_members.php");
@@ -37,7 +37,7 @@ include("includes/header.php");
 <div class="right_col" role="main">
 	<div class="x_panel">
 	  <div class="x_title">
-		<h2><?php echo $names; ?> <small> - <?php echo $person_data['person_number'];?> </small>   </h2>		
+		<h2><?php echo $names; ?> <small> - <?php echo $member->findPersonNumber($person_data['id']);?> </small>   </h2>		
 		<?php if(isset($_SESSION['access_level'])&&in_array($_SESSION['access_level'],array(1,2))){?>
 			<ul class="nav navbar-right panel_toolbox">
 			  <li> <a href="update-member-details.php?member_id=<?php echo $_GET['member_id']; ?>"  class="btn btn-primary" title="Edit Member"><i class="fa fa-edit"></i > Edit</a>
@@ -52,7 +52,7 @@ include("includes/header.php");
 	  <div class="x_content" id="member-details">
 		<div class="row" >
 		  <div class="col-md-2 col-sm-12 col-xs-12 form-group">
-				<h2> A/C - <?php echo $accounts->findAccountNumberByPersonNumber($person_data['id']);?></h2>
+				<h2> A/C - <?php echo sprintf('%08d',$accounts->findAccountNumberByPersonNumber($person_data['id']));?></h2>
 				<?php  
 				if($person_data['photograph'] !="" && file_exists($person_data['photograph'])){?> 
 					<img style="width:100%; height:100%;" height="100%" src="<?php echo $person_data['photograph']; ?>" > <a  href="" type="button"  data-toggle="modal" data-target=".add_photo"><i class="fa fa-edit"></i> Change photo</a>
@@ -71,7 +71,7 @@ include("includes/header.php");
 								</div>
 								<div class="modal-body">
 									<input type="hidden" name="photo_upload" >
-								  <input type="hidden" id="p_no" name="person_number" value="<?php echo $member_data['person_number']; ?>">
+								  <input type="hidden" id="p_no" name="person_number" value="<?php echo $member_data['person_id']; ?>">
 								  <input id="myFileInput" type="file" name="photograph" accept="image/*;capture=camera">
 								</div>
 								<div class="modal-footer">
@@ -88,7 +88,7 @@ include("includes/header.php");
 				<div class="col-md-12 col-sm-12 col-xs-12 details">
 					<div class="col-md-3 col-sm-12 col-xs-12 form-group " >
 						<p class="lead" style="">Branch</p>
-						<p class="p"><?php  echo $member->findBranch($member_data['branch_number']); ?></p>
+						<p class="p"><?php  echo $member->findBranch($member_data['branch_id']); ?></p>
 					</div>
 					<div class="col-md-3 col-sm-12 col-xs-12 form-group " >
 						<p class="lead">Gender</p>
@@ -179,7 +179,7 @@ include("includes/header.php");
 						</div>      
 					</div> -->
 		
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=loan.add" class="btn btn-primary"><i class="fa fa-plus"></i> Record a Loan</a> </li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=loan.add" class="btn btn-primary"><i class="fa fa-plus"></i> Apply for a Loan</a> </li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=subscription.add" class="btn btn-primary"><i class="fa fa-plus"></i> Subscribe</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=shares.add" class="btn btn-primary"><i class="fa fa-plus"></i> Buy Shares</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&task=nok.add" class="btn btn-primary"><i class="fa fa-plus"></i></i> Add Next of Kin</a></li>
