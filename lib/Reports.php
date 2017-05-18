@@ -435,16 +435,16 @@ Class Reports{
 						</thead>
 						<tbody>
 							<tr>
-								<th>Subscription</th><td></td><td class="subscriptions">xx</td>
+								<th>Subscription</th><td></td><td class="subscriptions">0.0</td>
 							</tr>
 							<tr>
-								<th>Shares</th><td></td><td class="shares">xx</td>
+								<th>Shares</th><td></td><td class="shares">0.0</td>
 							</tr>
 							<tr>
-								<th>Deposits</th><td></td><td id="deposits" class="deposits">xx</td>
+								<th>Deposits</th><td></td><td id="deposits" class="deposits">0.0</td>
 							</tr>
 							<tr>
-								<th>Withdraws</th><td class="withdraws">xx</td><td></td>
+								<th>Withdraws</th><td class="withdraws">0.0</td><td></td>
 							</tr>
 						</tbody>
                     </table>
@@ -476,13 +476,13 @@ Class Reports{
 						</thead>
 						<tbody>
 							<tr>
-								<th>Subscription</th><td></td><td class="subscriptions">xx</td>
+								<th>Subscription</th><td></td><td class="subscriptions">0.0</td>
 							</tr>
 							<tr>
-								<th>Deposits</th><td class="deposits">xx</td><td></td>
+								<th>Deposits</th><td class="deposits">0.0</td><td></td>
 							</tr>
 							<!--tr>
-								<th>Expenses</th><td></td><td id="expenses">xx</td>
+								<th>Expenses</th><td></td><td id="expenses">0.0</td>
 							</tr-->
 						</tbody>
                     </table>
