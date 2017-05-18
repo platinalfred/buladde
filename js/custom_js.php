@@ -90,7 +90,7 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 				interest  = ((parseInt(interest_rate)/100)* parseInt(loan_amount));
 				total = parseInt(interest) + parseInt(loan_amount);
 				if(!isNaN(total)){
-					var display_text = "Your interest is "+interest+"/= "+getWords(interest)+" Uganda Shillings Only and your total payback is "+total+"/= "+getWords(total)+"Uganda Shillings Only";
+					var display_text = "Your interest is "+interest+"/= "+getWords(interest)+" Uganda Shillings Only and total payback is "+total+"/= "+getWords(total)+"Uganda Shillings Only";
 					$("#expected_payback").html(display_text);
 					$("#expected_payback2").val(total);
 				}
@@ -198,7 +198,7 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 				s = "share";
 			}
 			$("#share_amount").val(total_share_amount);
-			$("#share_rate_amount").html(" You are buying "+currentInput+" "+ s+ " which is equivalent to "+ words +" Ugandan Shillings Only");
+			$("#share_rate_amount").html("You are buying "+currentInput+" "+ s+ " which is equivalent to "+ words +" Ugandan Shillings Only");
 			
 		}else{
 			$("#share_rate_amount").html("");
@@ -560,7 +560,7 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 		  // initialize the validator function
 	  validator.message.date = 'not a real date';
 
-	  // validate a field on "blur" event, a 'select' on 'change' event & a '.reuired' classed multifield on 'keyup':
+	  // validate a field on "blur" event, a 'select' on 'change' event & a '.required' classed multifield on 'keyup':
 	  $('form')
 		.on('blur', 'input[required], input.optional, select.required', validator.checkField)
 		.on('change', 'select.required', validator.checkField)
@@ -584,13 +584,6 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 
 		return false;
 	  });
-	 /* END FORM VALIDATION */
-	 /* FORM WIZARD */
-	
-	
-	/* $('#wizard_verticle').smartWizard({
-		transitionEffect: 'slide'
-	}); */
 
 	$('.buttonNext').addClass('btn btn-success');
 	$('.buttonPrevious').addClass('btn btn-primary');
@@ -605,7 +598,8 @@ var GuarantorSelection = function() {
 var Guarantor = function() {
     var self = this;
     // Stores an array of selectedGuarantors
-    self.selectedGuarantors = ko.observableArray([new GuarantorSelection()]); // Put one guarantor in by default
+    self.selectedGuarantors = ko.observableArray([new GuarantorSelection()]);
+	// Put one guarantor in by default
     self.totalSavings = ko.pureComputed(function() {
         var total = 0;
 		$.map(self.selectedGuarantors(), function(selectedGuarantor) {

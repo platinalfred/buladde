@@ -101,7 +101,7 @@ class Db{
 		if(!isset($_SESSION)) {
 			session_start();
 		}
-		$to_add = array("id","username","access_level", "branch_number", "person_number");
+		$to_add = array("id","username","access_level", "branch_id", "person_id");
 		$password = md5($password);
 		$results = $this->getfrec("staff", implode(",",$to_add), "username='$username' AND password='$password'", "", "");
 		if(count($results) > 0){

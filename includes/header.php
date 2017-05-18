@@ -8,7 +8,7 @@ if(!$logged){
 	header("Location:index.php");
 }
 $logged_in_user = $staff->findNamesById($_SESSION['id']);
-$foto = $staff->findPersonsPhoto($_SESSION['person_number']);
+$foto = $staff->findPersonsPhoto($_SESSION['person_id']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +20,7 @@ $foto = $staff->findPersonsPhoto($_SESSION['person_number']);
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="apple-touch-icon" sizes="57x57" href="img/fav.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="img/fav.png">
-    <title>Buladde Financial Services - <?php echo isset($page_title)?$page_title:"";?></title>
+    <title>Buladde Financial Services<?php echo isset($page_title)?(" - ".$page_title):"";?></title>
 	<link rel="icon" href="img/fav.png" type="image/x-icon">
     <!-- Bootstrap -->
     <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
