@@ -7,9 +7,19 @@ var st_date = start_date.format('YYYY-MM-DD'), //start date for the datatable
 	loan_type = <?php echo isset($_GET['type'])?"'{$_GET['type']}'":0; ?>; //loan_type for the datatable
 //format numbers to currency format
 function format1(n) {
-	return n.toString().replace(/./g, function(c, i, a) {
-		return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
-	});
+	var formatted = "";
+	if(n<0){
+		n = n*-1;
+		formatted = n.toString().replace(/./g, function(c, i, a) {
+			return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+		});
+		formatted = "("+formatted + ")";
+	}else{
+		formatted = n.toString().replace(/./g, function(c, i, a) {
+			return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+		})
+	}
+	return formatted;
 }
 <?php if($show_table_js):?>
 var dTable, dTable2;//Global datatables variable	
@@ -636,9 +646,9 @@ ko.applyBindings(guarantor);
           endDate: end_date,
           minDate: '01/01/2012',
           maxDate: '12/31/2020',
-          dateLimit: {
+          /* dateLimit: {
             days: 123
-          },
+          }, */
           showDropdowns: true,
           showWeekNumbers: true,
           timePicker: false,
@@ -649,8 +659,9 @@ ko.applyBindings(guarantor);
             'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
             'Last 7 Days': [moment().subtract(6, 'days'), moment()],
             'Last 30 Days': [moment().subtract(30, 'days'), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            //'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+            'Last 5 Years': [moment().subtract(5, 'year').startOf('month'), moment().subtract(1, 'month').endOf('month')]
           },
           opens: 'right',
           buttonClasses: ['btn btn-default'],

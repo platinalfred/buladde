@@ -40,7 +40,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_loans" ) {
 		
 		if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 			
-			$where = "(`loan_date` <= '".$_POST['end_date']."') AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$_POST['end_date']."'))  <= COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= '".$_POST['end_date']."'),0)";
+			$where = "(`loan_date` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."') AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$_POST['end_date']."'))  <= COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= '".$_POST['end_date']."'),0)";
 		}else{
 			$where = "(`loan_date` <= CURDATE()) AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,CURDATE()))  <= COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= CURDATE()),0)";
 		}
@@ -49,7 +49,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_loans" ) {
 		
 		if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 			
-			$where = "(`loan_date` <= '".$_POST['end_date']."') AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$_POST['end_date']."')) > COALESCE((SELECT SUM(`amount`) FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= '".$_POST['end_date']."'),0)";
+			$where = "(`loan_date` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."') AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,'".$_POST['end_date']."')) > COALESCE((SELECT SUM(`amount`) FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= '".$_POST['end_date']."'),0)";
 		}else{
 			$where = "(`loan_date` <= CURDATE()) AND ((`expected_payback`/TIMESTAMPDIFF(MONTH,loan_date,loan_end_date))*TIMESTAMPDIFF(MONTH,loan_date,CURDATE())) > COALESCE((SELECT SUM(`amount`) `paid_amount` FROM `loan_repayment` WHERE `loan_id` = `loan`.`id` AND `transaction_date` <= CURDATE()),0)";
 		}
@@ -57,7 +57,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_loans" ) {
 	if(isset($_POST['type']) && $_POST['type'] == 3){ //active loans
 		if((isset($_POST['start_date'])&& strlen($_POST['start_date'])>1) && (isset($_POST['end_date'])&& strlen($_POST['end_date'])>1)){
 			
-			$where = "(`loan_date` <= '".$_POST['end_date']."') AND `expected_payback` > COALESCE((SELECT SUM(amount) `paid_amount` FROM `loan_repayment` WHERE (`transaction_date` < '".$_POST['end_date']."') AND `loan_id` = `loan`.`id`),0)";
+			$where = "(`loan_date` BETWEEN '".$_POST['start_date']."' AND '".$_POST['end_date']."') AND `expected_payback` > COALESCE((SELECT SUM(amount) `paid_amount` FROM `loan_repayment` WHERE (`transaction_date` <= '".$_POST['end_date']."') AND `loan_id` = `loan`.`id`),0)";
 		}else{
 			$where = "`expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE `loan_id` = `loan`.`id`),0)";
 		}
@@ -77,7 +77,7 @@ if ( isset($_POST['page']) && $_POST['page'] == "view_loans" ) {
 	$table = "`loan` JOIN (SELECT `person`.`person_number`, `person`.`id` `person_id`, `firstname`, `lastname`, `othername`, `member`.`id` `member_id` FROM `member` JOIN `person` ON `member`.`person_id` = `person`.`id` WHERE active = 1)`person` ON `loan`.`person_id` = `person`.`person_id` JOIN `loan_type` ON `loan`.`loan_type` = `loan_type`.`id` LEFT JOIN (SELECT SUM(amount) `amount_paid`, `loan_id` FROM `loan_repayment` GROUP BY `loan_id`)`payment` ON `loan`.`id` = `payment`.`loan_id`";
 	
 	$primary_key = "`loan`.`id`";
-	$columns = array( "`loan`.`id`", "`loan`.`loan_number`", "`firstname`", "`loan_type`.`name`", "`lastname`", "`othername`", "`loan_amount`",/* "`loan_amount`*(`interest_rate`/100) interest", */"`expected_payback`", "COALESCE(`amount_paid`,0) `amount_paid`", "`loan_date`", "`member_id`", "`loan_end_date`", "DATEDIFF(`loan_end_date`,`loan_date`) `duration`", "`daily_default_amount`" , "default_days(`loan`.`id`, `loan_date`, `loan_end_date`, CURDATE(),`expected_payback`)def_days" );
+	$columns = array( "`loan`.`id`", "`loan`.`loan_number`", "`firstname`", "`loan_type`.`name`", "`lastname`", "`othername`", "`loan_amount`","COALESCE((`amount_paid`-`expected_payback`),0) interest", /* `loan_amount`*(`interest_rate`/100)*/"`expected_payback`", "COALESCE(`amount_paid`,0) `amount_paid`", "COALESCE((`expected_payback`-`amount_paid`),0) `balance`", "`loan_date`", "`member_id`", "`loan_end_date`", "DATEDIFF(`loan_end_date`,`loan_date`) `duration`", "`daily_default_amount`" , "default_days(`loan`.`id`, `loan_date`, `loan_end_date`, CURDATE(),`expected_payback`)def_days" );
 }
 //list of the income transactions
 if ( isset($_POST['page']) && $_POST['page'] == "view_income" ) {
