@@ -191,7 +191,7 @@ include("includes/header.php");
 				<ul class="nav navbar-right panel_toolbox">
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=client_loans" class="btn btn-success"><i class="fa fa-folder-open-o"></i> View Loans</a></li>
 				   <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=mysubscriptions" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Subscriptions</a></li>
-				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=myshares" class="btn btn-success"><i class="fa fa-folder-open-o"></i>My Shares</a></li>
+				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=myshares" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Shares</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=nok" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Next of kin details</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=mysavings" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Savings</a></li>
 				  <li><a href="?member_id=<?php echo  $_GET['member_id']; ?>&view=ledger" class="btn btn-success"><i class="fa fa-folder-open-o"></i>Ledger</a></li>

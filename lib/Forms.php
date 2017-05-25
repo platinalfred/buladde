@@ -533,7 +533,7 @@ Class Forms{
 				$rate = $shares->findShareRate();
 				$src = $income_sources->findIncomeSourceByName("Shares");
 				?>
-				<input type="hidden" id="rate_amount" name="" value="<?php echo $rate['amount']; ?>">
+				<input type="hidden" id="rate_amount" name="" value="100<?php echo $rate['amount']; ?>">
 				<form class="form-horizontal form-label-left" novalidate>
 					<input type="hidden" name="add_share" value="add_share">
 					<input type="hidden" name="person_id" value="<?php echo $pno; ?>">

@@ -81,7 +81,7 @@ if(isset($_POST['origin'])&&$_POST['origin']=='dashboard'){
 
 	//Total loan payments
 	//1 in this period
-	$figures['loan_payments'] = $dashboard->getSumOfLoanRepayments("(`transaction_date` BETWEEN '".$start_date."' AND '".$end_date."')");
+	$figures['loan_payments'] = $dashboard->getSumOfLoanRepayments("(`transaction_date` <= '".$end_date."')");
 	//before this period
 	$loan_payments_b4 = $dashboard->getSumOfLoanRepayments("(`transaction_date` < '".$start_date."')");
 	//percentage increase/decrease
@@ -123,10 +123,13 @@ if(isset($_POST['origin'])&&$_POST['origin']=='dashboard'){
 
 	//Loan portfolio
 	//1 in this period
-	$figures['loan_portfolio'] = $dashboard->getSumOfLoans("(`loan_date` BETWEEN '".$start_date."' AND '".$end_date."')");
+	$figures['loan_portfolio'] = $dashboard->getSumOfLoans("(`loan_date` <= '".$end_date."')");
+	// AND `expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE (`transaction_date` <= '".$end_date."') AND `loan_id` = `loan`.`id`),0)
 	
 	//before this period
 	$loan_portfolio_b4 = $dashboard->getSumOfLoans("(`loan_date` < '".$start_date."')");
+	// AND `expected_payback` > COALESCE((SELECT SUM(amount) paid_amount FROM `loan_repayment` WHERE (`transaction_date` < '".$start_date."') AND `loan_id` = `loan`.`id`),0)
+	
 	//percentage increase/decrease
 	$percents['loan_portfolio_percent'] = $loan_portfolio_b4>0?round((($loan_portfolio_b4 - $figures['loan_portfolio'])/$loan_portfolio_b4)*100,2):0; 
 
@@ -141,7 +144,7 @@ if(isset($_POST['origin'])&&$_POST['origin']=='dashboard'){
 
 	//Withdraws
 	//1 in this period
-	$figures['withdraws'] = ($accounts->findAccountBalance("`transaction_type`=2 AND `transaction_date` BETWEEN '".$start_date."' AND '".$end_date."'")*-1);
+	$figures['withdraws'] = ($accounts->findAccountBalance("`transaction_type`=2 AND `transaction_date` <= '".$end_date."'")*-1);
 	
 	//before this period  
 	$withdraws_b4 = ($accounts->findAccountBalance("`transaction_type`=2 AND `transaction_date` < '".$start_date."'")*-1);
@@ -150,7 +153,7 @@ if(isset($_POST['origin'])&&$_POST['origin']=='dashboard'){
 
 	//Deposits
 	//1 in this period
-	$figures['deposits'] = $accounts->findAccountBalance("`transaction_type`=1 AND `transaction_date` BETWEEN '".$start_date."' AND '".$end_date."'");
+	$figures['deposits'] = $accounts->findAccountBalance("`transaction_type`=1 AND `transaction_date` <= '".$end_date."'");
 	
 	//before this period  
 	$withdraws_b4 = $accounts->findAccountBalance("`transaction_type`=1 AND `transaction_date` < '".$start_date."'");

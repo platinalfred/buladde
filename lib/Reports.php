@@ -398,7 +398,7 @@ Class Reports{
 		?>
 		<div class="page-title" >
 		  <div class="col-md-5">
-			<h2><?php echo $account_names['firstname']." ".$account_names['lastname']; ?> <small> Ledger Accounts</small></h2>
+			<h2>Ledger Accounts <small> <?php echo $account_names['firstname']." ".$account_names['lastname']; ?></small></h2>
 		  </div>
 		  <div class="col-md-7">
 			<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
@@ -422,7 +422,7 @@ Class Reports{
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                    <table id="personal_account" class="table table-hover">
+                    <table id="ledger" class="table table-hover">
 						<thead>
 							<tr>
 								<?php 
@@ -435,16 +435,16 @@ Class Reports{
 						</thead>
 						<tbody>
 							<tr>
-								<th>Subscription</th><td></td><td class="subscriptions">0.0</td>
+								<th>Subscription</th><td></td><td id="subscriptions">0.0</td>
 							</tr>
 							<tr>
-								<th>Shares</th><td></td><td class="shares">0.0</td>
+								<th>Shares</th><td></td><td id="shares">0.0</td>
 							</tr>
 							<tr>
-								<th>Deposits</th><td></td><td id="deposits" class="deposits">0.0</td>
+								<th>Deposits</th><td></td><td id="deposits">0.0</td>
 							</tr>
 							<tr>
-								<th>Withdraws</th><td class="withdraws">0.0</td><td></td>
+								<th>Withdraws</th><td id="withdraws">0.0</td><td></td>
 							</tr>
 						</tbody>
                     </table>
@@ -476,10 +476,10 @@ Class Reports{
 						</thead>
 						<tbody>
 							<tr>
-								<th>Subscription</th><td></td><td class="subscriptions">0.0</td>
+								<th>Subscription</th><td></td><td id="subscriptionss">0.0</td>
 							</tr>
 							<tr>
-								<th>Deposits</th><td class="deposits">0.0</td><td></td>
+								<th>Deposits</th><td id="depositss">0.0</td><td></td>
 							</tr>
 							<!--tr>
 								<th>Expenses</th><td></td><td id="expenses">0.0</td>
@@ -516,10 +516,10 @@ Class Reports{
 						</thead>
 						<tbody>
 							<tr>
-								<th>Principle + Expected Interest</th><td class="expected_payback">0</td><td></td>
+								<th>Principle + Expected Interest</th><td id="expected_payback">0</td><td></td>
 							</tr>
 							<tr>
-								<th>Amount Paid</th><td></td><td class="amount_paid">0</td>
+								<th>Amount Paid</th><td></td><td id="amount_paid">0</td>
 							</tr>
 						</tbody>
                     </table>

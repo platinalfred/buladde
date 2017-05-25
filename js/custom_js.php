@@ -196,7 +196,7 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 		}
 		
 	});
-	$("#no_of_shares").keyup(function(){
+	$("#no_of_shares").on('keyup change',function(){
 		var currentInput  = parseInt($(this).val());
 		var one_share_amount  = parseInt($("#rate_amount").val());
 		var total_share_amount  = currentInput * one_share_amount;
@@ -208,7 +208,7 @@ jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
 				s = "share";
 			}
 			$("#share_amount").val(total_share_amount);
-			$("#share_rate_amount").html("You are buying "+currentInput+" "+ s+ " which is equivalent to "+ words +" Ugandan Shillings Only");
+			$("#share_rate_amount").html("You are buying "+currentInput+" "+ s+ " which is equivalent to "+ words +" Uganda Shillings Only");
 			
 		}else{
 			$("#share_rate_amount").html("");
@@ -661,7 +661,7 @@ ko.applyBindings(guarantor);
             'Last 30 Days': [moment().subtract(30, 'days'), moment()],
             //'This Month': [moment().startOf('month'), moment().endOf('month')],
             'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-            'Last 5 Years': [moment().subtract(5, 'year').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            'Full Records': [moment().subtract(1.3, 'year').startOf('month'), moment()]
           },
           opens: 'right',
           buttonClasses: ['btn btn-default'],
@@ -776,7 +776,7 @@ ko.applyBindings(guarantor);
 					//iterate over the percentages
 					$.each(response.percents, function(key, value){
 						var cur_ele = $("#"+key);
-						if(parseFloat(value)>=0){
+						if(parseFloat(value)>0){
 							$(cur_ele).removeClass("red fa-sort-desc").addClass("green fa-sort-asc").html(value+"%");
 						}
 						else{
@@ -807,10 +807,6 @@ ko.applyBindings(guarantor);
 						var a = parseFloat(value);			
 						$("#"+key).html(format1(a));
 					});
-					/* if(document.getElementById("income")){
-						$("#income").html( format1( parseFloat(response.subscriptions)+parseFloat(response.shares) +(parseFloat(response.expected_payback)-parseFloat(response.amount_paid )) ));;
-						$("#expenses").html(format1(parseFloat(response.expenses)));;
-					} */
 				}
 			});
 		}
